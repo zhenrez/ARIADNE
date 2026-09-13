@@ -120,3 +120,54 @@ FEED MATERIAL
 LOOK AT FINDINGS
 TRACE WHY (when desired)
 ```
+
+## 16. Epistemic guidance is firewalled from evidence
+
+Research-history timelines, chats, design rationale, hypothesis histories, working correspondence tables, machine predictions, structural alignments, TOL predictions, and checksum predictions are discovery guidance unless independently verified.
+
+The governing path is:
+
+```text
+G0 DISCOVERY_GUIDANCE
+  -> QUESTION
+  -> SEARCH
+  -> E0 CANDIDATE SOURCE
+  -> VERIFICATION
+  -> E1 VERIFIED ADMISSIBLE EVIDENCE
+  -> DEPENDENCY / INDEPENDENCE ANALYSIS
+  -> E2 INDEPENDENTLY CORROBORATED EVIDENCE
+```
+
+A derivative of G0 remains G0. Internal repetition, summarization, extraction, graphing, or matrix generation cannot launder guidance into evidence or create independent corroboration.
+
+Guidance may change **where ARIADNE looks next**. It may not increase evidentiary confidence in the answer it expects to find.
+
+Promotion is never mutation: a G0 record remains G0 forever. Independently acquired and verified evidence is represented as a new E1/E2 record linked back through discovery provenance.
+
+See `docs/EPISTEMIC_FIREWALL.md` and `config/epistemic_policy.json`.
+
+## 17. Conversation progress is checkpointed every ten exchanges
+
+Global project rule `GPR-001` applies across The Great Work and its connected branches.
+
+After every:
+
+```text
+10 user inputs
++
+10 assistant outputs
+=
+20 conversation-visible messages
+```
+
+all project progress since the prior checkpoint must be pushed into ARIADNE as a G0 continuity artifact.
+
+The operator is not responsible for remembering, summarizing, classifying, or pushing the checkpoint. This is an assistant/system responsibility.
+
+A checkpoint must preserve new discoveries, source acquisitions, hypothesis changes, corrections, decisions, rules, transforms, torch changes, bright-red items, failures, residuals, repo/artifact changes, recontextualized old threads, unresolved questions, return triggers, and forward/recursive paths.
+
+Tool calls and hidden/system messages do not count toward the cadence. If exact counting becomes uncertain, checkpoint early rather than late.
+
+Checkpoint files live under `checkpoints/YYYY-MM-DD/` and remain permanently `G0 — DISCOVERY_GUIDANCE`.
+
+See `docs/GLOBAL_PROJECT_RULES.md`, `config/project_rules.json`, and `checkpoints/README.md`.
