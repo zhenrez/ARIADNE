@@ -1,0 +1,65 @@
+{
+  "rules_version": "0.1",
+  "rules": [
+    {
+      "rule_id": "GPR-001",
+      "title": "Twenty-message ARIADNE checkpoint",
+      "status": "ACTIVE",
+      "scope": "GLOBAL",
+      "adopted": "2026-09-13",
+      "cadence": {
+        "completed_exchanges": 10,
+        "user_inputs": 10,
+        "assistant_outputs": 10,
+        "conversation_visible_messages": 20,
+        "count_tool_calls": false,
+        "count_system_messages": false,
+        "count_developer_messages": false,
+        "on_uncertain_count": "CHECKPOINT_EARLY"
+      },
+      "action": "PUSH_PROGRESS_SINCE_PREVIOUS_CHECKPOINT_TO_ARIADNE",
+      "destination_pattern": "checkpoints/YYYY-MM-DD/CP-YYYYMMDD-NNNN.md",
+      "operator_action_required": false,
+      "epistemic_zone": "G0",
+      "epistemic_class": "DISCOVERY_GUIDANCE",
+      "evidence_eligible": false,
+      "claim_support_weight": 0,
+      "corroboration_eligible": false,
+      "derivative_inherits_zone": true,
+      "required_sections": [
+        "new_discoveries",
+        "source_and_evidence_acquisitions",
+        "hypothesis_changes",
+        "corrections_and_superseded_states",
+        "decisions_and_rules",
+        "equation_schema_transform_mapping_changes",
+        "torch_changes",
+        "bright_red_items",
+        "failures_controls_residuals_outliers",
+        "repo_artifact_changes",
+        "recontextualized_older_threads",
+        "unresolved_questions_and_return_triggers",
+        "forward_and_recursive_paths"
+      ],
+      "allowed_relation_types": [
+        "GUIDES_TO",
+        "DISCOVERED_VIA",
+        "TESTS",
+        "CONTRADICTS_GUIDANCE"
+      ],
+      "forbidden_relation_types": [
+        "SUPPORTS",
+        "CORROBORATES"
+      ],
+      "write_failure_behavior": "QUEUE_PENDING_PUSH_AND_CONTINUE"
+    },
+    {
+      "rule_id": "GPR-002",
+      "title": "Epistemic firewall",
+      "status": "ACTIVE",
+      "scope": "GLOBAL",
+      "policy": "docs/EPISTEMIC_FIREWALL.md",
+      "config": "config/epistemic_policy.json"
+    }
+  ]
+}
