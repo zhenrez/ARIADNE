@@ -129,3 +129,82 @@ If exact message counting becomes uncertain because of interrupted turns or plat
 All research-history summaries, chat-derived continuity artifacts, design rationale, working hypotheses, machine predictions, structural alignments, TOL predictions, and checksum predictions are discovery guidance unless independently verified under the ARIADNE Epistemic Firewall.
 
 See `docs/EPISTEMIC_FIREWALL.md` and `config/epistemic_policy.json`.
+
+---
+
+## GPR-003 — Prior-art and field-census gate
+
+**Status:** ACTIVE / GLOBAL RESEARCH / NON-OPTIONAL  
+**Adopted:** 2026-09-14
+
+Before substantial original source interpretation or cross-domain synthesis begins for a new major research question, ARIADNE must first investigate the research landscape surrounding the question itself.
+
+The default sequence is:
+
+```text
+QUESTION
+  -> FIELD CENSUS
+  -> PRIOR ART
+  -> VOCABULARY
+  -> KNOWN RESULTS
+  -> KNOWN FAILURES
+  -> SOURCE MAP
+  -> ORIGINAL INVESTIGATION
+  -> CONTRIBUTION DELTA
+```
+
+The forbidden default is:
+
+```text
+QUESTION -> HISTORICAL RABBIT HOLE
+```
+
+### First-order census questions
+
+ARIADNE asks, before expensive original synthesis:
+
+1. Who has proposed this or a structurally equivalent idea before?
+2. What fields study the problem?
+3. What terminology do those fields use?
+4. What established theories, models, equations, or frameworks are closest?
+5. What reviews, surveys, bibliographies, encyclopedias, dissertations, or meta-analyses already map the space?
+6. What are the canonical papers, books, and authors?
+7. What competing explanations exist?
+8. What has already been falsified, criticized, or abandoned?
+9. What unresolved questions remain?
+10. What primary sources or datasets does the field itself consider important?
+11. What historical lineages have scholars already connected?
+12. What terminology changed over time and may conceal older versions of the same idea?
+13. What adjacent disciplines may have rediscovered the same structure under another name?
+14. Which reasonable prior-art searches produced no result?
+
+A failed search is recorded as a bounded negative search result. It is **not** converted into a novelty claim merely because the first search returned nothing.
+
+### Gate
+
+Original deep-source analysis opens only when either:
+
+- a reasonable field map has been established; or
+- a documented, bounded search has reached saturation without identifying applicable prior art.
+
+Until then, acquisition and custody may continue, but the research engine does not begin its ordinary reconnect / synthesis cycle for that question.
+
+### Epistemic scope
+
+Field-census index records are permanently treated as **G0 discovery metadata**. They may establish that a bibliographic record exists and may teach vocabulary, authors, titles, fields, citations, and likely source leads. They do not establish the underlying historical or scientific claim discussed by the indexed work.
+
+A scholarly paper has scope-dependent roles. If the question is “did author P propose theory X?”, paper P can be primary evidence for P's own proposal after verification. It is not thereby primary evidence that an earlier historical author Q intended X.
+
+This distinction is mandatory:
+
+```text
+CONTENT IDENTITY != CLAIM IDENTITY != EVIDENTIAL AUTHORITY
+```
+
+A hash answers whether the stored content is the same. A claim identity answers whether two records express the same proposition or occurrence. Evidential authority answers what that source may support, under which scope and dependencies. None may be substituted for another.
+
+The operating rule is:
+
+> Never rediscover manually what a field has already spent centuries organizing.
+
+Use original effort where the field ends, disagrees, fragments, fails, or never connected the relevant pieces.
