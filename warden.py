@@ -72,6 +72,20 @@ def _prepare_field_census(con, w):
         for q in gate['questions']:
             if q['status'] in ('READY','SATURATED'):
                 queue_prior_art_leads(con,q['question_id'],w.config.get('field_census_surface_k',12))
+        # A metadata map is not the same as inspecting the surfaced scholarship.
+        # Attempt acquisition of the top prior-art leads before ordinary synthesis.
+        prior_pending=con.execute('''SELECT COUNT(DISTINCT j.job_id)
+            FROM acquisition_links l JOIN acquisition_jobs j USING(job_id)
+            WHERE l.relation='PRIOR_ART_LEAD'
+              AND (j.status='QUEUED' OR (j.status='FETCH_FAILED' AND j.attempts<3))''').fetchone()[0]
+        if prior_pending:
+            gate=dict(gate)
+            gate['blocked']=True
+            gate['stage']='PRIOR_ART_ACQUISITION'
+            gate['prior_art_pending']=prior_pending
+            gate['blocked_questions']=[q for q in gate['questions'] if q['status'] in ('READY','SATURATED')]
+    else:
+        gate['stage']='FIELD_CENSUS'
     con.commit()
     return gate
 
@@ -84,13 +98,14 @@ def cycle(paths=None,budget=None):
         con.commit()
         gate=_prepare_field_census(con,w)
         if gate['blocked']:
-            pending=con.execute("SELECT COUNT(*) FROM field_queries WHERE status='QUEUED'").fetchone()[0]
-            event(con,'P0_GATE_BLOCKED','FIELD_CENSUS',{
-                'blocked_questions':gate['blocked_questions'],
-                'pending_field_queries':pending,
+            pending=con.execute("""SELECT COUNT(*) FROM acquisition_jobs
+                WHERE status='QUEUED' OR (status='FETCH_FAILED' AND attempts<3)""").fetchone()[0]
+            event(con,'P0_GATE_BLOCKED',gate.get('stage','FIELD_CENSUS'),{
+                'blocked_questions':gate.get('blocked_questions',[]),
+                'pending_acquisitions':pending,
                 'rule':'RESEARCH_THE_RESEARCH_BEFORE_ORIGINAL_ANALYSIS'})
             con.commit()
-            result=dict(executed=0,pending=pending,revision='P0_FIELD_CENSUS',p0=gate)
+            result=dict(executed=0,pending=pending,revision='P0_'+gate.get('stage','FIELD_CENSUS'),p0=gate)
             backup = snapshot(con,ariadne.ROOT)
             print(json.dumps(dict(result,snapshot=str(backup))),flush=True)
             return result
