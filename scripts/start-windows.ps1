@@ -408,3 +408,4 @@ catch {
 }
 finally {
     try { Remove-Item -LiteralPath $StopFile -Force -ErrorAction SilentlyContinue } catch {}
+}
