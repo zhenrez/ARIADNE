@@ -205,6 +205,208 @@ function Find-ExistingAriadne([int]$Start) {
 
 function Test-Venv([hashtable]$Base) {
     if (-not (Test-Path -LiteralPath $VenvPython)) { return $false }
+    $VenvConfig=Join-Path $Venv 'pyvenv.cfg'
+    if (-not (Test-Path -LiteralPath $VenvConfig)) { return $false }
+    $ConfigText=Get-Content -LiteralPath $VenvConfig -Raw -ErrorAction SilentlyContinue
+    if ($ConfigText -notmatch '(?im)^\s*include-system-site-packages\s*=\s*false\s*    $Probe='import json,platform,struct,sys; print(json.dumps({"version":platform.python_version(),"implementation":platform.python_implementation(),"bits":struct.calcsize("P")*8,"base_executable":getattr(sys,"_base_executable",sys.executable),"prefix":sys.prefix,"base_prefix":sys.base_prefix}))'
+    try {
+        $Raw=& $VenvPython -I -c $Probe 2>$null
+        if ($LASTEXITCODE -ne 0 -or -not $Raw) { return $false }
+        $Info=$Raw | ConvertFrom-Json
+        if ($Info.implementation -ne 'CPython' -or $Info.bits -ne 64) { return $false }
+        if ($Info.version -notmatch "^$([regex]::Escape($Base.Minor))\.") { return $false }
+        if (Test-ForbiddenPythonPath $Info.base_executable) { return $false }
+        if (Test-ForbiddenPythonPath $Info.base_prefix) { return $false }
+        $ExpectedPrefix=[IO.Path]::GetFullPath($Venv).TrimEnd('\')
+        $ActualPrefix=[IO.Path]::GetFullPath([string]$Info.prefix).TrimEnd('\')
+        return $ActualPrefix -ieq $ExpectedPrefix
+    } catch { return $false }
+}
+
+function Remove-IncompatibleVenv {
+    if (-not (Test-Path -LiteralPath $Venv)) { return }
+    Write-Step 'Replacing an incompatible or externally managed .venv'
+    try { Remove-Item -LiteralPath $Venv -Recurse -Force }
+    catch {
+        throw @"
+ARIADNE could not replace the existing .venv because Windows says one of its
+files is still in use. Close any older ARIADNE/Python window using this folder,
+then double-click START-ARIADNE.cmd again.
+
+Nothing outside this repository was changed.
+"@
+    }
+}
+
+function Wait-ForHealth([System.Diagnostics.Process]$Process,[int]$Port) {
+    $Url="http://127.0.0.1:$Port/"
+    for ($Attempt=0;$Attempt -lt 300;$Attempt++) {
+        $Process.Refresh()
+        if ($Process.HasExited) { throw "ARIADNE stopped during startup with exit code $($Process.ExitCode)." }
+        try {
+            $Health=Invoke-RestMethod -Uri ($Url+'api/health') -TimeoutSec 1
+            if ($Health.service -eq 'ARIADNE' -and $Health.status -eq 'ok') { return $Url }
+        } catch {}
+        Start-Sleep -Milliseconds 100
+    }
+    throw 'ARIADNE did not become ready within thirty seconds.'
+}
+
+function Stop-AriadneServer {
+    if ($null -eq $Server) { return }
+    $Server.Refresh()
+    if ($Server.HasExited) { return }
+    try { Set-Content -LiteralPath $StopFile -Value 'stop' -Encoding ASCII } catch {}
+    for ($Attempt=0;$Attempt -lt 100;$Attempt++) {
+        $Server.Refresh()
+        if ($Server.HasExited) { break }
+        Start-Sleep -Milliseconds 100
+    }
+    $Server.Refresh()
+    if (-not $Server.HasExited) { Stop-Process -Id $Server.Id -Force -ErrorAction SilentlyContinue }
+}
+
+function Write-Failure([System.Management.Automation.ErrorRecord]$Failure) {
+    try { New-Item -ItemType Directory -Force -Path $Artifacts | Out-Null } catch {}
+    $Lines=@(
+        'ARIADNE launcher failure',
+        ('Time: '+[DateTime]::UtcNow.ToString('o')),
+        ('Root: '+$Root),
+        ('Message: '+$Failure.Exception.Message),
+        ('Position: '+$Failure.InvocationInfo.PositionMessage),
+        ('Script stack: '+$Failure.ScriptStackTrace),
+        '',
+        '--- server stderr (tail) ---'
+    )
+    if (Test-Path -LiteralPath $ServerStderrLog) {
+        try { $Lines += @(Get-Content -LiteralPath $ServerStderrLog -Tail 80 -ErrorAction Stop) } catch {}
+    }
+    $Lines += @('', '--- server stdout (tail) ---')
+    if (Test-Path -LiteralPath $ServerStdoutLog) {
+        try { $Lines += @(Get-Content -LiteralPath $ServerStdoutLog -Tail 80 -ErrorAction Stop) } catch {}
+    }
+    $Lines += @('', 'No global Python, CUDA, NVIDIA, Conda, or Anaconda installation was changed.')
+    try { Set-Content -LiteralPath $FailureLog -Value $Lines -Encoding UTF8 } catch {}
+}
+
+try {
+    Set-Location $Root
+    New-Item -ItemType Directory -Force -Path $Artifacts | Out-Null
+    if ($Root.StartsWith('\\')) { throw 'ARIADNE uses SQLite WAL mode and must run from a local Windows drive, not a UNC/network share.' }
+
+    $Existing=Find-ExistingAriadne $PreferredPort
+    if ($Existing) {
+        $ExistingUrl="http://127.0.0.1:$($Existing.Port)/"
+        Write-Host "ARIADNE is already running from this repository at $ExistingUrl" -ForegroundColor Green
+        if (-not $VerifyOnly -and -not $NoBrowser) {
+            try { Start-Process $ExistingUrl }
+            catch {
+                Write-Host "The default browser could not be opened automatically." -ForegroundColor DarkYellow
+                Write-Host "Open this address manually: $ExistingUrl" -ForegroundColor Yellow
+            }
+        }
+        exit 0
+    }
+
+    Write-Step 'Selecting a clean 64-bit CPython 3.13 or 3.11 installation'
+    $Base=Select-BasePython
+    Write-Host "Using CPython $($Base.Version): $($Base.Executable)"
+
+    if ((Test-Path -LiteralPath $Venv) -and -not (Test-Venv $Base)) { Remove-IncompatibleVenv }
+    if (-not (Test-Path -LiteralPath $VenvPython)) {
+        Write-Step 'Creating the isolated .venv'
+        $CreateArgs=@($Base.Prefix)+@('-I','-m','venv',$Venv)
+        & $Base.Command @CreateArgs
+        if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $VenvPython)) { throw 'Virtual-environment creation failed.' }
+    }
+
+    Clear-ContaminatingEnvironment
+
+    Write-Step 'Checking pip inside the isolated environment'
+    & $VenvPython -I -m pip --version *> $null
+    if ($LASTEXITCODE -ne 0) {
+        & $VenvPython -I -m ensurepip --upgrade
+        if ($LASTEXITCODE -ne 0) { throw 'pip bootstrap failed inside .venv.' }
+    }
+
+    if (-not (Test-Path -LiteralPath $Requirements)) { throw 'requirements.txt is missing from the repository.' }
+
+    Write-Step 'Installing project requirements with outside pip configuration disabled'
+    & $VenvPython -I -m pip install --disable-pip-version-check --no-input --index-url https://pypi.org/simple -r $Requirements
+    if ($LASTEXITCODE -ne 0) { throw 'Requirement installation failed.' }
+
+    Write-Step 'Running preflight, SQLite feature checks, writer-lock check, and safe database backup'
+    & $VenvPython -I (Join-Path $Root 'scripts\launcher_preflight.py') --backup
+    if ($LASTEXITCODE -ne 0) { throw 'ARIADNE preflight failed.' }
+
+    Write-Step 'Compiling Python sources'
+    & $VenvPython -I -m compileall -q (Join-Path $Root 'ariadne.py') (Join-Path $Root 'warden.py') (Join-Path $Root 'ariadne_core') (Join-Path $Root 'scripts')
+    if ($LASTEXITCODE -ne 0) { throw 'Python compilation check failed.' }
+
+    Write-Step 'Running the regression suite with resource-warning visibility'
+    & $VenvPython -W 'default::ResourceWarning' -m unittest discover -s (Join-Path $Root 'tests') -v
+    if ($LASTEXITCODE -ne 0) { throw 'ARIADNE regression tests failed.' }
+
+    Write-Step 'Initializing/migrating and verifying the ARIADNE ledger'
+    & $VenvPython (Join-Path $Root 'warden.py') verify
+    if ($LASTEXITCODE -ne 0) { throw 'ARIADNE ledger verification failed.' }
+
+    $Port=Get-OpenPort $PreferredPort
+    $Url="http://127.0.0.1:$Port/"
+    try { Remove-Item -LiteralPath $StopFile -Force -ErrorAction SilentlyContinue } catch {}
+
+    Write-Step "Starting ARIADNE on $Url"
+    foreach ($Log in @($ServerStdoutLog,$ServerStderrLog)) {
+        try { Remove-Item -LiteralPath $Log -Force -ErrorAction SilentlyContinue } catch {}
+    }
+    $ServerArgs=@('warden.py','serve','--port',"$Port",'--interval','10','--stop-file',$StopRelative)
+    $Server=Start-Process -FilePath $VenvPython -ArgumentList $ServerArgs -WorkingDirectory $Root -NoNewWindow -RedirectStandardOutput $ServerStdoutLog -RedirectStandardError $ServerStderrLog -PassThru
+    $Url=Wait-ForHealth $Server $Port
+
+    if ($VerifyOnly) {
+        Write-Step 'Stopping the smoke-test server cleanly'
+        Stop-AriadneServer
+        $Server.Refresh()
+        if (-not $Server.HasExited) { throw 'Smoke-test server did not stop cleanly.' }
+        Write-Host ""
+        Write-Host 'Windows one-click bootstrap verification passed.' -ForegroundColor Green
+        exit 0
+    }
+
+    $Success=@{service='ARIADNE';started_utc=[DateTime]::UtcNow.ToString('o');python=$Base.Version;python_executable=$Base.Executable;venv=$Venv;port=$Port;url=$Url;pid=$Server.Id} | ConvertTo-Json
+    Set-Content -LiteralPath $SuccessLog -Value $Success -Encoding UTF8
+    if (-not $NoBrowser) {
+        try { Start-Process $Url }
+        catch {
+            Write-Host "The default browser could not be opened automatically." -ForegroundColor DarkYellow
+            Write-Host "ARIADNE is still running. Open this address manually: $Url" -ForegroundColor Yellow
+        }
+    }
+
+    Write-Host ""
+    Write-Host 'ARIADNE is running and its Warden worker is active.' -ForegroundColor Green
+    Write-Host 'Keep this window open. Press Ctrl+C to stop ARIADNE cleanly.'
+    try { Wait-Process -Id $Server.Id } finally { Stop-AriadneServer }
+
+    $Server.Refresh()
+    if ($Server.ExitCode -ne 0) { throw "ARIADNE exited with code $($Server.ExitCode)." }
+}
+catch {
+    try { Stop-AriadneServer } catch {}
+    Write-Failure $_
+    Write-Host ""
+    Write-Host 'STARTUP FAILED' -ForegroundColor Red
+    Write-Host $_.Exception.Message -ForegroundColor Red
+    Write-Host ""
+    Write-Host 'A readable diagnostic was saved to:'
+    Write-Host "  $FailureLog"
+    Write-Host ""
+    Write-Host 'No global Python, CUDA, NVIDIA, Conda, or Anaconda installation was changed.'
+    exit 1
+}
+finally {
+    try { Remove-Item -LiteralPath $StopFile -Force -ErrorAction SilentlyContinue } catch {}
+}) { return $false }
     $Probe='import json,platform,struct,sys; print(json.dumps({"version":platform.python_version(),"implementation":platform.python_implementation(),"bits":struct.calcsize("P")*8,"base_executable":getattr(sys,"_base_executable",sys.executable),"prefix":sys.prefix,"base_prefix":sys.base_prefix}))'
     try {
         $Raw=& $VenvPython -I -c $Probe 2>$null
