@@ -1,6 +1,7 @@
 """Local-only feed interface; a single algorithm worker runs in the background."""
 import base64
 import json
+import os
 import secrets
 import signal
 import sqlite3
@@ -37,10 +38,15 @@ from .dashboard import PAGE, progress_summary, submit_manifest
 
 
 
-def serve(port=8765,interval=10):
+def serve(port=8765,interval=10,stop_file=None):
     from warden import watch
     if not 1<=port<=65535 or interval<=0:raise ValueError('invalid port or interval')
     stop=threading.Event();mutex=threading.RLock();token=secrets.token_urlsafe(32)
+    stop_path=Path(stop_file).resolve() if stop_file else None
+    if stop_path:
+        stop_path.parent.mkdir(parents=True,exist_ok=True)
+        try:stop_path.unlink()
+        except FileNotFoundError:pass
     class Handler(BaseHTTPRequestHandler):
         def log_message(self,*args):pass
         def send(self,status,data,mime='application/json'):
@@ -53,6 +59,8 @@ def serve(port=8765,interval=10):
             if not self.allowed():self.send(403,'{}');return
             path=urlsplit(self.path).path
             if path=='/':self.send(200,PAGE.replace('__TOKEN__',token),'text/html; charset=utf-8')
+            elif path=='/api/health':
+                self.send(200,encoded(dict(service='ARIADNE',status='ok',pid=os.getpid(),root=str(ariadne.ROOT.resolve()))))
             elif path=='/api/status':
                 with ariadne.connect() as con:
                     progress=progress_summary(con)
@@ -113,7 +121,13 @@ def serve(port=8765,interval=10):
     old={sig:signal.signal(sig,lambda *_:stop.set()) for sig in (signal.SIGINT,signal.SIGTERM)}
     worker.start();print(f'ARIADNE running at http://127.0.0.1:{port}',flush=True)
     try:
-        while not stop.is_set():server.handle_request()
+        while not stop.is_set():
+            if stop_path and stop_path.exists():
+                stop.set();break
+            server.handle_request()
     finally:
         stop.set();worker.join(timeout=60);server.server_close()
+        if stop_path:
+            try:stop_path.unlink()
+            except FileNotFoundError:pass
         for sig,handler in old.items():signal.signal(sig,handler)

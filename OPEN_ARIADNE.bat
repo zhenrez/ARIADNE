@@ -1,6 +1,3 @@
 @echo off
-setlocal
-cd /d "%~dp0"
-start "" http://127.0.0.1:8765
-python warden.py serve
-if errorlevel 1 pause
+call "%~dp0START-ARIADNE.cmd" %*
+exit /b %ERRORLEVEL%

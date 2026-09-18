@@ -1,5 +1,3 @@
 @echo off
-setlocal
-cd /d "%~dp0"
-python warden.py watch
-if errorlevel 1 pause
+call "%~dp0START-ARIADNE.cmd" -NoBrowser
+exit /b %ERRORLEVEL%

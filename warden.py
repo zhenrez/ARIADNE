@@ -186,7 +186,7 @@ def main(argv=None):
     p=sub.add_parser('acquire');p.add_argument('manifest',help='Path to text containing URLs/DOIs')
     p=sub.add_parser('question');p.add_argument('question');p.add_argument('--scope',default='');p.add_argument('--term',action='append',default=[])
     p=sub.add_parser('field-map');p.add_argument('question_id',nargs='?')
-    p=sub.add_parser('serve');p.add_argument('--port',type=int,default=8765);p.add_argument('--interval',type=float,default=10)
+    p=sub.add_parser('serve');p.add_argument('--port',type=int,default=8765);p.add_argument('--interval',type=float,default=10);p.add_argument('--stop-file')
     args=parser.parse_args(argv)
     if args.command=='recover':
         print(recover(args.snapshot,args.target));return 0
@@ -198,7 +198,7 @@ def main(argv=None):
             watch(args.interval,args.budget,args.cycles);return 0
         if args.command=='serve':
             from ariadne_core.server import serve
-            serve(args.port,args.interval);return 0
+            serve(args.port,args.interval,args.stop_file);return 0
         con=ariadne.connect()
         try:
             w=Warden(con,ariadne.ROOT)

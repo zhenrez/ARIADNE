@@ -8,15 +8,18 @@ ARIADNE is a feed-first research engine for preserving evidence, competing inter
 
 ARIADNE is designed so the operator does **not** need to build graph nodes, write database queries, or remember unresolved research branches.
 
-The everyday interaction is:
+### Windows 11 — one-click start
 
-1. Start `python warden.py serve` (or double-click `OPEN_ARIADNE.bat` on Windows).
-2. Open http://127.0.0.1:8765 and drop files or paste a resource list.
-3. Watch progress; open **View findings** when you want the evidence details.
+Download/extract the repository once, then double-click **`START-ARIADNE.cmd`**.
+That one file performs setup, verification, server start, Warden start, free-port selection, and browser launch automatically.
 
-The browser page stays small. The local worker handles custody, acquisition,
-indexing, candidate graph connections, and version history. Closing the tab does
-not stop the worker; keep the process and computer running.
+It prefers clean 64-bit CPython 3.13 then 3.11; rejects NVIDIA/CUDA, Conda/Anaconda/Miniconda, Windows Store aliases and unrelated virtual environments; creates/replaces only the repository-local `.venv`; clears inherited Python/Conda/NVIDIA/CUDA/pip contamination only inside the launcher process; preserves unrelated PATH tools such as `pdftotext`; disables outside pip configuration; checks SQLite FTS5/JSON and Windows close/delete behavior; detects another Warden; makes a deduplicated pre-start SQLite backup; compiles sources; runs the regression suite with `ResourceWarning` visibility; verifies ledger/custody/history/foreign keys; finds a free loopback port; smoke-tests the server; starts the continuous Warden worker; opens the default browser; and writes `artifacts/launcher-failure.txt` on failure. It never changes or removes global Python, CUDA, NVIDIA, Conda or Anaconda installations.
+
+Docker is intentionally not required: ARIADNE is a local Python/SQLite application and the repository-local virtual environment has fewer moving parts. The launcher refuses UNC/network-share execution because ARIADNE uses SQLite WAL mode.
+
+GitHub/Windows do not permit a web page to silently execute downloaded code, so the safe minimum is one double-click after downloading/extracting the repository.
+
+Once open, drop files or paste a resource list into the browser. The local Warden handles custody, acquisition, indexing, candidate graph connections, version history, and the Where-To-Look-Next queue continuously while the launcher window stays open.
 
 Everything else is internal machinery.
 
@@ -92,14 +95,10 @@ The canonical store is a single SQLite database at `db/ariadne.sqlite`.
 Double-click:
 
 ```text
-SETUP_ARIADNE.bat
+START-ARIADNE.cmd
 ```
 
-Then drop files into `inbox/` and double-click:
-
-```text
-RUN_ARIADNE.bat
-```
+The older SETUP/RUN/OPEN/WATCH batch files remain compatibility shims to the same launcher.
 
 ### Command line
 
