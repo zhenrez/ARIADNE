@@ -61,8 +61,9 @@ function Probe-PyLauncher([string]$Launcher,[string]$ExpectedMinor) {
     $Probe='import json,platform,struct,sys; print(json.dumps({"version":platform.python_version(),"implementation":platform.python_implementation(),"bits":struct.calcsize("P")*8,"executable":sys.executable,"base_executable":getattr(sys,"_base_executable",sys.executable),"prefix":sys.prefix,"base_prefix":sys.base_prefix}))'
     $Selector="-$ExpectedMinor"
     try {
-        $Raw=& $Launcher $Selector -I -c $Probe 2>$null
-        if ($LASTEXITCODE -ne 0) { return $null }
+        Write-Host "Testing Python launcher candidate: $Launcher $Selector" -ForegroundColor DarkGray
+        $Raw=& $Launcher $Selector -I -c $Probe
+        if ($LASTEXITCODE -ne 0) { Write-Host "Rejected launcher candidate: probe exited $LASTEXITCODE." -ForegroundColor DarkYellow; return $null }
         $Info=Test-PythonInfo -Raw $Raw -ExpectedMinor $ExpectedMinor -CandidateLabel "$Launcher $Selector"
         if (-not $Info) { return $null }
         return @{Command=$Launcher;Prefix=@($Selector);Version=[string]$Info.version;Minor=$ExpectedMinor;Executable=[string]$Info.executable;BaseExecutable=[string]$Info.base_executable}
@@ -72,8 +73,9 @@ function Probe-PyLauncher([string]$Launcher,[string]$ExpectedMinor) {
 function Probe-PythonExe([string]$Path,[string]$ExpectedMinor) {
     $Probe='import json,platform,struct,sys; print(json.dumps({"version":platform.python_version(),"implementation":platform.python_implementation(),"bits":struct.calcsize("P")*8,"executable":sys.executable,"base_executable":getattr(sys,"_base_executable",sys.executable),"prefix":sys.prefix,"base_prefix":sys.base_prefix}))'
     try {
-        $Raw=& $Path -I -c $Probe 2>$null
-        if ($LASTEXITCODE -ne 0) { return $null }
+        Write-Host "Testing Python candidate: $Path" -ForegroundColor DarkGray
+        $Raw=& $Path -I -c $Probe
+        if ($LASTEXITCODE -ne 0) { Write-Host "Rejected Python candidate: probe exited $LASTEXITCODE." -ForegroundColor DarkYellow; return $null }
         $Info=Test-PythonInfo -Raw $Raw -ExpectedMinor $ExpectedMinor -CandidateLabel $Path
         if (-not $Info) { return $null }
         return @{Command=$Path;Prefix=@();Version=[string]$Info.version;Minor=$ExpectedMinor;Executable=[string]$Info.executable;BaseExecutable=[string]$Info.base_executable}
@@ -82,6 +84,16 @@ function Probe-PythonExe([string]$Path,[string]$ExpectedMinor) {
 
 function Select-BasePython {
     $Minors = if ($RequiredPythonMinor) { @($RequiredPythonMinor) } else { @('3.13', '3.11') }
+    if ($env:pythonLocation) {
+        $ActionPython=Join-Path $env:pythonLocation 'python.exe'
+        if (Test-Path -LiteralPath $ActionPython) {
+            foreach ($Minor in $Minors) {
+                $Candidate=Probe-PythonExe -Path $ActionPython -ExpectedMinor $Minor
+                if ($Candidate) { return $Candidate }
+            }
+        }
+    }
+
     $Launcher = Get-Command py.exe -ErrorAction SilentlyContinue
     if ($Launcher) {
         foreach ($Minor in $Minors) {
