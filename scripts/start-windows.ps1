@@ -19,6 +19,9 @@ $SuccessLog = Join-Path $Artifacts 'launcher-success.json'
 $Server = $null
 $StopRelative = "artifacts\launcher-stop-$PID.flag"
 $StopFile = Join-Path $Root $StopRelative
+$PortSearchSpan = 100
+$ServerStdoutLog = Join-Path $Artifacts 'server-stdout.log'
+$ServerStderrLog = Join-Path $Artifacts 'server-stderr.log'
 
 function Write-Step([string]$Message) {
     Write-Host ""
@@ -32,20 +35,20 @@ function Test-ForbiddenPythonPath([string]$Path) {
 
 function Test-PythonFields([string]$Version,[string]$Implementation,[int]$Bits,[string]$Executable,[string]$BaseExecutable,[string]$BasePrefix,[string]$ExpectedMinor,[string]$CandidateLabel) {
     if ($Implementation -ne 'CPython') {
-        Write-Host "Rejected \${CandidateLabel}: implementation is $Implementation, not CPython." -ForegroundColor DarkYellow
+        Write-Host "Rejected ${CandidateLabel}: implementation is $Implementation, not CPython." -ForegroundColor DarkYellow
         return $false
     }
     if ($Bits -ne 64) {
-        Write-Host "Rejected \${CandidateLabel}: \${Bits}-bit runtime; 64-bit required." -ForegroundColor DarkYellow
+        Write-Host "Rejected ${CandidateLabel}: ${Bits}-bit runtime; 64-bit required." -ForegroundColor DarkYellow
         return $false
     }
     if ($Version -notmatch "^$([regex]::Escape($ExpectedMinor))\.") {
-        Write-Host "Rejected \${CandidateLabel}: version $Version does not match $ExpectedMinor." -ForegroundColor DarkYellow
+        Write-Host "Rejected ${CandidateLabel}: version $Version does not match $ExpectedMinor." -ForegroundColor DarkYellow
         return $false
     }
     foreach ($CandidatePath in @($Executable,$BaseExecutable,$BasePrefix)) {
         if (Test-ForbiddenPythonPath $CandidatePath) {
-            Write-Host "Rejected \${CandidateLabel}: forbidden Python environment path $CandidatePath" -ForegroundColor DarkYellow
+            Write-Host "Rejected ${CandidateLabel}: forbidden Python environment path $CandidatePath" -ForegroundColor DarkYellow
             return $false
         }
     }
@@ -175,16 +178,20 @@ function Clear-ContaminatingEnvironment {
 }
 
 function Get-OpenPort([int]$Start) {
-    for ($Port=$Start; $Port -le ($Start+100); $Port++) {
+    if ($Start -lt 1 -or $Start -gt 65535) { throw "Preferred port must be between 1 and 65535." }
+    $End=[Math]::Min(65535,$Start+$PortSearchSpan)
+    for ($Port=$Start; $Port -le $End; $Port++) {
         $Listener=[System.Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback,$Port)
         try { $Listener.Start(); return $Port } catch {} finally { try {$Listener.Stop()} catch {} }
     }
-    throw "No available localhost port was found between $Start and $($Start+100)."
+    throw "No available localhost port was found between $Start and $End."
 }
 
 function Find-ExistingAriadne([int]$Start) {
+    if ($Start -lt 1 -or $Start -gt 65535) { return $null }
+    $End=[Math]::Min(65535,$Start+$PortSearchSpan)
     $ExpectedRoot=[IO.Path]::GetFullPath($Root).TrimEnd('\')
-    for ($Port=$Start; $Port -le ($Start+30); $Port++) {
+    for ($Port=$Start; $Port -le $End; $Port++) {
         try {
             $Health=Invoke-RestMethod -Uri "http://127.0.0.1:$Port/api/health" -TimeoutSec 1
             if ($Health.service -eq 'ARIADNE') {
@@ -230,7 +237,7 @@ Nothing outside this repository was changed.
 
 function Wait-ForHealth([System.Diagnostics.Process]$Process,[int]$Port) {
     $Url="http://127.0.0.1:$Port/"
-    for ($Attempt=0;$Attempt -lt 100;$Attempt++) {
+    for ($Attempt=0;$Attempt -lt 300;$Attempt++) {
         $Process.Refresh()
         if ($Process.HasExited) { throw "ARIADNE stopped during startup with exit code $($Process.ExitCode)." }
         try {
@@ -239,7 +246,7 @@ function Wait-ForHealth([System.Diagnostics.Process]$Process,[int]$Port) {
         } catch {}
         Start-Sleep -Milliseconds 100
     }
-    throw 'ARIADNE did not become ready within ten seconds.'
+    throw 'ARIADNE did not become ready within thirty seconds.'
 }
 
 function Stop-AriadneServer {
@@ -266,8 +273,16 @@ function Write-Failure([System.Management.Automation.ErrorRecord]$Failure) {
         ('Position: '+$Failure.InvocationInfo.PositionMessage),
         ('Script stack: '+$Failure.ScriptStackTrace),
         '',
-        'No global Python, CUDA, NVIDIA, Conda, or Anaconda installation was changed.'
+        '--- server stderr (tail) ---'
     )
+    if (Test-Path -LiteralPath $ServerStderrLog) {
+        try { $Lines += @(Get-Content -LiteralPath $ServerStderrLog -Tail 80 -ErrorAction Stop) } catch {}
+    }
+    $Lines += @('', '--- server stdout (tail) ---')
+    if (Test-Path -LiteralPath $ServerStdoutLog) {
+        try { $Lines += @(Get-Content -LiteralPath $ServerStdoutLog -Tail 80 -ErrorAction Stop) } catch {}
+    }
+    $Lines += @('', 'No global Python, CUDA, NVIDIA, Conda, or Anaconda installation was changed.')
     try { Set-Content -LiteralPath $FailureLog -Value $Lines -Encoding UTF8 } catch {}
 }
 
@@ -280,7 +295,13 @@ try {
     if ($Existing) {
         $ExistingUrl="http://127.0.0.1:$($Existing.Port)/"
         Write-Host "ARIADNE is already running from this repository at $ExistingUrl" -ForegroundColor Green
-        if (-not $VerifyOnly -and -not $NoBrowser) { Start-Process $ExistingUrl }
+        if (-not $VerifyOnly -and -not $NoBrowser) {
+            try { Start-Process $ExistingUrl }
+            catch {
+                Write-Host "The default browser could not be opened automatically." -ForegroundColor DarkYellow
+                Write-Host "Open this address manually: $ExistingUrl" -ForegroundColor Yellow
+            }
+        }
         exit 0
     }
 
@@ -332,8 +353,11 @@ try {
     try { Remove-Item -LiteralPath $StopFile -Force -ErrorAction SilentlyContinue } catch {}
 
     Write-Step "Starting ARIADNE on $Url"
+    foreach ($Log in @($ServerStdoutLog,$ServerStderrLog)) {
+        try { Remove-Item -LiteralPath $Log -Force -ErrorAction SilentlyContinue } catch {}
+    }
     $ServerArgs=@('warden.py','serve','--port',"$Port",'--interval','10','--stop-file',$StopRelative)
-    $Server=Start-Process -FilePath $VenvPython -ArgumentList $ServerArgs -WorkingDirectory $Root -NoNewWindow -PassThru
+    $Server=Start-Process -FilePath $VenvPython -ArgumentList $ServerArgs -WorkingDirectory $Root -NoNewWindow -RedirectStandardOutput $ServerStdoutLog -RedirectStandardError $ServerStderrLog -PassThru
     $Url=Wait-ForHealth $Server $Port
 
     if ($VerifyOnly) {
@@ -348,7 +372,13 @@ try {
 
     $Success=@{service='ARIADNE';started_utc=[DateTime]::UtcNow.ToString('o');python=$Base.Version;python_executable=$Base.Executable;venv=$Venv;port=$Port;url=$Url;pid=$Server.Id} | ConvertTo-Json
     Set-Content -LiteralPath $SuccessLog -Value $Success -Encoding UTF8
-    if (-not $NoBrowser) { Start-Process $Url }
+    if (-not $NoBrowser) {
+        try { Start-Process $Url }
+        catch {
+            Write-Host "The default browser could not be opened automatically." -ForegroundColor DarkYellow
+            Write-Host "ARIADNE is still running. Open this address manually: $Url" -ForegroundColor Yellow
+        }
+    }
 
     Write-Host ""
     Write-Host 'ARIADNE is running and its Warden worker is active.' -ForegroundColor Green
