@@ -22,6 +22,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: Exercise isolated one-click bootstrap and server smoke test
-        shell: powershell
-        run: .\scripts\start-windows.ps1 -VerifyOnly -RequiredPythonMinor '${{ matrix.python }}'
+      - name: Exercise the actual double-click launcher path
+        shell: cmd
+        run: START-ARIADNE.cmd -VerifyOnly -RequiredPythonMinor ${{ matrix.python }}
