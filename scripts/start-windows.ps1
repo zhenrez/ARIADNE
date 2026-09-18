@@ -33,7 +33,7 @@ function Test-ForbiddenPythonPath([string]$Path) {
     return $Path -match '(?i)(conda|anaconda|miniconda|mambaforge|miniforge|nvidia|cuda|windowsapps|[\\/]\.venv[\\/]|[\\/]venv[\\/]|[\\/]envs?[\\/])'
 }
 
-function Test-PythonFields([string]$Version,[string]$Implementation,[int]$Bits,[string]$Executable,[string]$BaseExecutable,[string]$BasePrefix,[string]$ExpectedMinor,[string]$CandidateLabel) {
+function Test-PythonFields([string]$Version,[string]$Implementation,[int]$Bits,[string]$Executable,[string]$BaseExecutable,[string]$Prefix,[string]$BasePrefix,[string]$ExpectedMinor,[string]$CandidateLabel) {
     if ($Implementation -ne 'CPython') {
         Write-Host "Rejected ${CandidateLabel}: implementation is $Implementation, not CPython." -ForegroundColor DarkYellow
         return $false
@@ -46,11 +46,22 @@ function Test-PythonFields([string]$Version,[string]$Implementation,[int]$Bits,[
         Write-Host "Rejected ${CandidateLabel}: version $Version does not match $ExpectedMinor." -ForegroundColor DarkYellow
         return $false
     }
-    foreach ($CandidatePath in @($Executable,$BaseExecutable,$BasePrefix)) {
+    foreach ($CandidatePath in @($Executable,$BaseExecutable,$Prefix,$BasePrefix)) {
         if (Test-ForbiddenPythonPath $CandidatePath) {
             Write-Host "Rejected ${CandidateLabel}: forbidden Python environment path $CandidatePath" -ForegroundColor DarkYellow
             return $false
         }
+    }
+    try {
+        $ActualPrefix=[IO.Path]::GetFullPath($Prefix).TrimEnd('\')
+        $ActualBasePrefix=[IO.Path]::GetFullPath($BasePrefix).TrimEnd('\')
+        if ($ActualPrefix -ine $ActualBasePrefix) {
+            Write-Host "Rejected ${CandidateLabel}: it is an unrelated virtual environment ($ActualPrefix)." -ForegroundColor DarkYellow
+            return $false
+        }
+    } catch {
+        Write-Host "Rejected ${CandidateLabel}: Python prefix paths could not be validated." -ForegroundColor DarkYellow
+        return $false
     }
     return $true
 }
@@ -65,9 +76,10 @@ function Probe-PyLauncher([string]$Launcher,[string]$ExpectedMinor) {
         $Bits=& $Launcher $Selector -I -c "import sys; print(64 if sys.maxsize > 2**32 else 32)"
         $Executable=& $Launcher $Selector -I -c "import sys; print(sys.executable)"
         $BaseExecutable=& $Launcher $Selector -I -c "import sys; print(sys._base_executable)"
+        $Prefix=& $Launcher $Selector -I -c "import sys; print(sys.prefix)"
         $BasePrefix=& $Launcher $Selector -I -c "import sys; print(sys.base_prefix)"
         if ($LASTEXITCODE -ne 0) { return $null }
-        if (-not (Test-PythonFields -Version $Version -Implementation $Implementation -Bits ([int]$Bits) -Executable $Executable -BaseExecutable $BaseExecutable -BasePrefix $BasePrefix -ExpectedMinor $ExpectedMinor -CandidateLabel "$Launcher $Selector")) { return $null }
+        if (-not (Test-PythonFields -Version $Version -Implementation $Implementation -Bits ([int]$Bits) -Executable $Executable -BaseExecutable $BaseExecutable -Prefix $Prefix -BasePrefix $BasePrefix -ExpectedMinor $ExpectedMinor -CandidateLabel "$Launcher $Selector")) { return $null }
         return @{Command=$Launcher;Prefix=@($Selector);Version=$Version.Trim();Minor=$ExpectedMinor;Executable=$Executable.Trim();BaseExecutable=$BaseExecutable.Trim()}
     } catch {
         Write-Host "Rejected launcher candidate: $($_.Exception.Message)" -ForegroundColor DarkYellow
@@ -84,9 +96,10 @@ function Probe-PythonExe([string]$Path,[string]$ExpectedMinor) {
         $Bits=& $Path -I -c "import sys; print(64 if sys.maxsize > 2**32 else 32)"
         $Executable=& $Path -I -c "import sys; print(sys.executable)"
         $BaseExecutable=& $Path -I -c "import sys; print(sys._base_executable)"
+        $Prefix=& $Path -I -c "import sys; print(sys.prefix)"
         $BasePrefix=& $Path -I -c "import sys; print(sys.base_prefix)"
         if ($LASTEXITCODE -ne 0) { return $null }
-        if (-not (Test-PythonFields -Version $Version -Implementation $Implementation -Bits ([int]$Bits) -Executable $Executable -BaseExecutable $BaseExecutable -BasePrefix $BasePrefix -ExpectedMinor $ExpectedMinor -CandidateLabel $Path)) { return $null }
+        if (-not (Test-PythonFields -Version $Version -Implementation $Implementation -Bits ([int]$Bits) -Executable $Executable -BaseExecutable $BaseExecutable -Prefix $Prefix -BasePrefix $BasePrefix -ExpectedMinor $ExpectedMinor -CandidateLabel $Path)) { return $null }
         return @{Command=$Path;Prefix=@();Version=$Version.Trim();Minor=$ExpectedMinor;Executable=$Executable.Trim();BaseExecutable=$BaseExecutable.Trim()}
     } catch {
         Write-Host "Rejected Python candidate: $($_.Exception.Message)" -ForegroundColor DarkYellow
