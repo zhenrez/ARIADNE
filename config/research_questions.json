@@ -1,15 +1,53 @@
 [
   {
     "enabled": true,
+    "question": "What exact historical, textual, and functional relationships explain the recurring 70/72 structures across Numbers 11, Eldad/Medad, Sanhedrin 17a, the Septuagint translation traditions, Luke 10, Babel/language traditions, and their documented reception without collapsing distinct count operators?",
+    "scope": "ANTI-RECTA active 70/72 investigation. Separate entities, addresses, seats, candidates, pairs, languages, nations, translators, disciples, and textual readings; map source dependency and chronology before synthesis.",
+    "seed_terms": [
+      "70 72 elders Eldad Medad",
+      "six from each tribe 72 70",
+      "Septuagint 72 translators 36 pairs",
+      "Luke 10 seventy seventy-two",
+      "70 languages Sanhedrin",
+      "Babel 70 72 languages",
+      "Aristeas 71 names 72"
+    ]
+  },
+  {
+    "enabled": true,
+    "question": "Within the period-locked core of roughly 100 BCE–100 CE, with a controlled extension through 300 CE, which decoder operations and meanings are actually attested for keshafim, alphabetic-number reckoning, Greek isopsephy, Semitic alphabetic numeration, eye-deception, names, incantation, binding, and related practices?",
+    "scope": "Do not import medieval Kabbalah/Qabalah, later Solomonic grimoires, Dee, Goetia, or modern numerology upstream. Distinguish keshafim from ohez et ha-enayim and distinguish period-valid numerical decoders from sorcery unless a source explicitly connects them.",
+    "seed_terms": [
+      "keshafim Sanhedrin 17a",
+      "Mishnah Sanhedrin sorcerer act eye deception",
+      "ohez et ha-enayim",
+      "Greek isopsephy first century",
+      "Hebrew alphabetic numerals BCE",
+      "Josephus Solomon incantation"
+    ]
+  },
+  {
+    "enabled": true,
+    "question": "Does the A08–A43 debate/transmission actor corpus independently sustain a 36-actor × two-primary-name-readings architecture yielding 72 semantic addresses under a uniform whole-carrier plus strongest-historical-root rule?",
+    "scope": "Preregister W_i whole presented-name semantic object and R_i strongest historically licensed complete root/morphological analysis. Alternate segmentations remain secondary and do not increment the count. Attack with alternate corpus boundaries, spellings, dependencies, removals, and matched controls.",
+    "seed_terms": [
+      "36 72 translators pairs names",
+      "ancient Greek name morphology Irenaeus Hippolytus Origen Aquila",
+      "Valentinus Basilides Heracleon Colarbasus",
+      "name etymology debate actors",
+      "onomastics patristic names"
+    ]
+  },
+  {
+    "enabled": true,
     "question": "Can local closure or reciprocal return coexist with a global level, register, octave, or generation change, especially in musical interval and comma systems?",
-    "scope": "Current Completed Harmony / MI-FA boundary investigation; prior-art and field vocabulary census before further original cross-domain synthesis.",
+    "scope": "Banked callback to Completed Harmony / MI-FA boundary investigation. Reignite when the 70/72 decoder work establishes a genuinely new typed dimension-changing operation.",
     "seed_terms": [
       "local closure global state change",
       "comma pump",
       "pitch class register",
       "monodromy",
       "graph covering",
-      "voltage graph",
       "MI-FA semitone",
       "musical comma"
     ]
