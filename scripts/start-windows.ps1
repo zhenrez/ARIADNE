@@ -130,9 +130,10 @@ function Select-BasePython {
         }
     }
 
-    foreach ($Command in @(Get-Command python.exe -All -ErrorAction SilentlyContinue)) {
-        if (Test-ForbiddenPythonPath $Command.Source) { continue }
-        foreach ($Minor in $Minors) {
+    $PathPythons=@(Get-Command python.exe -All -ErrorAction SilentlyContinue)
+    foreach ($Minor in $Minors) {
+        foreach ($Command in $PathPythons) {
+            if (Test-ForbiddenPythonPath $Command.Source) { continue }
             $Candidate = Probe-PythonExe -Path $Command.Source -ExpectedMinor $Minor
             if ($Candidate) { return $Candidate }
         }
