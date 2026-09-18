@@ -386,18 +386,29 @@ def generate_queue(con, source_id: str) -> None:
         enqueue(con,source_id,None,"UP",f"Global check for transform {tr['from_value']} {tr['operator']} {tr['to_value']}","Check whether this transform changes any older cosmology, lineage, language, sound/music, TOL, ritual/magic, number, or historical-transmission problem.","LOW","HIGH")
 
 
-def register_source(path: Path, connection=None, pointer_depth=0) -> tuple[str,bool,dict[str,int]]:
+def register_source(path: Path, connection=None, pointer_depth=0, move_into_custody=False) -> tuple[str,bool,dict[str,int]]:
     path=path.resolve(); digest=sha256_file(path); source_id=f"SRC-{digest[:16].upper()}"
+    original_name=path.name; original_path=str(path); original_size=path.stat().st_size
     stats={"discrepancies":0,"transforms":0,"residuals":0,"assertions":0,"torch_hits":0}
     with (nullcontext(connection) if connection is not None else connect()) as con:
         existing=con.execute("SELECT source_id FROM sources WHERE sha256=?",(digest,)).fetchone()
-        if existing: return existing["source_id"],False,stats
-        dest_dir=CUSTODY_DIR/source_id; dest_dir.mkdir(parents=True,exist_ok=True); dest=dest_dir/path.name
-        if not dest.exists(): shutil.copy2(path,dest)
+        if existing:
+            if move_into_custody and path.exists():
+                try: path.unlink()
+                except OSError: pass
+            return existing["source_id"],False,stats
+        dest_dir=CUSTODY_DIR/source_id; dest_dir.mkdir(parents=True,exist_ok=True); dest=dest_dir/original_name
+        if not dest.exists():
+            if move_into_custody:
+                shutil.move(str(path),str(dest))
+            else:
+                shutil.copy2(path,dest)
         if sha256_file(dest) != digest:
             raise ValueError(f"Custody checksum mismatch: {dest}")
         text,error=extract_text(dest)
-        con.execute("INSERT INTO sources(source_id,sha256,original_name,original_path,custody_path,extension,byte_size,text_extracted,created_at) VALUES(?,?,?,?,?,?,?,?,?)",(source_id,digest,path.name,str(path),str(dest.relative_to(ROOT)),path.suffix.lower(),path.stat().st_size,1 if text is not None else 0,now()))
+        con.execute("INSERT INTO sources(source_id,sha256,original_name,original_path,custody_path,extension,byte_size,text_extracted,created_at) VALUES(?,?,?,?,?,?,?,?,?)",(source_id,digest,original_name,original_path,str(dest.relative_to(ROOT)),dest.suffix.lower(),original_size,1 if text is not None else 0,now()))
+        from ariadne_core.storage import record_present
+        record_present(con,source_id,reacquirable=move_into_custody)
         eid=stable_id("EVT",source_id,"INGEST",now())
         con.execute("INSERT INTO ingest_events(event_id,source_id,action,detail,created_at) VALUES(?,?,?,?,?)",(eid,source_id,"INGEST","Source registered in custody",now()))
         if text is None:
@@ -405,12 +416,10 @@ def register_source(path: Path, connection=None, pointer_depth=0) -> tuple[str,b
         else:
             stats.update(extract_candidates(con,source_id,text)); stats["torch_hits"]=match_torches(con,source_id,text); generate_queue(con,source_id)
         from ariadne_core.acquisition import infer_lane
-        lane,reason=infer_lane(path,text or '')
+        lane,reason=infer_lane(dest,text or '')
         con.execute('INSERT OR IGNORE INTO source_lanes VALUES(?,?,?)',(source_id,lane,reason))
         if text:
             from ariadne_core.acquisition import pointers,queue_manifest
-            # Bookmark exports carry resource URLs in attributes that the text
-            # extractor intentionally removes. Preserve and inspect the original.
             pointer_text=dest.read_text(encoding='utf-8-sig',errors='replace') if dest.suffix.lower() in ('.html','.htm') else text
             leads=pointers(pointer_text)
             if leads: queue_manifest(con,'\n'.join(leads),source_id,pointer_depth,'GUIDES_TO' if lane=='G0' else 'DISCOVERED_POINTER')
@@ -420,7 +429,9 @@ def register_source(path: Path, connection=None, pointer_depth=0) -> tuple[str,b
 def inbox_files() -> Iterable[Path]:
     ensure_dirs()
     for p in sorted(INBOX_DIR.rglob("*")):
-        if p.is_file() and not p.name.startswith("."): yield p
+        if not p.is_file() or p.name.startswith(".") or p.suffix == ".part": continue
+        if "acquired" in p.relative_to(INBOX_DIR).parts: continue
+        yield p
 
 
 def ingest(paths: list[str]) -> None:
