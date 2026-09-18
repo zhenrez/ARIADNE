@@ -33,24 +33,24 @@ function Test-ForbiddenPythonPath([string]$Path) {
 function Test-PythonInfo([string]$Raw,[string]$ExpectedMinor,[string]$CandidateLabel) {
     if (-not $Raw) { return $null }
     try { $Info=$Raw | ConvertFrom-Json } catch {
-        Write-Host "Rejected $CandidateLabel: probe output was not valid JSON." -ForegroundColor DarkYellow
+        Write-Host "Rejected ${CandidateLabel}: probe output was not valid JSON." -ForegroundColor DarkYellow
         return $null
     }
     if ($Info.implementation -ne 'CPython') {
-        Write-Host "Rejected $CandidateLabel: implementation is $($Info.implementation), not CPython." -ForegroundColor DarkYellow
+        Write-Host "Rejected ${CandidateLabel}: implementation is $($Info.implementation), not CPython." -ForegroundColor DarkYellow
         return $null
     }
     if ($Info.bits -ne 64) {
-        Write-Host "Rejected $CandidateLabel: $($Info.bits)-bit runtime; 64-bit required." -ForegroundColor DarkYellow
+        Write-Host "Rejected ${CandidateLabel}: $($Info.bits)-bit runtime; 64-bit required." -ForegroundColor DarkYellow
         return $null
     }
     if ($Info.version -notmatch "^$([regex]::Escape($ExpectedMinor))\.") {
-        Write-Host "Rejected $CandidateLabel: version $($Info.version) does not match $ExpectedMinor." -ForegroundColor DarkYellow
+        Write-Host "Rejected ${CandidateLabel}: version $($Info.version) does not match $ExpectedMinor." -ForegroundColor DarkYellow
         return $null
     }
     foreach ($Field in @('executable','base_executable','base_prefix')) {
         if (Test-ForbiddenPythonPath ([string]$Info.$Field)) {
-            Write-Host "Rejected $CandidateLabel: $Field points to a forbidden Python environment: $($Info.$Field)" -ForegroundColor DarkYellow
+            Write-Host "Rejected ${CandidateLabel}: $Field points to a forbidden Python environment: $($Info.$Field)" -ForegroundColor DarkYellow
             return $null
         }
     }
