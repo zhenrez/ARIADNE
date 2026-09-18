@@ -30,19 +30,53 @@ function Test-ForbiddenPythonPath([string]$Path) {
     return $Path -match '(?i)(conda|anaconda|miniconda|mambaforge|miniforge|nvidia|cuda|windowsapps|[\\/]\.venv[\\/]|[\\/]venv[\\/]|[\\/]envs?[\\/])'
 }
 
-function Probe-Python([string]$Command, [string[]]$Prefix, [string]$ExpectedMinor) {
-    $Probe = 'import json,platform,struct,sys; print(json.dumps({"version":platform.python_version(),"implementation":platform.python_implementation(),"bits":struct.calcsize("P")*8,"executable":sys.executable,"base_executable":getattr(sys,"_base_executable",sys.executable),"prefix":sys.prefix,"base_prefix":sys.base_prefix}))'
+function Test-PythonInfo([string]$Raw,[string]$ExpectedMinor,[string]$CandidateLabel) {
+    if (-not $Raw) { return $null }
+    try { $Info=$Raw | ConvertFrom-Json } catch {
+        Write-Host "Rejected $CandidateLabel: probe output was not valid JSON." -ForegroundColor DarkYellow
+        return $null
+    }
+    if ($Info.implementation -ne 'CPython') {
+        Write-Host "Rejected $CandidateLabel: implementation is $($Info.implementation), not CPython." -ForegroundColor DarkYellow
+        return $null
+    }
+    if ($Info.bits -ne 64) {
+        Write-Host "Rejected $CandidateLabel: $($Info.bits)-bit runtime; 64-bit required." -ForegroundColor DarkYellow
+        return $null
+    }
+    if ($Info.version -notmatch "^$([regex]::Escape($ExpectedMinor))\.") {
+        Write-Host "Rejected $CandidateLabel: version $($Info.version) does not match $ExpectedMinor." -ForegroundColor DarkYellow
+        return $null
+    }
+    foreach ($Field in @('executable','base_executable','base_prefix')) {
+        if (Test-ForbiddenPythonPath ([string]$Info.$Field)) {
+            Write-Host "Rejected $CandidateLabel: $Field points to a forbidden Python environment: $($Info.$Field)" -ForegroundColor DarkYellow
+            return $null
+        }
+    }
+    return $Info
+}
+
+function Probe-PyLauncher([string]$Launcher,[string]$ExpectedMinor) {
+    $Probe='import json,platform,struct,sys; print(json.dumps({"version":platform.python_version(),"implementation":platform.python_implementation(),"bits":struct.calcsize("P")*8,"executable":sys.executable,"base_executable":getattr(sys,"_base_executable",sys.executable),"prefix":sys.prefix,"base_prefix":sys.base_prefix}))'
+    $Selector="-$ExpectedMinor"
     try {
-        $Raw = & $Command @Prefix -I -c $Probe 2>$null
-        if ($LASTEXITCODE -ne 0 -or -not $Raw) { return $null }
-        $Info = $Raw | ConvertFrom-Json
-        if ($Info.implementation -ne 'CPython') { return $null }
-        if ($Info.bits -ne 64) { return $null }
-        if ($Info.version -notmatch "^$([regex]::Escape($ExpectedMinor))\.") { return $null }
-        if (Test-ForbiddenPythonPath $Info.executable) { return $null }
-        if (Test-ForbiddenPythonPath $Info.base_executable) { return $null }
-        if (Test-ForbiddenPythonPath $Info.base_prefix) { return $null }
-        return @{Command=$Command;Prefix=@($Prefix);Version=[string]$Info.version;Minor=$ExpectedMinor;Executable=[string]$Info.executable;BaseExecutable=[string]$Info.base_executable}
+        $Raw=& $Launcher $Selector -I -c $Probe 2>$null
+        if ($LASTEXITCODE -ne 0) { return $null }
+        $Info=Test-PythonInfo -Raw $Raw -ExpectedMinor $ExpectedMinor -CandidateLabel "$Launcher $Selector"
+        if (-not $Info) { return $null }
+        return @{Command=$Launcher;Prefix=@($Selector);Version=[string]$Info.version;Minor=$ExpectedMinor;Executable=[string]$Info.executable;BaseExecutable=[string]$Info.base_executable}
+    } catch { return $null }
+}
+
+function Probe-PythonExe([string]$Path,[string]$ExpectedMinor) {
+    $Probe='import json,platform,struct,sys; print(json.dumps({"version":platform.python_version(),"implementation":platform.python_implementation(),"bits":struct.calcsize("P")*8,"executable":sys.executable,"base_executable":getattr(sys,"_base_executable",sys.executable),"prefix":sys.prefix,"base_prefix":sys.base_prefix}))'
+    try {
+        $Raw=& $Path -I -c $Probe 2>$null
+        if ($LASTEXITCODE -ne 0) { return $null }
+        $Info=Test-PythonInfo -Raw $Raw -ExpectedMinor $ExpectedMinor -CandidateLabel $Path
+        if (-not $Info) { return $null }
+        return @{Command=$Path;Prefix=@();Version=[string]$Info.version;Minor=$ExpectedMinor;Executable=[string]$Info.executable;BaseExecutable=[string]$Info.base_executable}
     } catch { return $null }
 }
 
@@ -51,7 +85,7 @@ function Select-BasePython {
     $Launcher = Get-Command py.exe -ErrorAction SilentlyContinue
     if ($Launcher) {
         foreach ($Minor in $Minors) {
-            $Candidate = Probe-Python -Command $Launcher.Source -Prefix @("-$Minor") -ExpectedMinor $Minor
+            $Candidate = Probe-PyLauncher -Launcher $Launcher.Source -ExpectedMinor $Minor
             if ($Candidate) { return $Candidate }
         }
     }
@@ -66,7 +100,7 @@ function Select-BasePython {
     foreach ($Path in $Known | Select-Object -Unique) {
         if (Test-Path -LiteralPath $Path) {
             foreach ($Minor in $Minors) {
-                $Candidate = Probe-Python -Command $Path -Prefix @() -ExpectedMinor $Minor
+                $Candidate = Probe-PythonExe -Path $Path -ExpectedMinor $Minor
                 if ($Candidate) { return $Candidate }
             }
         }
@@ -75,7 +109,7 @@ function Select-BasePython {
     foreach ($Command in @(Get-Command python.exe -All -ErrorAction SilentlyContinue)) {
         if (Test-ForbiddenPythonPath $Command.Source) { continue }
         foreach ($Minor in $Minors) {
-            $Candidate = Probe-Python -Command $Command.Source -Prefix @() -ExpectedMinor $Minor
+            $Candidate = Probe-PythonExe -Path $Command.Source -ExpectedMinor $Minor
             if ($Candidate) { return $Candidate }
         }
     }
