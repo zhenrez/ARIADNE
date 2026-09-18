@@ -22,6 +22,37 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: Exercise the actual double-click launcher path
+
+      - name: Exercise actual double-click path under hostile inherited environment
+        shell: cmd
+        run: |
+          set "CONDA_PREFIX=C:\hostile-conda"
+          set "CUDA_PATH=C:\hostile-cuda"
+          set "NVIDIA_VISIBLE_DEVICES=all"
+          set "PYTHONHOME=C:\hostile-python-home"
+          set "PYTHONPATH=C:\hostile-python-path"
+          set "PIP_INDEX_URL=https://invalid.example.invalid/simple"
+          call START-ARIADNE.cmd -VerifyOnly -RequiredPythonMinor ${{ matrix.python }}
+
+      - name: Poison the existing venv to require automatic replacement
+        shell: powershell
+        run: |
+          $path = '.venv\pyvenv.cfg'
+          $text = Get-Content -LiteralPath $path -Raw
+          if ($text -notmatch 'include-system-site-packages\s*=\s*false') {
+            throw 'Fresh launcher venv was not isolated before the replacement test.'
+          }
+          $text = $text -replace 'include-system-site-packages\s*=\s*false', 'include-system-site-packages = true'
+          Set-Content -LiteralPath $path -Value $text -Encoding ASCII
+
+      - name: Verify incompatible venv is replaced automatically
         shell: cmd
         run: START-ARIADNE.cmd -VerifyOnly -RequiredPythonMinor ${{ matrix.python }}
+
+      - name: Confirm replacement restored strict venv isolation
+        shell: powershell
+        run: |
+          $text = Get-Content -LiteralPath '.venv\pyvenv.cfg' -Raw
+          if ($text -notmatch 'include-system-site-packages\s*=\s*false') {
+            throw 'Launcher did not restore strict venv isolation.'
+          }
