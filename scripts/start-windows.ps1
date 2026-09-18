@@ -324,7 +324,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'ARIADNE regression tests failed.' }
 
     Write-Step 'Initializing/migrating and verifying the ARIADNE ledger'
-    & $VenvPython -I (Join-Path $Root 'warden.py') verify
+    & $VenvPython (Join-Path $Root 'warden.py') verify
     if ($LASTEXITCODE -ne 0) { throw 'ARIADNE ledger verification failed.' }
 
     $Port=Get-OpenPort $PreferredPort
@@ -332,7 +332,7 @@ try {
     try { Remove-Item -LiteralPath $StopFile -Force -ErrorAction SilentlyContinue } catch {}
 
     Write-Step "Starting ARIADNE on $Url"
-    $ServerArgs=@('-I','warden.py','serve','--port',"$Port",'--interval','10','--stop-file',$StopRelative)
+    $ServerArgs=@('warden.py','serve','--port',"$Port",'--interval','10','--stop-file',$StopRelative)
     $Server=Start-Process -FilePath $VenvPython -ArgumentList $ServerArgs -WorkingDirectory $Root -NoNewWindow -PassThru
     $Url=Wait-ForHealth $Server $Port
 
