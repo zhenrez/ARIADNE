@@ -23,7 +23,11 @@ def runtime_check():
     if Path(sys.prefix).resolve()!=VENV.resolve():fail(f'Launcher is not running inside the repository .venv: {sys.prefix}')
     base=Path(getattr(sys,'_base_executable',sys.executable))
     if any(term in str(base).lower() for term in FORBIDDEN):fail(f'Virtual environment inherits from a rejected Python distribution: {base}')
-    return dict(version=version,implementation=platform.python_implementation(),bits=64,executable=sys.executable,base_executable=str(base))
+    cfg=VENV/'pyvenv.cfg'
+    if not cfg.is_file():fail('Virtual environment is missing pyvenv.cfg.')
+    cfg_text=cfg.read_text(encoding='utf-8',errors='replace').lower()
+    if 'include-system-site-packages = false' not in cfg_text:fail('Virtual environment must not inherit global system site-packages.')
+    return dict(version=version,implementation=platform.python_implementation(),bits=64,executable=sys.executable,base_executable=str(base),system_site_packages=False)
 
 def sqlite_feature_check():
     with closing(sqlite3.connect(':memory:')) as con:
