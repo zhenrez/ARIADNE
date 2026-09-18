@@ -209,7 +209,8 @@ function Test-Venv([hashtable]$Base) {
     $VenvConfig=Join-Path $Venv 'pyvenv.cfg'
     if (-not (Test-Path -LiteralPath $VenvConfig)) { return $false }
     $ConfigText=Get-Content -LiteralPath $VenvConfig -Raw -ErrorAction SilentlyContinue
-    if ($ConfigText -notmatch '(?im)^\s*include-system-site-packages\s*=\s*false\s*    $Probe='import json,platform,struct,sys; print(json.dumps({"version":platform.python_version(),"implementation":platform.python_implementation(),"bits":struct.calcsize("P")*8,"base_executable":getattr(sys,"_base_executable",sys.executable),"prefix":sys.prefix,"base_prefix":sys.base_prefix}))'
+    if ($ConfigText -notmatch '(?im)^\s*include-system-site-packages\s*=\s*false\s*$') { return $false }
+    $Probe='import json,platform,struct,sys; print(json.dumps({"version":platform.python_version(),"implementation":platform.python_implementation(),"bits":struct.calcsize("P")*8,"base_executable":getattr(sys,"_base_executable",sys.executable),"prefix":sys.prefix,"base_prefix":sys.base_prefix}))'
     try {
         $Raw=& $VenvPython -I -c $Probe 2>$null
         if ($LASTEXITCODE -ne 0 -or -not $Raw) { return $false }
