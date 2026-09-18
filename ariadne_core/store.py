@@ -124,9 +124,11 @@ def migrate(con):
     install_federation(con)
     from .inventory import install as install_inventory
     install_inventory(con)
+    from .storage import install as install_storage
+    install_storage(con)
     from .history import install_history
     install_history(con)
-    con.execute("INSERT OR IGNORE INTO pipeline_state VALUES('schema','1')")
+    con.execute("INSERT OR IGNORE INTO pipeline_state VALUES('schema','2')")
 
 
 def event(con, stage, subject, payload):
