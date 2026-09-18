@@ -208,3 +208,79 @@ The operating rule is:
 > Never rediscover manually what a field has already spent centuries organizing.
 
 Use original effort where the field ends, disagrees, fragments, fails, or never connected the relevant pieces.
+
+---
+
+## GPR-004 — ABRUPT is the browser execution surface of ARIADNE
+
+**Status:** ACTIVE / GLOBAL RESEARCH / NON-OPTIONAL  
+**Adopted:** 2026-09-18
+
+**ABRUPT — ARIADNE Browser Research Utility Protocol for Trustworthiness — is not a separate project, branch of research, parallel methodology, or independent state machine.**
+
+It is the browser/chat execution profile for the canonical ARIADNE research instrument.
+
+Therefore:
+
+1. All work performed under ABRUPT is ARIADNE work.
+2. All canonical ARIADNE rules remain active inside ABRUPT, including the Epistemic Firewall, P0 gate, source custody, disagreement preservation, E/U/D/A separation, residual retention, typed lineage, Global–Local navigation, Torch Ledger, checkpoint cadence, project/fork governance, and accessibility contract.
+3. ABRUPT may add stricter browser-specific trustworthiness controls but may not weaken, bypass, fork, or silently replace an ARIADNE rule.
+4. Browser/chat discoveries, hypotheses, summaries, calculations, and transfer packets are G0 discovery guidance unless independently promoted through the ARIADNE evidence pipeline.
+5. Project-specific research state belongs in the appropriate downstream/federated ARIADNE project state. Generic mechanisms and constitutional rules belong upstream.
+6. A locally generated ABRUPT artifact that has not been checkpointed/pushed is not considered durably integrated into ARIADNE.
+7. A change in chat, browser session, model, or interface does not create a new research endeavor. Continuity resumes from the latest valid ARIADNE checkpoint, active focus, Torch Ledger, and provenance state.
+
+Operating invariant:
+
+```text
+ABRUPT ⊂ ARIADNE
+```
+
+not:
+
+```text
+ABRUPT || ARIADNE
+```
+
+---
+
+## GPR-005 — Runtime-status honesty and chat-to-ARIADNE bridge
+
+**Status:** ACTIVE / GLOBAL / NON-OPTIONAL  
+**Adopted:** 2026-09-18
+
+ARIADNE's local Warden and the ChatGPT/browser research surface are separate processes unless an explicit message/feed bridge is running.
+
+The assistant must never claim that ARIADNE is processing a chat “in the background” merely because the repository contains Warden code or because a checkpoint protocol exists.
+
+A valid runtime-status claim requires one of:
+
+- direct evidence that the local Warden process is running and receiving the relevant feed; or
+- confirmed ingestion/checkpoint artifacts produced by that runtime.
+
+Repository access alone proves repository state, not local process state.
+
+### Browser responsibility when no live bridge is verified
+
+If the browser/chat cannot verify a live message bridge:
+
+1. continue research under the canonical ARIADNE/ABRUPT workflow;
+2. checkpoint/push required G0 continuity artifacts through available repository tooling at the prescribed cadence;
+3. mark any runtime-dependent work as `UNVERIFIED_RUNTIME` rather than implying it occurred;
+4. preserve the exact feed/pointers needed for Warden to ingest later;
+5. do not make the operator reconstruct lost progress.
+
+### Local runtime requirement
+
+The local Warden only performs continuous acquisition/discovery while its process is actually running. Chat messages enter that runtime only when an explicit sender/feed connection is configured. Running Warden without a chat feed does not make the current conversation automatically available to it.
+
+### Drift safeguard
+
+Every Protocol Alignment Audit must include:
+
+- last confirmed ARIADNE checkpoint/push;
+- whether a live runtime/feed is verified;
+- whether any research has accumulated only in chat/local artifacts since the last durable checkpoint;
+- whether a catch-up checkpoint is required.
+
+If cadence was missed, repair transparently with a recovery checkpoint. Do not fabricate the missing cadence history or pretend the checkpoint occurred on time.
