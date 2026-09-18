@@ -51,7 +51,7 @@ function Select-BasePython {
     $Launcher = Get-Command py.exe -ErrorAction SilentlyContinue
     if ($Launcher) {
         foreach ($Minor in $Minors) {
-            $Candidate = Probe-Python $Launcher.Source @("-$Minor") $Minor
+            $Candidate = Probe-Python -Command $Launcher.Source -Prefix @("-$Minor") -ExpectedMinor $Minor
             if ($Candidate) { return $Candidate }
         }
     }
@@ -66,7 +66,7 @@ function Select-BasePython {
     foreach ($Path in $Known | Select-Object -Unique) {
         if (Test-Path -LiteralPath $Path) {
             foreach ($Minor in $Minors) {
-                $Candidate = Probe-Python $Path @() $Minor
+                $Candidate = Probe-Python -Command $Path -Prefix @() -ExpectedMinor $Minor
                 if ($Candidate) { return $Candidate }
             }
         }
@@ -75,7 +75,7 @@ function Select-BasePython {
     foreach ($Command in @(Get-Command python.exe -All -ErrorAction SilentlyContinue)) {
         if (Test-ForbiddenPythonPath $Command.Source) { continue }
         foreach ($Minor in $Minors) {
-            $Candidate = Probe-Python $Command.Source @() $Minor
+            $Candidate = Probe-Python -Command $Command.Source -Prefix @() -ExpectedMinor $Minor
             if ($Candidate) { return $Candidate }
         }
     }
