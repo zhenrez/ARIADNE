@@ -320,7 +320,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Python compilation check failed.' }
 
     Write-Step 'Running the regression suite with resource-warning visibility'
-    & $VenvPython -I -W 'default::ResourceWarning' -m unittest discover -s (Join-Path $Root 'tests') -t $Root -v
+    & $VenvPython -W 'default::ResourceWarning' -m unittest discover -s (Join-Path $Root 'tests') -v
     if ($LASTEXITCODE -ne 0) { throw 'ARIADNE regression tests failed.' }
 
     Write-Step 'Initializing/migrating and verifying the ARIADNE ledger'
