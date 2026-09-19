@@ -31,5 +31,6 @@
   "field_census_rounds": 2,
   "field_census_surface_k": 12,
   "field_census_expansion_terms": 2,
-  "field_census_saturation_novelty": 0.25
+  "field_census_saturation_novelty": 0.25,
+  "persistent_fuzzy_index": false
 }
