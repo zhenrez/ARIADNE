@@ -49,7 +49,7 @@ def accept_message(con, root, message_id, stream, content):
         cid = identity("CHECKPOINT", stream, ids)
         path = Path(root) / "inbox" / (cid + ".json")
         path.write_text(encoded(dict(lane="G0", messages=group)), encoding="utf-8")
-        sid, _, _ = ariadne.register_source(path, connection=con)
+        sid, _, _ = ariadne.register_source(path, connection=con, move_into_custody=True)
         con.execute("INSERT OR IGNORE INTO chat_checkpoints VALUES(?,?,?,?)", (cid, stream, encoded(ids), sid))
         event(con, "G0_CHECKPOINT", cid, dict(source_id=sid, message_ids=ids))
         count += 1
@@ -172,9 +172,13 @@ def serve(port=8765, interval=10, stop_file=None):
                     metrics["Reignited torches"] = con.execute(
                         "SELECT COUNT(*) FROM torches WHERE state='REIGNITED'"
                     ).fetchone()[0]
-                    storage_state = usage(ariadne.ROOT, con=con)
+                    storage_state = usage(ariadne.ROOT, con=con, include_venv=False)
                     sources = list_sources(con, ariadne.ROOT, 100)
                     queue = _queue_rows(con, 100)
+                    last_event = con.execute(
+                        "SELECT seq,stage,subject,created FROM pipeline_events ORDER BY seq DESC LIMIT 1"
+                    ).fetchone()
+                    activity = dict(last_event) if last_event else None
 
                 health = ariadne.ARTIFACTS_DIR / "watch_status.json"
                 try:
@@ -198,6 +202,7 @@ def serve(port=8765, interval=10, stop_file=None):
                             storage_policy=load_policy(ariadne.ROOT),
                             sources=sources,
                             queue=queue,
+                            activity=activity,
                         )
                     ),
                 )
