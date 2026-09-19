@@ -919,3 +919,95 @@ The six Judah translator positions should be tested under all legitimate Z6 orde
 
 P-UPSTREAM-ADAM-01:
 Absolute Judah pitch remains unknown until Adam/Jacob transposition and orientation are fixed by an independent upstream aeon→archon→angel/demon→human chain or another clean anchor.
+
+
+## New held-out hits after corrected coordinate model — Epiphanius 22 and 36×2
+
+Status: HIGH_DIAGNOSTIC / E1 candidate pending source-line ingestion
+
+### Epiphanius explicitly supplies 36×2 = 72
+
+On Weights and Measures states that the seventy-two translators were divided into thirty-six cells, two in each cell, and that each pair produced a translation independently.
+
+This is an historical/native 36×2 representation of the 72 field.
+
+It was not used to derive the current music theorem:
+music already had
+A_72 = Z_12 × Z_6
+and Z_6 can be decomposed as 3×2,
+so
+12×3×2 = 36×2 = 72.
+
+Interpretation:
+music's 36×2 factorization receives a direct later historical realization in Epiphanius.
+Do not treat dependency as proof of universal structure; treat as a held-out shape hit.
+
+### Epiphanius explicitly supplies 22 generations Adam→Jacob by omitting Cainan
+
+On Weights and Measures says there are twenty-two "heads/generations" from Adam to Jacob/Israel and explicitly remarks that Scripture omits Cainan from the number.
+
+This gives:
+- MT/Epiphanius vertical coordinate: Adam=0, Jacob=21, Judah generation=22.
+- LXX-with-Cainan vertical coordinate: Adam=0, Jacob=22, Judah generation=23.
+
+Critical coordinate separation:
+The Cainan dispute changes Judah's VERTICAL generation/register coordinate by +1.
+It does NOT change Judah's LOCAL angular address within Jacob's 12-son class:
+Judah remains son/tribal position 4.
+
+Therefore the Cainan dispute and Judah-position dispute must not be conflated.
+
+### Judah address continuity
+
+Epiphanius names the translator-group sequence:
+1 Reuben
+2 Simeon
+3 Levi
+4 Judah
+5 Issachar
+6 Zebulun
+7 Gad
+8 Asher
+9 Dan
+10 Naphtali
+11 Joseph
+12 Benjamin.
+
+Thus Judah is again explicitly position 4 in the 12-tribe translator carrier.
+
+Under the provisional fifth-traversal local adapter:
+Judah = slot 4 = T_7^3(local tonic)
+= pitch-class offset +9 mod12 in one orientation
+= exact 27/16 normalized ratio;
+mirror orientation = +3 mod12 / 32:27.
+
+This creates a cross-generation address-preservation candidate:
+Jacob's fourth son Judah -> fourth tribal sector Judah -> six phase subaddresses in the 72 translator field.
+
+### New phase/pair prediction
+
+Epiphanius gives 36 physical translator pairs but does not identify the members of each pair in the cited passage.
+
+If the six-per-tribe list order is also a Z6 phase order, the music-first decomposition predicts natural antipodal phase pairs:
+(1,4), (2,5), (3,6)
+rather than automatically adjacent pairs
+(1,2), (3,4), (5,6).
+
+P-EPI-PAIR-01:
+Find any independent witness that preserves actual translator pair assignments.
+Prediction must remain frozen:
+if pair membership tracks the Z6 antipodal decomposition more strongly than adjacent/shuffled controls, that materially supports the phase adapter.
+If no pairing witness exists, retain unresolved.
+
+P-EPI-PAIR-02:
+Within Judah's six-position list, witness instability at slots 5–6 should NOT be called a single dyad until pair topology is independently established.
+
+### Contribution shift
+
+The useful result is not "72 = 36×2"; Epiphanius already says that.
+The contribution candidate is the typed coordinate model:
+vertical generation/register
+× angular tribal/pitch address
+× sixfold phase
+× pair/role realization,
+which allows disputes to be localized by axis rather than collapsed into one count.
