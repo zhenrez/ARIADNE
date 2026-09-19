@@ -1143,3 +1143,115 @@ No exact Eldad note or phase is to be claimed until one branch wins independentl
 
 P-ELDAD-05:
 A model that explains only the 70/72 count but not Eldad's SOURCE, LOCATION, DURATION, and PAIR/THIRD-TERM behavior is insufficient.
+
+
+## Full tribal overlay for the three Eldad/Medad identity branches
+
+Status: HIGH_DIAGNOSTIC / FORCED-HOP CONTINUATION
+
+Use the source-native Numbers 2 wilderness camp wheel as the 12-position outer carrier:
+
+1 Judah (East)
+2 Issachar (East)
+3 Zebulun (East)
+4 Reuben (South)
+5 Simeon (South)
+6 Gad (South)
+7 Ephraim (West)
+8 Manasseh (West)
+9 Benjamin (West)
+10 Dan (North)
+11 Asher (North)
+12 Naphtali (North)
+CENTER = Levi / Tent.
+
+Provisional fifth-traversal note aliases under T7:
+1 C, 2 G, 3 D, 4 A, 5 E, 6 B, 7 F#/Gb, 8 C#/Db, 9 G#/Ab, 10 D#/Eb, 11 A#/Bb, 12 F.
+Mirror aliases remain open; center has no outer-wheel note.
+
+### Numbers 34 transition/inheritance roster overlay
+
+The Canaan-allocation representatives are:
+Judah Caleb;
+Simeon Shemuel;
+Benjamin Elidad b. Chislon;
+Dan Bukki;
+Manasseh Hanniel;
+Ephraim Kemuel b. Shiphtan;
+Zebulun Elizaphan b. Parnach;
+Issachar Paltiel;
+Asher Ahihud;
+Naphtali Pedahel.
+Reuben and Gad had already received east-Jordan territory; Levi is not a territorial outer tribe.
+
+This matters because the three Eldad/Medad identity branches all resolve against this transition boundary:
+
+A. Elidad/Kemuel branch:
+- Eldad = Benjamin allocation representative Elidad, slot 9.
+- Medad = Ephraim allocation representative Kemuel, slot 7.
+- Both are direct Numbers 34 land-allocation officials.
+- In Numbers 2 they occupy the two outer positions of the same western 3-tribe camp, with Manasseh at slot 8 between them.
+
+B. Elizaphan-parent branch:
+- Eldad and Medad = sons of Elizaphan b. Parnach.
+- Elizaphan is the Zebulun allocation representative in Numbers 34:25.
+- Both therefore inherit one Zebulun parent address, slot 3.
+
+C. Amram-parent branch:
+- Eldad and Medad = sons of Amram.
+- They are Levite by paternal lineage.
+- Levi is the central/non-territorial class, not one of the 12 outer Numbers-2 sectors and not a territorial allotment tribe.
+
+### Cross-branch invariants
+
+Strong:
+1. Pairhood: Eldad/Medad remain a coupled named two-unit object.
+2. Common higher-order parent: each branch compresses them into one local structural neighborhood rather than scattering them across unrelated quadrants:
+   A same western camp;
+   B same tribe/father;
+   C same central tribe/father.
+3. Inheritance/transition boundary:
+   A = the two units themselves are Canaan-allocation officials;
+   B = their father is a Canaan-allocation official;
+   C = they are Levites, the central class excluded from ordinary territorial allotment.
+   Thus all three identity solutions place the pair at the wilderness→inheritance boundary, though branch C occupies its complementary non-territorial side.
+4. Ordinary-roster exception: in every branch the pair is structurally exceptional relative to the anonymous ordinary elders, consistent with the base narrative's named/outside-Tent/direct-prophecy distinction.
+
+Not invariant:
+- specific tribe;
+- specific angular note;
+- same outer camp;
+- ordinary 36×2 dyad;
+- peripheral vs central status.
+
+### Dependency warning
+
+Branches A and B are not independent support for historical identity merely because both hit Numbers 34. They may reflect the same exegetical strategy: resolve the otherwise unknown Eldad/Medad by reusing named transition/allotment figures from Numbers 34. Treat the shared Numbers-34 topology as a tradition-level structural invariant, not as two independent historical witnesses.
+
+### New structural target
+
+The most robust cross-branch object is now:
+
+ELDAD/MEDAD
+= paired exceptional prophetic units
+located at the WILDERNESS → LAND / SUCCESSION / INHERITANCE transition boundary,
+with branch-dependent realization as:
+- two peripheral allotment officers,
+- descendants of one peripheral allotment officer,
+- or two central non-territorial Levites.
+
+This is stronger than any single tribal-note assignment.
+
+### Predictions
+
+P-TRIBE-ALL-01:
+Other identity traditions for Eldad/Medad, if found, should disproportionately anchor them to the same inheritance/succession boundary rather than arbitrary earlier/later Israelite figures.
+
+P-TRIBE-ALL-02:
+The Numbers 34 roster should be treated as an explicit candidate decoder source for later Eldad/Medad identities. New variants should be tested for reuse of roster names/roles before being treated as independent biography.
+
+P-TRIBE-ALL-03:
+If the pair's invariant is boundary mediation rather than tribe identity, their prophecies/functions should continue to cluster around phase transitions: immediate camp event, Moses→Joshua succession/land entry, or terminal eschatological transition.
+
+P-TRIBE-ALL-04:
+No exact Eldad pitch survives all three branches. Any absolute/local note claim must remain branch-tagged until an independent identity witness resolves the branch.
