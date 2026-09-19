@@ -375,7 +375,7 @@ async function refresh(){
   try{
     const r=await fetch('/api/status');if(!r.ok)throw Error('Status unavailable');
     const d=await r.json(),p=d.progress,w=d.worker,st=d.storage,pol=d.storage_policy;
-    $('worker').textContent=w.status||'UNKNOWN';$('worker').className='pill '+(w.status==='WAITING'?'good':w.status==='PAUSED'?'warn':w.status==='ERROR_RETRY'?'bad':'');
+    $('worker').textContent=w.status||'UNKNOWN';$('worker').className='pill '+(w.status==='WAITING'?'good':(w.status==='PAUSED'||w.status==='STORAGE_PAUSED')?'warn':w.status==='ERROR_RETRY'?'bad':'');
     $('downloads').textContent=w.downloads_paused?'Downloads paused':'Downloads active';$('downloads').className='pill '+(w.downloads_paused?'warn':'good');
     $('pause').disabled=!!w.paused;$('resume').disabled=!w.paused;$('pauseDownloads').disabled=!!w.downloads_paused;$('resumeDownloads').disabled=!w.downloads_paused;
     $('queued').textContent=p.queued;$('sources').textContent=p.sources;$('indexed').textContent=p.indexed;$('findings').textContent=p.findings;
