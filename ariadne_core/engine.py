@@ -19,6 +19,7 @@ DEFAULTS = dict(query_budget=40, max_depth=3, retrieval_limit=30, candidate_limi
                 display_limit=40, stale_rounds=2, novelty_floor=.05,
                 near_duplicate_threshold=.85, exploration_weight=.3, diversity_weight=.2,
                 protected_torches=['TORCH-JUDAH'], aliases={}, multiscale_enabled=True,
+                persistent_fuzzy_index=False,
                 weights=dict(novelty=.25, diagnostic=.3, torch=.2, coverage_gap=.15, yield_=.1))
 
 
@@ -42,6 +43,8 @@ class Warden:
             raise ValueError('weights must be finite and nonnegative')
         if type(self.config['multiscale_enabled']) is not bool:
             raise ValueError('multiscale_enabled must be a boolean')
+        if type(self.config['persistent_fuzzy_index']) is not bool:
+            raise ValueError('persistent_fuzzy_index must be a boolean')
         migrate(con)
         self.config_hash = identity('CFG', self.config)
         implementation_root = Path(__file__).resolve().parent.parent
@@ -58,7 +61,8 @@ class Warden:
         cursor = self.con.execute('INSERT OR IGNORE INTO passages VALUES(?,?,?,?)', (pid,source_id,locator,text))
         if cursor.rowcount:
             self.con.execute('INSERT INTO passage_fts VALUES(?,?)', (pid,text))
-            self.con.executemany('INSERT OR IGNORE INTO gram_index VALUES(?,?)', ((g,pid) for g in sorted(grams(text))))
+            if self.config['persistent_fuzzy_index']:
+                self.con.executemany('INSERT OR IGNORE INTO gram_index VALUES(?,?)', ((g,pid) for g in sorted(grams(text))))
             self.edge(source_id,pid,'CONTAINS',{'locator':locator})
         return pid
 
@@ -282,7 +286,7 @@ class Warden:
             lexical = [r[0] for r in self.con.execute('SELECT passage_id FROM passage_fts WHERE passage_fts MATCH ? ORDER BY bm25(passage_fts),passage_id LIMIT ?', (expression,cap+1))]
         gs = sorted(grams(text))[:80]
         fuzzy = []
-        if gs:
+        if self.config['persistent_fuzzy_index'] and gs:
             fuzzy = [r[0] for r in self.con.execute('SELECT passage_id FROM gram_index WHERE gram IN ('+','.join('?'*len(gs))+') GROUP BY passage_id ORDER BY COUNT(*) DESC,passage_id LIMIT ?', (*gs,cap+1))]
         structural = []
         if direction == 'DOWN':
