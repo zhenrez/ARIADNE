@@ -150,6 +150,103 @@ DETECT
 ```
 
 
+
+## Mandatory reconnaissance lanes: First Order, First-&-3/4-P, First-&-3/4
+
+These are three distinct pre-synthesis passes. They must not be collapsed into a generic "prior-art check."
+
+### First Order — established field map
+
+Purpose: establish the strongest conventional map before original synthesis.
+
+Ask:
+- Who has studied the exact or structurally equivalent question?
+- What fields and vocabularies contain it?
+- What are the canonical sources, reviews, bibliographies, and standard models?
+- What is accepted, disputed, unresolved, falsified, abandoned, or merely assumed?
+- What primary evidence does the field rely on?
+- Where does the field explicitly stop?
+
+Output classes:
+`KNOWN`, `DISPUTED`, `FAILED`, `OPEN`, `SOURCE_LEAD`.
+
+Treatment:
+First Order maps the current scholarly baseline. Consensus is not automatically truth; it is the strongest conventional comparison surface unless contradicted by better evidence.
+
+### First-&-3/4-P — power / suppression / selection-pressure map
+
+Purpose: test whether the surviving record, research agenda, publication history, source preservation, or apparent consensus may have been shaped by power or selection effects.
+
+Ask:
+- Who controlled preservation, canon, publication, funding, translation, archives, classification, or access?
+- What legal, religious, political, economic, reputational, institutional, or security pressures affected investigation?
+- Are there documented cases of censorship, destruction, exclusion, retaliation, classification, selective preservation, or access restriction?
+- Does absence of evidence occur in an environment where evidence would reasonably have survived and been publishable?
+- Who benefits or loses authority under competing interpretations?
+- Are claims of suppression themselves evidenced or merely asserted?
+
+Output classes:
+`DOCUMENTED_PRESSURE`, `POSSIBLE_SELECTION_EFFECT`, `UNSUPPORTED_SUPPRESSION_CLAIM`, `ACCESS_GAP`, `PRESERVATION_BIAS`, `SEARCH_PRIORITY_MODIFIER`.
+
+Treatment:
+Suppression/marginalization changes search strategy, confidence in absence, and interpretation of consensus. It does **not** by itself increase truth status. "Suppressed" is never promoted to "true" without independent evidence.
+
+### First-&-3/4 — fringe / heterodox / marginal theory map
+
+Purpose: widen the search space deliberately beyond accepted scholarship to recover anomalies, variables, source leads, discarded hypotheses, alternative problem framings, and predictions that conventional work may omit.
+
+Search:
+- fringe and heterodox scholarship;
+- abandoned theories;
+- occult/esoteric or noncanonical interpretive traditions where relevant;
+- dissident or marginalized researchers;
+- "conspiracy"-labeled claims when they are traceable enough to test;
+- obscure dissertations, forums, archival claims, older polemics, and cross-disciplinary analogues.
+
+Ask:
+- What exact observation motivated the theory?
+- What primary source or anomaly does it point to?
+- What variable or relation does it introduce?
+- What part is observation vs inference vs mechanism vs worldview?
+- What predictions does it make?
+- What criticisms defeated or weakened it?
+- What survives after removing unsupported explanation?
+- Does it preserve a source lead, anomaly, residual, or structural comparison that deserves independent checking?
+
+Output classes:
+`FRINGE_OBSERVATION`, `FRINGE_SOURCE_LEAD`, `ALTERNATIVE_MODEL`, `UNSUPPORTED_MECHANISM`, `TESTABLE_PREDICTION`, `RESIDUAL`, `DISQUALIFIED`.
+
+Treatment:
+Fringe material is **discovery guidance**, not evidence for the underlying historical/scientific claim. Reacquire and verify the primary source independently. A bad explanation can contain a real observation; a persecuted theory can still be false; a mainstream rejection can be correct or selection-biased. Preserve these possibilities separately.
+
+### Divergence compiler
+
+After the three passes, compare:
+
+```text
+FIRST ORDER
+vs
+FIRST-&-3/4-P
+vs
+FIRST-&-3/4
+```
+
+Extract:
+- agreements;
+- disagreements;
+- unexplained anomalies;
+- variables present in only one lane;
+- source leads requiring independent verification;
+- theories rejected by evidence vs theories merely ignored/stigmatized;
+- contribution delta;
+- predicted addresses worth testing.
+
+Only then proceed to expensive original synthesis unless a bounded emergency/source-custody task requires otherwise.
+
+### Re-entry
+
+All three lanes re-open after a materially new finding, vocabulary, mechanism, cross-domain connection, unexpected prediction hit, or new source class.
+
 ## Re-entrant Prior-Art Divergence Firewall
 
 The prior-art gate is not a one-time opening ritual. It is **re-entrant** and must fire again whenever the investigation produces a materially new:
