@@ -286,3 +286,63 @@ Potentially distinctive surviving feature:
 Irenaeus explicitly pairs Aquila and Theodotion in his own historical moment; Symmachus appears later in the textual/reception record. This temporal boundary must be tested as history, not treated as numerical proof.
 
 Do not promote 666-specific structural uniqueness unless a relation independently specific to Aquila+Theodotion survives Symmachus and other nearest controls.
+
+
+## Torch shift — Jerome / Hieronymus 616 candidate
+
+Status: BURNING / HIGH_DIAGNOSTIC_VALUE / G0
+
+The user directed focus to the Jerome hit as the most plausible current contribution delta.
+
+### Decoder separation
+
+For Hieronymus / Ἱερώνυμος:
+
+- semantic root-lemma lane: ἱερός (385) + ὄνομα (231) = **616**
+- historically attested dialect/allomorph lane: ἱερός (385) + ὄνυμα (561) = **946**
+- surface-name lane: Ἱερώνυμος = **1675**
+
+LSJ treats ὄνυμα as Aeolic/Doric for ὄνομα. Therefore 616 is retained as a legitimate **root-lemma decoder result** under HERMONICITI, but not misreported as the surface/morphemic isopsephy of Ἱερώνυμος.
+
+### First Order / First-&-3/4 field-map result
+
+Known prior art:
+- Jerome's name means "sacred/holy name".
+- Jerome authored the Liber interpretationis nominum Hebraicorum / De Nominibus Hebraicis, a systematic work on meanings/etymologies of biblical names.
+- Jerome's name-work belongs to the ancient onomastica sacra tradition deriving from Philo/Origen/Eusebius.
+- In that very work Jerome explicitly preserves/interprets Greek name candidates whose isopsephy is 666 (including Εὐίνας and a Τειτάν-related entry).
+- Modern scholarship independently studies Jerome's extensive name-etymology practice and its exegetical role.
+- Jerome securely revised the Gospels, not the Vulgate Apocalypse; the Apocalypse outside the Gospels has uncertain/non-Jerome Vulgate authorship.
+- Jerome did revise Victorinus's Apocalypse commentary, but surviving 666 material in later recensions has complex redaction and cannot simply be attributed to Jerome.
+
+Bounded negative prior-art result:
+Exact searches did not surface an existing proposal combining Jerome's own "sacred name" root-lemma sum = 616 with his historical practice of biblical name interpretation and his explicit handling of 666 name-number candidates. This is NOT proof of novelty.
+
+### Contribution candidate
+
+The potentially novel object is not "Jerome studied names" or "Jerome discussed 666"; both are known.
+
+It is the relational convergence:
+
+ROOT-NAME OF JEROME ("sacred" + "name") --root-lemma isopsephy--> 616
+AND
+JEROME'S ACTUAL SCHOLARLY ROLE --> systematic interpreter of names
+AND
+JEROME'S OWN NAME-INTERPRETATION WORK --> explicit 666 name-number material
+
+This is a HERMONICITI-reflexive relation and must be tested without double-counting.
+
+### Pre-registered next predictions
+
+PRED-JER-01:
+If the 616 root-lemma result is structurally meaningful rather than arithmetic coincidence, Jerome's name-treatment practice should be unusually central to his actual method and should interact directly with numerical/name interpretation, not merely occur as an incidental title or isolated gloss.
+Current status after first inspection: PARTIAL/HIT; systematic onomastic practice and explicit 666 name-number entries are present. Must test controls.
+
+PRED-JER-02:
+The Jerome convergence should remain distinctive when compared with nearest onomastic predecessors/controls (Philo, Origen, Eusebius) using the SAME root-lemma decoder. If comparable predecessors produce equal or stronger 616/666 self-referential fits, the Jerome significance weakens.
+
+PRED-JER-03:
+A clean historical path should connect Jerome's name-etymology practice to Irenaean/Hippolytan 666 material through demonstrable source dependence or reception, without requiring the later Victorinus interpolations. If not, the 616/666 junction remains a modern structural coincidence.
+
+Next prescribed hop:
+PRIOR-ART RECHECK -> DOWN Jerome De Nominibus 666 entries/source lineage -> SIDEWAYS Philo/Origen/Eusebius controls -> ORTHOGONAL Jerome's translation/text-critical behavior -> UP contribution/non-break assessment.
