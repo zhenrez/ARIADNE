@@ -15,6 +15,7 @@ DEFAULT_POLICY = {
     "max_source_bytes": 25 * 1024 * 1024,
     "launcher_backup_retention": 2,
     "snapshot_retention": 1,
+    "processing_overhead_factor": 3,
     "auto_evict_g0_originals": True,
 }
 
@@ -52,7 +53,7 @@ def validate_policy(data):
     for key in (
         "local_budget_bytes", "free_space_reserve_bytes", "metadata_fetch_limit_bytes",
         "selective_fetch_limit_bytes", "max_source_bytes", "launcher_backup_retention",
-        "snapshot_retention",
+        "snapshot_retention", "processing_overhead_factor",
     ):
         if type(out[key]) is not int or out[key] < 0:
             raise ValueError(f"{key} must be a nonnegative integer")
@@ -111,14 +112,25 @@ def _tree_bytes(path):
     return total
 
 
-def usage(root):
+def usage(root, con=None, include_venv=True):
     root = Path(root)
+    if con is not None:
+        try:
+            custody = con.execute(
+                """SELECT COALESCE(SUM(s.byte_size),0)
+                   FROM sources s JOIN source_storage ss USING(source_id)
+                   WHERE ss.state='PRESENT'"""
+            ).fetchone()[0]
+        except Exception:
+            custody = _tree_bytes(root / "custody")
+    else:
+        custody = _tree_bytes(root / "custody")
     categories = {
         "database": _tree_bytes(root / "db"),
-        "custody": _tree_bytes(root / "custody"),
+        "custody": int(custody or 0),
         "inbox": _tree_bytes(root / "inbox"),
         "artifacts": _tree_bytes(root / "artifacts"),
-        "venv": _tree_bytes(root / ".venv"),
+        "venv": _tree_bytes(root / ".venv") if include_venv else 0,
     }
     research_bytes = sum(categories[k] for k in ("database", "custody", "inbox", "artifacts"))
     disk = shutil.disk_usage(root)
@@ -140,9 +152,9 @@ def usage(root):
     }
 
 
-def acquisition_limit(root):
+def acquisition_limit(root, con=None):
     policy = load_policy(root)
-    state = usage(root)
+    state = usage(root, con=con, include_venv=False)
     if state["headroom_bytes"] <= 0:
         return 0, "storage budget or free-space reserve reached"
     per_source = {
@@ -150,15 +162,20 @@ def acquisition_limit(root):
         "selective": policy["selective_fetch_limit_bytes"],
         "full": policy["max_source_bytes"],
     }[policy["mode"]]
-    return min(per_source, policy["max_source_bytes"], state["headroom_bytes"]), None
+    safe_headroom = state["headroom_bytes"] // max(1, policy["processing_overhead_factor"])
+    if safe_headroom <= 0:
+        return 0, "storage headroom is insufficient for source plus processing/index overhead"
+    return min(per_source, policy["max_source_bytes"], safe_headroom), None
 
 
-def ensure_upload_capacity(root, byte_count):
-    state = usage(root)
+def ensure_upload_capacity(root, byte_count, con=None):
+    policy = load_policy(root)
+    state = usage(root, con=con, include_venv=False)
     if byte_count < 0:
         raise ValueError("invalid upload size")
-    if byte_count > state["headroom_bytes"]:
-        raise OSError("ARIADNE storage budget/free-space reserve would be exceeded by this upload")
+    required = byte_count * max(1, policy["processing_overhead_factor"])
+    if required > state["headroom_bytes"]:
+        raise OSError("ARIADNE storage budget/free-space reserve would be exceeded by this upload plus processing overhead")
     return True
 
 
@@ -172,20 +189,23 @@ def sync_source_storage(con, root):
             (row["source_id"],),
         ).fetchone()
         existing = con.execute("SELECT * FROM source_storage WHERE source_id=?", (row["source_id"],)).fetchone()
+        desired_reacquirable = 1 if job else 0
         if existing is None:
             con.execute(
                 "INSERT INTO source_storage VALUES(?,?,?,?,?)",
-                (row["source_id"], "PRESENT" if present else "MISSING", 0, 1 if job else 0, _now()),
+                (row["source_id"], "PRESENT" if present else "MISSING", 0, desired_reacquirable, _now()),
             )
-        else:
-            new_state = existing["state"]
-            if present:
-                new_state = "PRESENT"
-            elif existing["state"] == "PRESENT":
-                new_state = "MISSING"
+            continue
+        new_state = existing["state"]
+        if present:
+            new_state = "PRESENT"
+        elif existing["state"] == "PRESENT":
+            new_state = "MISSING"
+        new_reacquirable = max(int(existing["reacquirable"]), desired_reacquirable)
+        if new_state != existing["state"] or new_reacquirable != int(existing["reacquirable"]):
             con.execute(
-                "UPDATE source_storage SET state=?,reacquirable=max(reacquirable,?),updated_at=? WHERE source_id=?",
-                (new_state, 1 if job else 0, _now(), row["source_id"]),
+                "UPDATE source_storage SET state=?,reacquirable=?,updated_at=? WHERE source_id=?",
+                (new_state, new_reacquirable, _now(), row["source_id"]),
             )
 
 
@@ -327,10 +347,20 @@ def cleanup(root, kind):
             pass
 
     if kind == "staging":
-        for base in (root / "inbox" / "acquired", root / "inbox"):
-            if base.exists():
-                for path in base.rglob("*.part"):
+        staging = root / "inbox" / ".staging"
+        if staging.exists():
+            for path in staging.rglob("*"):
+                if path.is_file():
                     remove_file(path)
+        acquired = root / "inbox" / "acquired"
+        if acquired.exists():
+            for path in acquired.rglob("*"):
+                if path.is_file():
+                    remove_file(path)
+        inbox = root / "inbox"
+        if inbox.exists():
+            for path in inbox.rglob("*.part"):
+                remove_file(path)
     elif kind == "snapshots":
         files = sorted((root / "artifacts" / "snapshots").glob("state-*.sqlite"), key=lambda p: p.stat().st_mtime, reverse=True) if (root / "artifacts" / "snapshots").exists() else []
         for path in files[policy["snapshot_retention"]:]:
