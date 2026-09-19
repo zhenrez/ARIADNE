@@ -682,3 +682,73 @@ When a human-layer recurrence is proposed, record:
 - prediction for what should appear in those intermediates.
 
 Do not collapse generations into geometric subdivisions.
+
+
+## Human-level coordinate rule — generation as class, note as local address
+
+Status: ACTIVE / G0 / USER-DIRECTED METHODOLOGICAL RULE
+
+From this point forward, named human-lineage units must be assigned:
+- generation/class index g;
+- wheel/register index w = floor(g/12);
+- angular pitch-class address pc in Z12;
+- note label for readability;
+- transform/operator used from parent to child;
+- witness/lineage variant if generation count differs.
+
+Primordial Adam and Eden Adam remain distinct. For human genealogy, use Eden Adam as the local human monad. Do not merge with Primordial Adam.
+
+### Local-monad convention
+
+Until an upstream aeon→archon→angel/demon→Adam trace fixes Adam's absolute pitch and orientation, set Eden Adam to relative pitch-class 0 (readability label C only). This is a coordinate origin, not a historical pitch claim.
+
+SUN gives two mirror branch transforms:
+- R = 2/3 (descending fifth), octave-normalized pitch-class movement = +5 mod 12;
+- L = 3/4 (descending fourth), octave-normalized pitch-class movement = +7 mod 12.
+
+Because genealogy alone does not yet choose R vs L, preserve both mirror orientations. Do not silently select one.
+
+For a repeated same-type father→son lineage edge:
+pc_R(g)=5g mod12
+pc_L(g)=7g mod12.
+These are mirror trajectories.
+
+### Adam→Judah witness split
+
+Masoretic/Samaritan-style chain (no second Cainan):
+Adam is g=0 and Judah g=22.
+
+Septuagint/Luke-style chain with second Cainan between Arpachshad and Shelah:
+Adam is g=0 and Judah g=23.
+
+Critical structural consequence:
+- g=12 is the first 12-step pitch-class return to the monad.
+- g=24 is the second return.
+- g=6 and g=18 are the mirror-invariant opposite pitch-class positions.
+
+Competing witnesses therefore place different people at the exact first-cycle closure:
+- MT-style: Shelah at g=12.
+- LXX-style: second Cainan at g=12.
+
+And they predict different second-cycle closure occupants:
+- MT-style: Hezron at g=24 (via Judah→Perez→Hezron).
+- LXX-style: Perez at g=24.
+
+Do not adjudicate yet. Freeze as a prediction/referee problem.
+
+### Pre-registered genealogy predictions
+
+P-GEN-01 — cycle-closure signature:
+Whichever genealogy is structurally cleaner should show a repeatable relationship/function signature at g=0, g=12, g=24 across independent evidence. Do not choose the signature after inspecting all three.
+
+P-GEN-02 — half-cycle signature:
+g=6 and g=18 should show a recurring boundary/opposition/transition signature if the 12-step spiral mapping has explanatory value.
+
+P-GEN-03 — mirror orientation:
+R-vs-L orientation must be fixed by an independent upstream/downstream anchor; local semantic convenience cannot choose it.
+
+P-GEN-04 — absolute transposition:
+The Adam=C label is provisional. An upstream trace from higher classes may transpose the entire human wheel without changing relative addresses.
+
+P-GEN-05 — variant referee:
+The second-Cainan dispute is high diagnostic value because insertion/deletion occurs exactly at the first 12-step return. Music may referee it only through held-out structural signatures, never by cardinality alone.
