@@ -268,3 +268,21 @@ However, Symmachus participates in the same Hexaplar comparative apparatus, so t
 
 Current PRED-666-02 status:
 `PARTIAL HIT — invariant textual-critical operator exists; 666-specific uniqueness unproven.`
+
+
+## Nearest non-666 translator control
+
+Symmachus is a required control because:
+- he is another later Greek reviser included with Aquila and Theodotion in Origen's Hexapla;
+- he also renders Isaiah 7:14 with νεᾶνις ("young woman");
+- his whole-name isopsephy does not produce a 666 interval with either Aquila or Theodotion.
+
+Therefore:
+- "young woman" rendering is not unique to the Aquila↔Theodotion Δ666 pair;
+- participation in the Hexaplar compare/mark/preserve/correct operator is not unique to the Δ666 pair;
+- PRED-666-02 remains only PARTIAL.
+
+Potentially distinctive surviving feature:
+Irenaeus explicitly pairs Aquila and Theodotion in his own historical moment; Symmachus appears later in the textual/reception record. This temporal boundary must be tested as history, not treated as numerical proof.
+
+Do not promote 666-specific structural uniqueness unless a relation independently specific to Aquila+Theodotion survives Symmachus and other nearest controls.
