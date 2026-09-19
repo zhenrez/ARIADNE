@@ -430,7 +430,8 @@ def inbox_files() -> Iterable[Path]:
     ensure_dirs()
     for p in sorted(INBOX_DIR.rglob("*")):
         if not p.is_file() or p.name.startswith(".") or p.suffix == ".part": continue
-        if "acquired" in p.relative_to(INBOX_DIR).parts: continue
+        parts=p.relative_to(INBOX_DIR).parts
+        if "acquired" in parts or any(part.startswith(".") for part in parts[:-1]): continue
         yield p
 
 
@@ -441,7 +442,9 @@ def ingest(paths: list[str]) -> None:
     new_count=0
     for p in candidates:
         if not p.exists() or not p.is_file(): print(f"SKIP: {p} (not a file)"); continue
-        source_id,is_new,stats=register_source(p)
+        resolved=p.resolve()
+        move_local=resolved.is_relative_to(INBOX_DIR.resolve())
+        source_id,is_new,stats=register_source(p,move_into_custody=move_local)
         if is_new:
             new_count+=1; print(f"INGESTED {p.name} -> {source_id} | discrepancies={stats['discrepancies']} transforms={stats['transforms']} residuals={stats['residuals']} torch_hits={stats['torch_hits']}")
         else: print(f"KNOWN    {p.name} -> {source_id}")
