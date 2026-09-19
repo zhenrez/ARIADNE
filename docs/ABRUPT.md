@@ -450,3 +450,32 @@ ABRUPT incorporates mechanisms, not historical authority, from:
 - selected entity-resolution ideas from `FutureSpeakAI/agent-fridays-trust-graph-engine`
 
 All external outputs remain subject to the ARIADNE epistemic firewall.
+
+
+## Total Information Quarantine (TIQ)
+
+When a research region is judged contaminated by accumulated historical/theological/academic interpretive noise, ABRUPT may enter **Total Information Quarantine**.
+
+### Phase 1 — Clean Room Carrier Wave
+Build and freeze the mathematical/acoustic model using variables, operators, invariants, and checksums only.
+- No historical names.
+- No textual variants.
+- No doctrinal labels.
+- No retrofitted semantic assignments.
+- Separate coordinate axes explicitly.
+- Preserve exact ratios and residuals; do not flatten them for convenience.
+
+### Phase 2 — Textless Topology Test
+The user may supply abstract coordinate structures stripped of their historical identities.
+- Run the frozen clean-room math forward and backward.
+- Reject topologies requiring illegal coordinate jumps, broken checksums, or post-hoc operator changes.
+- Return NO CALL where the math underdetermines the structure.
+
+### Phase 3 — Sealed Multidimensional Reconstruction
+Before reopening disputed evidence:
+- preregister predicted count, operator, address, residual, boundary behavior, and allowed variation;
+- then compare against the historical holdout;
+- require simultaneous fit on multiple independent axes;
+- reject branches that need post-hoc adjustment.
+
+During TIQ, historical material is a sealed holdout, not a source for model construction.
