@@ -46,7 +46,7 @@ def single_writer(root):
                 fcntl.flock(handle,fcntl.LOCK_UN)
 
 
-def _prepare_field_census(con, w):
+def _prepare_field_census(con, w, allow_acquisition=True):
     """Run P0 before any Warden compile/reconnect/original synthesis."""
     from ariadne_core.field_census import (ensure_all, gate_status, install, process,
                                            queue_prior_art_leads, settings,
@@ -58,15 +58,18 @@ def _prepare_field_census(con, w):
     sync_question_config(con, ariadne.ROOT)
     ensure_all(con, w.config)
     con.commit()
-    from ariadne_core.acquisition import acquire
-    acquire(con, ariadne.ROOT, budget=max(4, len(settings(w.config)['providers'])))
+    if allow_acquisition:
+        from ariadne_core.acquisition import acquire
+        acquire(con, ariadne.ROOT, budget=max(4, len(settings(w.config)['providers'])))
     process(con, ariadne.ROOT, w.config)
     # Bibliographic index responses teach vocabulary and prior-art identity only.
     # Keep them out of E0 evidence even though the exact bytes remain in custody.
+    from ariadne_core.storage import maybe_evict_g0
     for row in con.execute('''SELECT DISTINCT j.source_id FROM field_queries q
         JOIN acquisition_jobs j USING(job_id) WHERE j.source_id IS NOT NULL''').fetchall():
         con.execute('INSERT OR REPLACE INTO source_lanes VALUES(?,?,?)',
                     (row[0],'G0','P0 field-census bibliographic metadata; discovery guidance only'))
+        maybe_evict_g0(con,ariadne.ROOT,row[0])
     gate=gate_status(con,w.config)
     if not gate['blocked']:
         for q in gate['questions']:
@@ -90,13 +93,13 @@ def _prepare_field_census(con, w):
     return gate
 
 
-def cycle(paths=None,budget=None):
+def cycle(paths=None,budget=None,allow_acquisition=True):
     ariadne.ingest(paths or [])
     con = ariadne.connect()
     try:
         w = Warden(con,ariadne.ROOT)
         con.commit()
-        gate=_prepare_field_census(con,w)
+        gate=_prepare_field_census(con,w,allow_acquisition=allow_acquisition)
         if gate['blocked']:
             pending=con.execute("""SELECT COUNT(*) FROM acquisition_jobs
                 WHERE status='QUEUED' OR (status='FETCH_FAILED' AND attempts<3)""").fetchone()[0]
@@ -106,15 +109,13 @@ def cycle(paths=None,budget=None):
                 'rule':'RESEARCH_THE_RESEARCH_BEFORE_ORIGINAL_ANALYSIS'})
             con.commit()
             result=dict(executed=0,pending=pending,revision='P0_'+gate.get('stage','FIELD_CENSUS'),p0=gate)
-            backup = snapshot(con,ariadne.ROOT)
-            print(json.dumps(dict(result,snapshot=str(backup))),flush=True)
+            print(json.dumps(result),flush=True)
             return result
         result = w.run(budget)
         result['p0']=gate
         con.commit()
         report = render(w)
-        backup = snapshot(con,ariadne.ROOT)
-        print(json.dumps(dict(result,report=str(report),snapshot=str(backup))),flush=True)
+        print(json.dumps(dict(result,report=str(report))),flush=True)
         return result
     except BaseException:
         con.rollback()
@@ -123,7 +124,7 @@ def cycle(paths=None,budget=None):
         con.close()
 
 
-def watch(interval=30,budget=None,cycles=None,stop_event=None,mutex=None):
+def watch(interval=30,budget=None,cycles=None,stop_event=None,mutex=None,pause_event=None,acquisition_pause_event=None):
     if interval<=0 or (cycles is not None and cycles<1):
         raise ValueError('interval and cycles must be positive')
     stop = stop_event or threading.Event()
@@ -135,24 +136,30 @@ def watch(interval=30,budget=None,cycles=None,stop_event=None,mutex=None):
     try:
         while not stop.is_set() and (cycles is None or count<cycles):
             try:
+                import time
+                paused=bool(pause_event and pause_event.is_set())
+                downloads_paused=bool(acquisition_pause_event and acquisition_pause_event.is_set())
+                if paused:
+                    health=dict(status='PAUSED',poll=count,pending=pending,downloads_paused=downloads_paused)
+                    (ariadne.ARTIFACTS_DIR/'watch_status.json').write_text(json.dumps(health),encoding='utf-8')
+                    count+=1
+                    if cycles is None or count<cycles: stop.wait(interval)
+                    continue
+
                 paths = [*ariadne.inbox_files(),*ariadne.CONFIG_DIR.glob('*.json')]
                 current = tuple((str(p),p.stat().st_size,p.stat().st_mtime_ns) for p in sorted(paths))
-                # Two stable polls avoid booking half-written files. No-change idle
-                # creates no new research versions or costly query work.
-                import time
                 with ariadne.connect() as con:
-                    acquisition_due=bool(con.execute("SELECT 1 FROM acquisition_jobs WHERE status IN ('QUEUED','FETCH_FAILED') AND attempts<3 AND next_attempt<=? LIMIT 1",(time.time(),)).fetchone())
+                    acquisition_due=(not downloads_paused) and bool(con.execute("SELECT 1 FROM acquisition_jobs WHERE status IN ('QUEUED','FETCH_FAILED') AND attempts<3 AND next_attempt<=? LIMIT 1",(time.time(),)).fetchone())
                 if current == previous and (current != processed or pending or acquisition_due):
-                    # Publish active work before a potentially slow network batch.
                     (ariadne.ARTIFACTS_DIR/'watch_status.json').write_text(
-                        json.dumps(dict(status='PROCESSING',poll=count,pending=True)),
+                        json.dumps(dict(status='PROCESSING',poll=count,pending=True,downloads_paused=downloads_paused)),
                         encoding='utf-8')
                     from contextlib import nullcontext
                     with (mutex if mutex is not None else nullcontext()):
-                        result = cycle(budget=budget)
+                        result = cycle(budget=budget,allow_acquisition=not downloads_paused)
                     pending = result['pending']>0;processed=current
                 previous=current
-                health = dict(status='WAITING' if not pending else 'PROCESSING',poll=count,pending=pending)
+                health = dict(status='WAITING' if not pending else 'PROCESSING',poll=count,pending=pending,downloads_paused=downloads_paused)
             except Exception as exc:
                 health = dict(status='ERROR_RETRY',error=str(exc),poll=count)
                 print(json.dumps(health),file=sys.stderr,flush=True)
@@ -193,7 +200,7 @@ def main(argv=None):
     with single_writer(ariadne.ROOT):
         ariadne.init_db()
         if args.command in ('run','ingest'):
-            cycle(args.paths,args.budget);return 0
+            cycle(args.paths,args.budget,allow_acquisition=True);return 0
         if args.command=='watch':
             watch(args.interval,args.budget,args.cycles);return 0
         if args.command=='serve':
