@@ -643,3 +643,42 @@ P-REF-04:
 Where a local sixfold neighborhood is damaged to five, repair should preferentially involve restoration of a coupled pair relationship, not just insertion of any sixth item.
 
 Failure of these predictions weakens the music-referee mapping.
+
+
+## Correction — human-layer class transitions are genealogical generations
+
+Status: ACTIVE / SUPERSEDES one-step "global vs local scale" framing
+
+At the human/historical layer, each hierarchical class transition is to be modeled as one genealogical generation unless a source-native structure requires otherwise.
+
+Therefore the recurrence between:
+- Judah / Judahite ancestor-level structures, and
+- the wilderness-generation 70/72 elders,
+
+is NOT a one-scale local/global repetition. It is a multi-generation recurrence after several turns of the spiral.
+
+Canonical Judahite genealogy gives the rough coordinate:
+Judah -> Perez -> Hezron -> Ram -> Amminadab -> Nahshon,
+placing a wilderness-era Judahite representative about five descent steps after Judah. Exact elder identity may not map to Nahshon, and biblical genealogies can telescope; therefore treat "five" as a coordinate hypothesis, not a fixed historical fact.
+
+Method consequence:
+For the human layer, compare the same neighborhood relation across EVERY intervening generational class where evidence exists. The expected pattern should evolve along the spiral rather than repeat identically.
+
+Replace:
+GLOBAL 72-field vs LOCAL 6-sector = one scale step
+
+with:
+SAME RELATIONAL MOTIF recurring after N genealogical class transitions, with phase/role drift predicted by the spiral.
+
+New requirement:
+When a human-layer recurrence is proposed, record:
+- ancestor generation index;
+- descendant generation index;
+- number of class/generation steps;
+- invariant relation;
+- allowed phase drift;
+- changed role/state at each turn;
+- missing intermediate classes;
+- prediction for what should appear in those intermediates.
+
+Do not collapse generations into geometric subdivisions.
