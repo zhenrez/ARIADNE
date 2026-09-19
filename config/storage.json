@@ -8,6 +8,6 @@
   "launcher_backup_retention": 2,
   "snapshot_retention": 1,
   "auto_evict_g0_originals": true,
-  "processing_overhead_factor": 3,
+  "processing_overhead_factor": 5,
   "auto_evict_reacquirable_text_originals": true
 }
