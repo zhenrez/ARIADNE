@@ -558,3 +558,88 @@ for each class, inspect the same local structural neighborhood:
 parent coordinate -> subaddress factorization -> relation occupancy -> concurrence/closure -> role/carrier expansion -> residual/boundary.
 
 Only after the clean cross-class fingerprint is frozen may the Moses/70-72 holdout be opened.
+
+
+## Music Referee — Eldad/Medad and Judah
+
+Status: ACTIVE / HOLDOUT APPLICATION / G0
+
+Music is used as a structural referee, not historical evidence.
+
+### Frozen musical geometry applied
+
+Use the already-derived address geometry:
+
+12 parent sectors × 6 local phases = 72 addresses
+6 local phases = 3 dyads × 2 states
+therefore:
+12 × 3 × 2 = 72
+and equivalently:
+36 dyad-addresses × 2 states = 72 realizations.
+
+Do not use disputed Mosaic/Aristeas material to derive this geometry.
+
+### REF-ELDAD-01
+
+Question:
+If a 72-field loses exactly two visible/authorized members but the full functional field persists, what shape should the residual have?
+
+Music prediction:
+The residual 2 should preferentially be ONE COMPLETE DYAD from the 36×2 structure, not two unrelated missing singles.
+
+Applied observation:
+The disputed field is represented as 70 recognized + Eldad/Medad as a named pair that remain functionally active.
+
+Referee interpretation:
+72 is structurally the full address field; 70 is compatible with a projected/authorized count that externalizes one complete dyad.
+
+This is a structural call only; it does not establish historical origin or chronology.
+
+Next falsifier:
+If Eldad and Medad do not behave as a coupled/complementary pair under independent role/function analysis, or if another native 70-generator explains the field better, weaken/reject.
+
+### REF-JUDAH-01
+
+Question:
+At one 6-slot parent neighborhood inside a 12×6=72 field, what does a 5-name witness imply?
+
+Music prediction:
+A complete local neighborhood requires 6 positions = 3 dyads × 2 states.
+If the first four positions remain stable across witnesses but the final region differs, the corruption should be treated as a DYAD-LEVEL disturbance affecting positions 5–6, not automatically as a single missing sixth name.
+
+Observed witness pattern already known:
+Aristeas fourth group: first four stable names + Chabrias + lacuna.
+Epiphanius Judah group: same first four + Zechariah + Hilkiah.
+
+Referee interpretation:
+The local count of 5 is structurally incomplete.
+Epiphanius preserves the correct 6-slot cardinality.
+Music alone cannot determine the original historical names.
+The disputed locus should be modeled as a two-slot/final-dyad problem; Chabrias must not be treated as automatically secure merely because it occupies slot 5 in the damaged witness.
+
+External critical apparatus subsequently notes that the fifth and sixth names are supplied from Epiphanius as Zacharias and Chelkias and that Chabrias is probably corrupt. This is prior textual criticism, not a novel historical conclusion.
+
+### Cross-scale isomorphism
+
+Eldad/Medad and Judah occupy analogous but different scales:
+
+- Global field: 72 = 36 dyads ×2; Eldad/Medad correspond to one whole dyad displaced from the visible 70.
+- Local sector: 6 = 3 dyads ×2; Judah's fourth-group corruption concentrates in the final two-slot dyad.
+
+This is the exact kind of scale-recursive relation the project is testing.
+
+### New predictions to test independently
+
+P-REF-01:
+Additional Judah textual witnesses/critical evidence should show instability concentrated in the final dyad (positions 5–6) rather than diffuse corruption across all six positions.
+
+P-REF-02:
+Eldad and Medad should exhibit complementary rather than merely duplicate functions within one shared role-class. The binary axis must be independently identifiable; do not invent it from names after inspection.
+
+P-REF-03:
+Other clean 12×6 or 36×2 systems with a 70-like projection should, if genuinely same-class, remove/externalize one whole dyad rather than two unrelated states.
+
+P-REF-04:
+Where a local sixfold neighborhood is damaged to five, repair should preferentially involve restoration of a coupled pair relationship, not just insertion of any sixth item.
+
+Failure of these predictions weakens the music-referee mapping.
