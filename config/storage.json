@@ -9,5 +9,6 @@
   "snapshot_retention": 1,
   "auto_evict_g0_originals": true,
   "processing_overhead_factor": 5,
-  "auto_evict_reacquirable_text_originals": true
+  "auto_evict_reacquirable_text_originals": true,
+  "processing_reserve_bytes": 67108864
 }
