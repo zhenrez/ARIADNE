@@ -314,6 +314,8 @@ def serve(port=8765, interval=10, stop_file=None):
                             updates["free_space_reserve_bytes"] = int(body["free_space_reserve_bytes"])
                         if "auto_evict_g0_originals" in body:
                             updates["auto_evict_g0_originals"] = bool(body["auto_evict_g0_originals"])
+                        if "auto_evict_reacquirable_text_originals" in body:
+                            updates["auto_evict_reacquirable_text_originals"] = bool(body["auto_evict_reacquirable_text_originals"])
                         result = save_policy(ariadne.ROOT, updates)
                         con.execute(
                             "UPDATE acquisition_jobs SET status='QUEUED' WHERE status='STORAGE_DEFERRED'"
@@ -332,6 +334,15 @@ def serve(port=8765, interval=10, stop_file=None):
                             result = {"source_id": source_id, "pinned": False}
                         elif action == "evict":
                             result = evict_source(con, ariadne.ROOT, source_id)
+                        elif action == "reacquire":
+                            changed=con.execute(
+                                """UPDATE acquisition_jobs
+                                   SET status='QUEUED',attempts=0,next_attempt=0
+                                   WHERE source_id=?""",(source_id,)
+                            ).rowcount
+                            if not changed:
+                                raise ValueError("this source has no recorded network acquisition path")
+                            result={"source_id":source_id,"status":"QUEUED_FOR_REACQUISITION"}
                         else:
                             raise ValueError("unknown source action")
 
