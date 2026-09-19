@@ -167,8 +167,13 @@ def watch(interval=30,budget=None,cycles=None,stop_event=None,mutex=None,pause_e
                     with (mutex if mutex is not None else nullcontext()):
                         result = cycle(budget=budget,allow_acquisition=not downloads_paused)
                     pending = result['pending']>0;processed=current
+                    storage_blocked=bool(result.get('storage_blocked'))
+                else:
+                    storage_blocked=False
                 previous=current
-                health = dict(status='WAITING' if not pending else 'PROCESSING',poll=count,pending=pending,downloads_paused=downloads_paused)
+                health = dict(status='STORAGE_PAUSED' if storage_blocked else ('WAITING' if not pending else 'PROCESSING'),
+                              poll=count,pending=pending,downloads_paused=downloads_paused,
+                              storage_blocked=storage_blocked)
             except Exception as exc:
                 health = dict(status='ERROR_RETRY',error=str(exc),poll=count)
                 print(json.dumps(health),file=sys.stderr,flush=True)
