@@ -11,6 +11,7 @@ DB=ROOT/'db/ariadne.sqlite'
 ARTIFACTS=ROOT/'artifacts'
 BACKUPS=ARTIFACTS/'launcher-backups'
 LOCK=ROOT/'db/warden.lock'
+STORAGE_CONFIG=ROOT/'config/storage.json'
 FORBIDDEN=('conda','anaconda','miniconda','miniforge','mambaforge','nvidia','cuda','windowsapps')
 
 def fail(message): raise RuntimeError(message)
@@ -73,6 +74,24 @@ def digest(path):
         for chunk in iter(lambda:handle.read(1024*1024),b''):h.update(chunk)
     return h.hexdigest()
 
+def _backup_retention():
+    try:
+        data=json.loads(STORAGE_CONFIG.read_text(encoding='utf-8'))
+        keep=int(data.get('launcher_backup_retention',2))
+        return max(0,keep)
+    except (OSError,ValueError,TypeError,json.JSONDecodeError):
+        return 2
+
+def _prune_old_backups():
+    keep=_backup_retention()
+    files=sorted(BACKUPS.glob('prestart-*.sqlite'),key=lambda p:p.stat().st_mtime,reverse=True)
+    for path in files[keep:]:
+        try:path.unlink()
+        except OSError:pass
+        manifest=path.with_suffix('.json')
+        try:manifest.unlink()
+        except OSError:pass
+
 def backup_existing_database():
     if not DB.exists():return None
     if DB.stat().st_size==0:fail(f'Existing database is empty/corrupt: {DB}')
@@ -91,6 +110,7 @@ def backup_existing_database():
     if existing:temporary.unlink();return str(existing[-1])
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ');final=BACKUPS/f'prestart-{stamp}-{sha[:12]}.sqlite';temporary.replace(final)
     final.with_suffix('.json').write_text(json.dumps(dict(file=final.name,sha256=sha,source=str(DB.relative_to(ROOT)),created_utc=datetime.now(timezone.utc).isoformat()),indent=2),encoding='utf-8')
+    _prune_old_backups()
     return str(final)
 
 def main():
