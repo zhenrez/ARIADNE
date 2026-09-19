@@ -172,7 +172,7 @@ def serve(port=8765, interval=10, stop_file=None):
                     metrics["Reignited torches"] = con.execute(
                         "SELECT COUNT(*) FROM torches WHERE state='REIGNITED'"
                     ).fetchone()[0]
-                    storage_state = usage(ariadne.ROOT)
+                    storage_state = usage(ariadne.ROOT, con=con)
                     sources = list_sources(con, ariadne.ROOT, 100)
                     queue = _queue_rows(con, 100)
 
@@ -275,7 +275,7 @@ def serve(port=8765, interval=10, stop_file=None):
                         data = base64.b64decode(body["data"], validate=True)
                         if len(data) > MAX_BYTES:
                             raise ValueError("upload exceeds 25 MiB")
-                        ensure_upload_capacity(ariadne.ROOT, len(data))
+                        ensure_upload_capacity(ariadne.ROOT, len(data), con=con)
                         name = Path(body["name"].replace("\\", "/")).name
                         if not name or name in (".", ".."):
                             raise ValueError("invalid file name")
