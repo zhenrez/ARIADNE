@@ -15,7 +15,7 @@ DEFAULT_POLICY = {
     "max_source_bytes": 25 * 1024 * 1024,
     "launcher_backup_retention": 2,
     "snapshot_retention": 1,
-    "processing_overhead_factor": 3,
+    "processing_overhead_factor": 5,
     "auto_evict_g0_originals": True,
     "auto_evict_reacquirable_text_originals": True,
 }
