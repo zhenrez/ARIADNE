@@ -386,6 +386,22 @@ Preferred paths:
 
 If a path changes nothing beyond terminology, duplicates a known conclusion, or requires breaking better-supported neighboring evidence, bank or reject it.
 
+## Forced-Hop Falsification Rule
+
+A forced hop is a protocol action, not a user commitment to the tested model.
+
+When a plausible mapping, adapter, analogy, or coordinate system is proposed for testing:
+- treat it as a **candidate hypothesis**, never as a chosen interpretation;
+- pre-register what it predicts before fitting;
+- run it even if it may be wrong;
+- preserve HIT / MISS / PARTIAL / CONTRADICTION outcomes;
+- use failures to infer which dimensions, mappings, or class assumptions are invalid;
+- carry forward the constraints learned from the failed test;
+- never attribute the model choice to the user unless the user explicitly ratifies it.
+
+The purpose of a forced hop is often to discover **what cannot be right**, because eliminated mappings constrain what can still be right.
+
+
 ## Execution Compliance — Protocol Violations
 
 The following are protocol violations, not optional omissions:
