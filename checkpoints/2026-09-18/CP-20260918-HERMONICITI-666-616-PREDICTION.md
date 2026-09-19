@@ -1305,3 +1305,88 @@ Candidate 1 is mathematically admissible in principle but unresolved because its
 Candidate 3 is illegal in the frozen state space.
 
 Do not convert Candidate 1 NO CALL into FAIL without additional coordinate data.
+
+
+## TIQ Phase 3 — Blind W72 isolated-binary prediction
+
+Status: PRE-REGISTERED / HISTORICAL HOLDOUT SEALED
+
+Frozen state space:
+W72 = Z12 × Z3 × Z2.
+
+For each (p,τ), define binary fiber:
+F_{p,τ} = {(p,τ,0),(p,τ,1)}.
+
+Candidate-2 theorem:
+B acts within each fiber,
+B^2 = I,
+C(B^2)=0.
+
+Choose exactly one distinguished isolated fiber:
+F* = F_{p*,τ*}.
+
+### Partition theorem
+
+W72 = F* ⊔ M70
+
+with:
+|F*|=2
+|M70|=70
+
+and:
+M70 = union of the remaining 35 binary fibers.
+
+Therefore:
+72 = 2 + 70 = 1 binary fiber + 35 binary fibers.
+
+Both subsets are B-invariant:
+B(F*)=F*
+B(M70)=M70.
+
+No B-edge may cross the cut if F* is strictly isolated.
+
+### Anomaly profile
+
+The isolated pair does NOT require a different local operator.
+It uses the same B flip as every binary fiber:
+β -> β+1 mod2
+φ -> φ+3 mod6.
+
+Its members are antipodal in the local six-phase fiber:
+{φ*, φ*+3}.
+
+No extra acoustic residual, p-shift, τ-shift, or generation shift is required.
+
+The anomaly is therefore global/relational:
+one otherwise ordinary binary fiber is distinguished by boundary condition or role,
+not by deformation of its internal geometry.
+
+### Forced constraints
+
+If strict isolation is true:
+
+1. W72 cannot behave as one single B-connected/transitive block.
+2. The distinguished two nodes cannot be two unrelated singleton removals; they must be one complete binary fiber sharing (p*,τ*) and differing only in β.
+3. The 70-node complement cannot contain a broken half-fiber. It must be exactly 35 complete binary fibers.
+4. No operator edge assigned to the isolated pair may require p,τ,g,or ρ changes unless a new coupling operator is explicitly introduced; under the frozen theorem that would invalidate the Candidate-2-only premise.
+5. A claimed uniform 72-node action in which every node participates identically in one undifferentiated global block is incompatible with the existence of one strictly isolated B-orbit.
+
+### Stronger group-action note
+
+Under B alone, W72 is canonically the disjoint union of 36 two-cycles even before one is distinguished:
+W72 / <B> has 36 orbits.
+
+Thus the Phase-3 anomaly is not "pairhood exists" but:
+ONE binary orbit is selectively separated from the other 35.
+
+### Blind holdout prediction
+
+If a later holdout presents a 72-total system with a structurally exceptional pair, the clean-room model predicts:
+- full field = 72;
+- exceptional object = exactly 2 nodes;
+- remainder = exactly 70 nodes;
+- exceptional two share one parent coordinate (p,τ);
+- they differ only in β;
+- they retain an intact B oscillation;
+- the remaining 70 form 35 intact binary fibers;
+- any account requiring two unrelated missing nodes, a broken pair, or an illegal axis jump fails this theorem.
