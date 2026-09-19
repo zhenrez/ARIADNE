@@ -1684,3 +1684,79 @@ GLOBAL 72=F* ⊔ M70 architecture: STRONGLY SUPPORTED / NOT FULLY HISTORICALLY C
 ### Dependency note
 
 Modern scholarship notes that Pseudo-Jonathan's three-part synthesis is likely dependent on the collection of three opinions already present in the Talmud. Therefore the three output topics are not independent witnesses to one another. Their value here is coordinate resolution within the Targumic realization, not triple independent corroboration.
+
+
+## Phase 8 — Global dyadic deployment cross-validation
+
+Status: GLOBAL STRUCTURAL CROSS-VALIDATION / ORIGINAL M70 DIRECT PAIRING STILL NOT INTERNALLY ATTESTED
+
+Historical input:
+Luke 10:1 explicitly states that the appointed group is sent ana dyo ("two by two").
+The manuscript tradition varies between 70 and 72.
+
+### Arithmetic realization
+
+If N=70:
+70 / 2 = 35 complete dyads.
+
+If N=72:
+72 / 2 = 36 complete dyads.
+
+Thus the Lukan deployment natively realizes exactly the two pair-counts predicted by the W72 theorem:
+M70 = 35 × 2
+W72 = 36 × 2.
+
+### Synthesis with the already-closed local anomaly
+
+Frozen theorem:
+W72 = F* ⊔ M70
+|F*| = 2 = 1 binary fiber
+|M70| = 70 = 35 binary fibers
+
+Therefore:
+W72 = (1×2) ⊔ (35×2) = 36×2 = 72.
+
+This is mathematically exact.
+
+### Historical status distinction
+
+Luke 10 explicitly attests pairwise deployment, but Luke does not explicitly cite Numbers 11 in the verse.
+Numbers-11 / Moses-elders background is a recognized scholarly intertext/possible allusion, not an explicit textual citation.
+
+Therefore:
+- Global pair architecture receives a genuine successor-system historical realization.
+- This independently demonstrates that a 70-node deployment can naturally be realized as 35 dyads.
+- It does NOT by itself prove that the original Numbers-11 seventy elders were historically paired internally in the same way.
+
+### Final closure levels
+
+MATHEMATICAL W72 ARCHITECTURE:
+CLOSED.
+
+LOCAL F* HISTORICAL INSTANTIATION:
+CLOSED within the Pseudo-Jonathan branch.
+
+GLOBAL DYADIC ARCHITECTURE ACROSS SUCCESSOR/RECEPTION SYSTEMS:
+CLOSED / CROSS-VALIDATED:
+70 -> 35×2 in Luke 10 under the 70 reading;
+72 -> 36×2 in Luke 10 under the 72 reading;
+72 -> 36×2 also appears in Epiphanius's translator-cell account.
+
+ORIGINAL NUMBERS-11 M70 INTERNAL PAIRING:
+NOT DIRECTLY HISTORICALLY CLOSED unless independent evidence explicitly pairs the seventy themselves.
+
+### Structural theorem
+
+W72 = Z12 × Z3 × Z2
+     = 36 binary fibers
+     = F* ⊔ M70
+     = (1×2) ⊔ (35×2)
+     = 36×2.
+
+The 70/72 manuscript boundary in the successor deployment preserves the same dyadic grammar:
+70 -> 35 dyads;
+72 -> 36 dyads.
+
+This means the count variation changes the number of complete binary orbits by exactly one, not the pairing operator itself.
+
+That invariant is high diagnostic value.
