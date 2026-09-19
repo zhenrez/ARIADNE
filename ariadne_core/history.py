@@ -1,7 +1,8 @@
-"""Every committed row transition is versioned; snapshots are recovery artifacts.
+"""Authoritative state transitions are hash-versioned; derived indexes remain reconstructable.
 
 The hash chains detect accidental alteration. They are not signatures against an
-attacker who controls both database and backups. Never prune research history.
+attacker who controls both database and backups. Logical research history is not
+pruned; high-volume derived/index tables are excluded from duplicate row history.
 """
 import hashlib
 import json
@@ -10,7 +11,14 @@ from contextlib import closing
 from pathlib import Path
 from .store import encoded, event
 
-EXCLUDED = {'state_versions', 'sqlite_sequence'}
+EXCLUDED = {
+    'state_versions','sqlite_sequence',
+    # Reconstructable/high-volume derived state. Provenance survives through
+    # sources, pipeline_events, implementation versions and authoritative tables.
+    'source_profiles','passages','gram_index','findings','graph_edges','proposals',
+    'challenges','branch_origins','branch_observations','query_runs','scale_patterns',
+    'field_candidates','torch_hits'
+}
 
 
 def setup_hash(con):
@@ -30,9 +38,14 @@ def install_history(con):
     CREATE TRIGGER IF NOT EXISTS versions_no_delete BEFORE DELETE ON state_versions
       BEGIN SELECT RAISE(ABORT,'state history is append-only'); END;
     ''')
-    # FTS is a reproducible index over passages; do not duplicate shadow tables.
-    tables = [r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
-              if r[0] not in EXCLUDED and not r[0].startswith(('sqlite_','passage_fts'))]
+    # FTS and other reconstructable derived tables are deliberately excluded from
+    # row-by-row history to prevent research-state amplification.
+    all_tables = [r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")]
+    for table in all_tables:
+        if table in EXCLUDED or table.startswith(('sqlite_','passage_fts')):
+            for op in ('insert','update','delete'):
+                con.execute(f'DROP TRIGGER IF EXISTS "version_{table}_{op}"')
+    tables = [t for t in all_tables if t not in EXCLUDED and not t.startswith(('sqlite_','passage_fts'))]
     for table in tables:
         columns = [r[1] for r in con.execute(f'PRAGMA table_info("{table}")')]
         def row(alias):
@@ -87,7 +100,7 @@ def state_at(con, revision):
 
 
 def snapshot(con,root):
-    """SQLite online backup, integrity check, content hash and immutable manifest."""
+    """Explicit milestone backup. Normal Warden cycles no longer call this automatically."""
     con.commit()
     root = Path(root)
     directory = root/'artifacts/snapshots'
@@ -106,6 +119,11 @@ def snapshot(con,root):
                     state_revision=head[0],state_hash=head[1],
                     schema=[dict(r) for r in con.execute('SELECT type,name,sql FROM sqlite_master WHERE sql IS NOT NULL ORDER BY type,name')])
     path.with_suffix('.json').write_text(encoded(manifest),encoding='utf-8')
+    try:
+        from .storage import cleanup
+        cleanup(root,'snapshots')
+    except Exception:
+        pass
     return path
 
 
