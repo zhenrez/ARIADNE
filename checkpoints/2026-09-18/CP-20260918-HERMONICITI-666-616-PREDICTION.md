@@ -1390,3 +1390,77 @@ If a later holdout presents a 72-total system with a structurally exceptional pa
 - they retain an intact B oscillation;
 - the remaining 70 form 35 intact binary fibers;
 - any account requiring two unrelated missing nodes, a broken pair, or an illegal axis jump fails this theorem.
+
+
+## Phase 3 historical projection — Numbers 11 dataset against isolated-binary theorem
+
+Status: CONDITIONAL MAPPING / HOLDOUT TEST
+
+Frozen theorem:
+W72 = F* ⊔ M70
+with
+F* = one complete binary fiber,
+M70 = 35 complete binary fibers.
+
+Dataset mapping:
+F* := {Eldad, Medad}
+M70 := gathered 70 elders.
+
+### Result 1 — F* anomaly-profile match
+
+Observed dataset features supplied:
+- the two named units are registered within the total array;
+- they are structurally/spatially separated from the gathered 70;
+- both remain functionally active under the same activation event.
+
+This matches the GLOBAL anomaly profile:
+one intact 2-node object separated from a 70-node main body while remaining functionally active.
+
+However, the dataset as supplied does NOT independently establish the LOCAL binary-coordinate theorem:
+same p,
+same τ,
+opposite β,
+B-mediated oscillation,
+or zero local checksum.
+Therefore the result is:
+GLOBAL MATCH / LOCAL COORDINATES PREDICTED BUT UNVERIFIED.
+
+### Result 2 — Shared parent-address consequence
+
+If the Eldad/Medad pair truly instantiates F*, then by theorem they MUST have:
+p_E = p_M = p*
+τ_E = τ_M = τ*
+β_E ≠ β_M.
+
+The exact p* and τ* are not recoverable from the Numbers 11 dataset alone.
+They are now blind historical predictions to be sought independently.
+Any historical reconstruction placing the two in different p or different τ coordinates falsifies this specific F* mapping.
+
+### Result 3 — E70 composition consequence
+
+If E70 truly instantiates M70, then:
+E70 = union of 35 complete binary fibers.
+
+Therefore the 70 cannot be structurally primitive as 70 unrelated singleton units under this model.
+They must admit a pairing relation:
+35 × 2 = 70,
+with no broken half-fiber, singleton remainder, 69+1 split, or two unrelated missing half-fibers.
+
+This is a hard falsifiable prediction, not something supplied by the dataset.
+
+Historical models eliminated CONDITIONALLY IF the mapping is accepted:
+- 70 as an undifferentiated set of 70 independent atoms;
+- 70 as a structure containing an unpaired singleton;
+- 70 as 69+1;
+- 70 formed by deleting two unrelated nodes from 72 while leaving broken binary fibers;
+- any model in which the exceptional pair itself requires different p, τ, g, or ρ to explain its pairing.
+
+Historical models are NOT eliminated merely because they are absent from the supplied dataset; external evidence must now test the 35-pair prediction.
+
+### Critical falsifier
+
+If no defensible 35-pair structure can be found for the 70 under independent evidence, then the mapping E70=M70 fails even though the superficial cardinality 70+2=72 matches.
+
+Thus:
+cardinality match = necessary,
+typed binary-fiber decomposition = decisive.
