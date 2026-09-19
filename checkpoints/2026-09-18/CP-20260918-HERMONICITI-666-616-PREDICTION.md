@@ -1011,3 +1011,135 @@ vertical generation/register
 × sixfold phase
 × pair/role realization,
 which allows disputes to be localized by axis rather than collapsed into one count.
+
+
+## FORCED HOP — apply coordinate ledger to Eldad
+
+Status: ACTIVE / HIGH_DIAGNOSTIC / HOLDOUT APPLICATION
+
+### Native 12-position wilderness carrier
+
+For the Numbers wilderness context, prefer the source-native camp wheel of Numbers 2 over Jacob birth-order when assigning tribal angular positions:
+
+1 Judah
+2 Issachar
+3 Zebulun
+4 Reuben
+5 Simeon
+6 Gad
+7 Ephraim
+8 Manasseh
+9 Benjamin
+10 Dan
+11 Asher
+12 Naphtali
+
+Levi is not one of the twelve outer camp sectors; Levites occupy the center around the Tent.
+
+Using the already-declared provisional fifth traversal T7(p)=p+7 mod12, with slot 1 as local tonic:
+slot pitches are
+1=0, 2=7, 3=2, 4=9, 5=4, 6=11, 7=6, 8=1, 9=8, 10=3, 11=10, 12=5.
+These are relative pitch-class aliases only.
+
+### Eldad base-text coordinate
+
+Numbers 11 supplies:
+- named unit: Eldad
+- paired with Medad
+- remains in the camp rather than going to the Tent
+- receives/rests under the Spirit and prophesies
+- tribe unspecified
+- six-of-tribe phase unspecified
+
+Therefore the strict base-text coordinate is:
+
+ELDAD = (wilderness generation/class, tribal_address=UNKNOWN, sixfold_phase=UNKNOWN, role=prophet/outside-Tent)
+
+No unique note may be assigned from Numbers 11 alone.
+
+### Three later identity branches
+
+A. Numbers Rabbah / Tanhuma identity:
+Eldad = Elidad ben Chislon, prince/representative of Benjamin.
+Medad = Kemuel ben Shiphtan, representative of Ephraim.
+
+Under Numbers-2 camp order:
+- Medad/Ephraim = slot 7 = relative pitch-class 6
+- Manasseh = slot 8 = relative pitch-class 1
+- Eldad/Benjamin = slot 9 = relative pitch-class 8
+
+This puts Eldad and Medad NOT in one sixfold tribal sector, but as the two outer members of the SAME three-tribe western camp:
+Ephraim — Manasseh — Benjamin.
+
+Structural prediction under this branch:
+Eldad/Medad should behave as a complementary OUTER PAIR bracketing a central third member/function, not as a local 36×2 dyad.
+Search for an independently meaningful Manasseh/central role before interpreting.
+
+B. Targum Pseudo-Jonathan identity:
+Eldad and Medad are brothers, children of Elizaphan son of Parnach and Jochebed.
+Elizaphan son of Parnach is associated with Zebulun (Num 34:25).
+
+Under patrilineal tribal address:
+- both map to Zebulun = Numbers-2 slot 3 = relative pitch-class 2.
+- their distinct sixfold phase positions remain UNKNOWN.
+
+Structural prediction under this branch:
+they can be two states within ONE parent tribal address. This is compatible with a local 3×2 / 36×2 dyadic realization, but exact pair membership remains unproven.
+
+C. Amram-half-brother tradition:
+Eldad and Medad are sons of Amram by another wife.
+
+Under patrilineal address:
+- both are Levite.
+- Levi is CENTER, not one of the twelve outer Numbers-2 tribal sectors.
+
+Structural prediction under this branch:
+Eldad/Medad are not ordinary peripheral 12×6 addresses at all; they belong to the central/source axis while remaining physically in the camp.
+This would explain why a 70/72 peripheral census is a poor representation of their role, but it conflicts with treating them as ordinary six-per-tribe candidates unless a different 12-tribe convention is demonstrated.
+
+### Referee consequence
+
+The former claim "Eldad+Medad = one complete dyad displaced from the 72" is NOT established by the base text and remains branch-dependent.
+
+Music now distinguishes three testable models:
+
+1. OUTER-PAIR/TRIAD model:
+   Ephraim—Manasseh—Benjamin, with Medad/Eldad as endpoints.
+2. SAME-SECTOR/BINARY model:
+   both Zebulun, distinct unknown phases.
+3. CENTRAL-AXIS model:
+   both Levite, outside the twelve-sector perimeter.
+
+These models make different predictions and should be tested against independent role, prophecy, geography, lineage, and transmission evidence.
+
+### Direct functional observation
+
+Numbers itself distinguishes:
+- seventy elders: stationed around the Tent; Spirit drawn from that upon Moses.
+- Eldad/Medad: remain in camp; Spirit rests upon them.
+
+Later traditions sharpen this into:
+- seventy: mediated through Moses and temporary;
+- Eldad/Medad: direct divine source and continuing prophecy.
+
+This is compatible with a source-axis/boundary distinction but must not be used to choose the lineage branch after the fact.
+
+### Pre-registered Eldad predictions
+
+P-ELDAD-01:
+If branch A (Benjamin/Ephraim outer-pair) is structurally real, independent tradition should give the intervening Manasseh address or an analogous central third term a meaningful mediating function in the same transition neighborhood.
+
+P-ELDAD-02:
+If branch B (same Zebulun sector) is structurally real, Eldad and Medad should show complementary binary functions while preserving one higher tribal address.
+
+P-ELDAD-03:
+If branch C (Levite/center) is structurally real, Eldad/Medad should repeatedly behave as source-adjacent/central units whose function bypasses the ordinary twelve-sector authorization mechanism.
+
+P-ELDAD-04:
+No exact Eldad note or phase is to be claimed until one branch wins independently. Candidate relative notes:
+- Benjamin branch: slot 9 / pc 8
+- Zebulun branch: slot 3 / pc 2
+- Levi-center branch: central axis / no outer-wheel pitch assignment.
+
+P-ELDAD-05:
+A model that explains only the 70/72 count but not Eldad's SOURCE, LOCATION, DURATION, and PAIR/THIRD-TERM behavior is insufficient.
