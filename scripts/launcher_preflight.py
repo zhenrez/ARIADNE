@@ -1,6 +1,6 @@
 """One-click launcher preflight for ARIADNE."""
 from __future__ import annotations
-import argparse, hashlib, json, os, platform, sqlite3, struct, sys, tempfile
+import argparse, hashlib, json, os, platform, shutil, sqlite3, struct, sys, tempfile
 from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
@@ -74,16 +74,27 @@ def digest(path):
         for chunk in iter(lambda:handle.read(1024*1024),b''):h.update(chunk)
     return h.hexdigest()
 
-def _backup_retention():
+def _storage_policy():
+    defaults=dict(
+        launcher_backup_retention=2,
+        local_budget_bytes=1024*1024*1024,
+        free_space_reserve_bytes=5*1024*1024*1024,
+    )
     try:
         data=json.loads(STORAGE_CONFIG.read_text(encoding='utf-8'))
-        keep=int(data.get('launcher_backup_retention',2))
-        return max(0,keep)
+        if isinstance(data,dict):defaults.update(data)
     except (OSError,ValueError,TypeError,json.JSONDecodeError):
-        return 2
+        pass
+    for key in ('launcher_backup_retention','local_budget_bytes','free_space_reserve_bytes'):
+        try:defaults[key]=max(0,int(defaults[key]))
+        except (ValueError,TypeError):pass
+    return defaults
 
-def _prune_old_backups():
-    keep=_backup_retention()
+def _backup_retention():
+    return _storage_policy()['launcher_backup_retention']
+
+def _prune_old_backups(keep=None):
+    keep=_backup_retention() if keep is None else max(0,int(keep))
     files=sorted(BACKUPS.glob('prestart-*.sqlite'),key=lambda p:p.stat().st_mtime,reverse=True)
     for path in files[keep:]:
         try:path.unlink()
@@ -95,7 +106,26 @@ def _prune_old_backups():
 def backup_existing_database():
     if not DB.exists():return None
     if DB.stat().st_size==0:fail(f'Existing database is empty/corrupt: {DB}')
-    BACKUPS.mkdir(parents=True,exist_ok=True);temporary=BACKUPS/f'.prestart-{os.getpid()}.sqlite'
+    policy=_storage_policy()
+    keep=policy['launcher_backup_retention']
+    if keep==0:return 'SKIPPED_BY_RETENTION_POLICY'
+    BACKUPS.mkdir(parents=True,exist_ok=True)
+    # Make room before creating another full database copy.
+    _prune_old_backups(max(0,keep-1))
+    estimated=max(DB.stat().st_size,4096)
+    free=shutil.disk_usage(ROOT).free
+    if free-estimated < policy['free_space_reserve_bytes']:
+        return 'SKIPPED_TO_PRESERVE_FREE_SPACE'
+    research_bytes=0
+    for base in (ROOT/'db',ROOT/'custody',ROOT/'inbox',ROOT/'artifacts'):
+        if base.exists():
+            for item in base.rglob('*'):
+                if item.is_file():
+                    try:research_bytes+=item.stat().st_size
+                    except OSError:pass
+    if research_bytes+estimated > policy['local_budget_bytes']:
+        return 'SKIPPED_TO_PRESERVE_ARIADNE_BUDGET'
+    temporary=BACKUPS/f'.prestart-{os.getpid()}.sqlite'
     if temporary.exists():temporary.unlink()
     source=sqlite3.connect(DB,timeout=10)
     try:
@@ -107,7 +137,10 @@ def backup_existing_database():
             if dest.execute('PRAGMA integrity_check').fetchone()[0]!='ok':fail('Pre-start backup failed SQLite integrity_check.')
     finally:source.close()
     sha=digest(temporary);existing=sorted(BACKUPS.glob(f'prestart-*-{sha[:12]}.sqlite'))
-    if existing:temporary.unlink();return str(existing[-1])
+    if existing:
+        temporary.unlink()
+        _prune_old_backups(keep)
+        return str(existing[-1])
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ');final=BACKUPS/f'prestart-{stamp}-{sha[:12]}.sqlite';temporary.replace(final)
     final.with_suffix('.json').write_text(json.dumps(dict(file=final.name,sha256=sha,source=str(DB.relative_to(ROOT)),created_utc=datetime.now(timezone.utc).isoformat()),indent=2),encoding='utf-8')
     _prune_old_backups()
