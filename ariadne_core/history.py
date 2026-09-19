@@ -109,6 +109,15 @@ def snapshot(con,root):
     path = directory/f'state-{head[0]:012d}-{head[1][:12]}.sqlite'
     if path.exists():
         return path
+    from .storage import usage
+    state=usage(root,con=con,include_venv=False)
+    expected=max(
+        int(con.execute('PRAGMA page_count').fetchone()[0]) *
+        int(con.execute('PRAGMA page_size').fetchone()[0]),
+        4096
+    )
+    if expected>state['headroom_bytes']:
+        raise OSError('Snapshot would exceed ARIADNE storage budget or free-space reserve')
     temporary = path.with_suffix('.tmp')
     with closing(sqlite3.connect(temporary)) as dest:
         con.backup(dest)
