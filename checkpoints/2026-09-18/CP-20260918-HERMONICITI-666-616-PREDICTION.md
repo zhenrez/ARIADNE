@@ -443,3 +443,118 @@ Use as low-ambiguity structural controls, with source/dependency labels:
 - 360-cycle subdivisions and calendar residual systems for regular-grid + boundary-residual comparison.
 
 Do not use these as proof of historical transmission into Moses. They are shape controls for held-out prediction.
+
+
+## Macro correction — musical 72 class located without Moses/70-72 holdout
+
+Status: HIGH_DIAGNOSTIC / PRE-REGISTERED BEFORE HOLDOUT TEST
+
+Moses/70-72 and its directly entangled debate chain are SEALED as holdout. Do not use them to derive the blueprint.
+
+### Two musical constructions must remain distinct
+
+#### A. SUN-core graph growth
+
+Frozen SUN recurrence:
+C_n -> {R_n,L_n} -> C_{n+1},
+R=2/3 C, L=3/4 C, C_{n+1}=1/2 C_n.
+
+If ordinary recurrence is allowed to continue without the TOL stop/boundary mapping, each generation adds exactly three new graph states: R_n, L_n, C_{n+1}.
+
+Therefore:
+- derived-state count after n generations: D_n = 3n
+- root-inclusive full graph count: F_n = 3n + 1
+
+Relevant clean sequence:
+n=12: 36 / 37
+n=14: 42 / 43
+n=16: 48 / 49
+n=20: 60 / 61
+n=23: 69 / 70
+n=24: 72 / 73
+
+This is a mathematical consequence of counting the frozen SUN graph, NOT yet a historical class mapping.
+
+#### B. Existing music-first address descent
+
+Previously specified independently in Argo_Music_First_Theorem:
+
+- C_12 = Z_12
+- 2-against-3 polyrhythm has LCM(2,3)=6 phase slots
+- A_72 = C_12 × Z_6
+- V_144 = A_72 × {A,B}
+- V_216 = A_72 × {A,B,d}
+
+Thus music already contains an explicit 72-class:
+72 PITCH/PHASE ADDRESSES, not 72 pitch classes/notes.
+
+Local six-phase neighborhood for each pitch p:
+phase t = 0,1,2,3,4,5
+A(t): 2t=0 mod6 -> {0,3}
+B(t): 3t=0 mod6 -> {0,2,4}
+A∩B -> {0}
+Shifted B: 3t+3=0 mod6 -> {1,3,5}
+A∩B_shift -> {3}
+
+So the address set remains sixfold while the relation moves the concurrence from phase 0 to phase 3.
+
+### Completed Harmony / FK role
+
+Completed Harmony/FK is NOT required to obtain the 72 musical address class.
+It supplies a separate boundary rule:
+local ratio closure can coexist with global register/generation displacement.
+
+Do not use FK to manufacture 72.
+
+### Current cross-class coordinate
+
+The non-holdout musical class ladder is provisionally:
+
+12 pitch/address parents
+ -> 72 pitch×phase addresses
+ -> 144 two-voice address cells
+ -> 216 three-part/descendant address cells
+
+This directly matches the project's existing typed distinction:
+address != entity != role != capability.
+
+### New preregistered predictions
+
+P-MUSIC-72-01:
+Any genuinely same-class historical/cosmological 72 system should be better modeled as a structured address/state space than as 72 unrelated primitive entities. It should expose a native factorization or coordinate grammar. Bare cardinality is insufficient.
+
+P-MUSIC-72-02:
+The local neighborhood of a 72-address class should contain a sixfold substructure under each of twelve parent positions, or a structurally equivalent 12×6 decomposition. This may be permuted or represented differently, but the relation grammar should survive.
+
+P-MUSIC-72-03:
+If a same-class system then doubles or triples representation roles without changing addresses, nearby classes should naturally appear as 144 role-realizations and/or 216 three-component realizations. These must be typed as role/carrier expansion, not new primitive addresses.
+
+P-MUSIC-72-04:
+At the local sixfold neighborhood, complementary 2/3 occupancy should produce one shared concurrence per cycle; changing relative phase should relocate the concurrence without changing the six-address carrier.
+
+P-SUN-COUNT-01:
+If SUN graph-growth counting has cross-system relevance, analogous CLEAN non-holdout systems should show counting discrepancies matching derived-only vs root-inclusive conventions: 3n vs 3n+1. High-value neighborhoods include 42/43, 48/49, 69/70, 72/73.
+
+P-SUN-COUNT-02:
+The n=23→24 SUN neighborhood predicts:
+derived states 69→72,
+root-inclusive states 70→73.
+If repeated clean systems show no structurally analogous root-inclusion/generation-boundary behavior, discard this count projection as a mathematical coincidence.
+
+P-SUN-COUNT-03:
+Known project anomaly families 49↔48 and related +/-1 counts must be retested ONLY in non-holdout systems against the 3n / 3n+1 rule before any application to the disputed 70/72 region.
+
+### Prior-art note
+
+The LCM(2,3)=6 polyrhythm grid is standard music arithmetic. Bounded web prior-art searches did not surface the exact 12-pitch-class × 6-phase = 72 address construction as an established standard music-theory object. Treat this as bounded negative prior art, not novelty proof.
+
+### Next hop
+
+ZOOM OUT:
+map all non-holdout number-field classes and typed transforms.
+
+ZOOM IN:
+for each class, inspect the same local structural neighborhood:
+parent coordinate -> subaddress factorization -> relation occupancy -> concurrence/closure -> role/carrier expansion -> residual/boundary.
+
+Only after the clean cross-class fingerprint is frozen may the Moses/70-72 holdout be opened.
