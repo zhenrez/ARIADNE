@@ -12,7 +12,7 @@ from pathlib import Path
 from .store import encoded, event
 
 EXCLUDED = {
-    'state_versions','sqlite_sequence',
+    'state_versions','sqlite_sequence','pipeline_events','implementation_versions',
     # Reconstructable/high-volume derived state. Provenance survives through
     # sources, pipeline_events, implementation versions and authoritative tables.
     'source_profiles','passages','gram_index','findings','graph_edges','proposals',
