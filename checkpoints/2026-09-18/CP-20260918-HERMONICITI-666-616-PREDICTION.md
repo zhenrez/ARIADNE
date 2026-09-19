@@ -199,3 +199,36 @@ SIDEWAYS: compare Aquila→Theodotion and Menander→Valentinus.
 ORTHOGONAL: inspect nearest non-666 historically related pairs with similar chronology/roles.
 UP: test whether "directed recapitulative interval" changes anything beyond known heresiological/textual histories.
 Return DOWN only if contribution delta survives.
+
+
+## Prediction result update — PRED-666-01
+
+**Status:** PARTIAL / FAILS INDEPENDENCE TEST
+
+The second whole-name Δ666 candidate, Menander 520 → Valentinus 1186, does not presently reproduce the Aquila→Theodotion relation strongly enough to support a general "Δ666 = directed historical recapitulation" rule.
+
+### First Order
+- Justin independently attests Menander as a disciple of Simon and active in Antioch.
+- Clement reports a different claimed Valentinian lineage: Valentinus ← Theudas ← Paul.
+- Irenaeus creates a broad Simon→Menander→later-"Gnostic" genealogy and applies arguments developed against Valentinus to Menander/Simon/Marcion.
+- Modern scholarship treats Irenaeus's universal genealogy/category of "Gnosticism" as methodologically problematic; later firsthand material does not fit the older heresiological taxonomy cleanly.
+
+### First-&-3/4-P
+- Much early information about Menander and Valentinus survives through hostile anti-heretical writers.
+- This weakens confidence in simple genealogical conclusions and requires source-by-source reconstruction.
+- Nag Hammadi-era scholarship also warns against the opposite ideological simplification: "suppressed Gnostic truth" is not established merely because later orthodoxy won.
+
+### First-&-3/4
+- G.R.S. Mead and later esoteric/modern Gnostic traditions preserve Menander→Saturninus→Basilides→Valentinus style chains, but Mead explicitly notes that such chains rest on patristic statements and may have been inferred from doctrinal similarity rather than direct teacher-pupil transmission.
+- Fringe material therefore preserves a useful **warning**, not independent support for the lineage.
+
+### Consequence
+The Menander→Valentinus Δ666 arithmetic hit remains a control/ping, but not a verified same-class relational recurrence.
+
+Do not use it to strengthen the Aquila→Theodotion 666 interpretation.
+
+Instead, this failure increases the relative diagnostic value of Aquila→Theodotion because that pair has an independently attested shared textual act (Isaiah 7:14 rendering) beyond Irenaeus's genealogical/polemical organization.
+
+### Next
+- PRED-666-02 remains active: identify a genuinely invariant operation across three stages of Aquila→Theodotion without using generic source→translation→reception categories.
+- Run nearest non-666 translator/reviser controls before promotion.
