@@ -269,13 +269,30 @@ def sync_torches() -> None:
 
 def extract_text(path: Path) -> tuple[Optional[str], Optional[str]]:
     ext = path.suffix.lower()
-    if ext=='.pdf' and shutil.which('pdftotext'):
+    if ext=='.pdf':
+        # The launcher installs pypdf so normal Windows use needs no separate
+        # Poppler/CLI setup. pdftotext remains a fallback when available.
         try:
-            result=subprocess.run(['pdftotext','-layout','-enc','UTF-8',str(path),'-'],capture_output=True,timeout=60,check=True)
-            text=result.stdout.decode('utf-8',errors='replace')
-            return (text,None) if text.strip() else (None,'PDF has no extractable text; OCR adapter required')
-        except (subprocess.SubprocessError,OSError) as exc:
-            return None,f'PDF extraction failed: {exc}'
+            from pypdf import PdfReader
+            reader=PdfReader(str(path),strict=False)
+            text="\n\n".join((page.extract_text() or "") for page in reader.pages)
+            if text.strip():
+                return text,None
+        except ImportError:
+            pass
+        except Exception as exc:
+            pypdf_error=str(exc)
+        else:
+            pypdf_error='PDF contains no extractable text'
+        if shutil.which('pdftotext'):
+            try:
+                result=subprocess.run(['pdftotext','-layout','-enc','UTF-8',str(path),'-'],capture_output=True,timeout=60,check=True)
+                text=result.stdout.decode('utf-8',errors='replace')
+                if text.strip():
+                    return text,None
+            except (subprocess.SubprocessError,OSError) as exc:
+                return None,f'PDF extraction failed: {exc}'
+        return None,(locals().get('pypdf_error') or 'PDF has no extractable text')+'; OCR adapter required for scanned/image-only pages'
     if ext not in TEXT_EXTENSIONS:
         return None, f"No v0 text extractor for {ext or 'extensionless/binary'} input"
     try:
