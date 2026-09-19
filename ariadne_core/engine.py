@@ -84,9 +84,14 @@ class Warden:
             path = self.root/src['custody_path']
             if not path.exists():
                 storage=self.con.execute("SELECT state FROM source_storage WHERE source_id=?",(src['source_id'],)).fetchone()
-                if storage and storage[0]=='EVICTED' and known:
-                    event(self.con,'RECOMPILE_DEFERRED',src['source_id'],{'reason':'original intentionally evicted','compiled_version':known[0]})
-                    continue
+                lane=self.con.execute("SELECT lane FROM source_lanes WHERE source_id=?",(src['source_id'],)).fetchone()
+                if storage and storage[0]=='EVICTED':
+                    if known:
+                        event(self.con,'RECOMPILE_DEFERRED',src['source_id'],{'reason':'original intentionally evicted','compiled_version':known[0]})
+                        continue
+                    if lane and lane[0]=='G0':
+                        event(self.con,'GUIDANCE_ORIGINAL_EVICTED',src['source_id'],{'reason':'parsed G0 source intentionally evicted after discovery extraction'})
+                        continue
                 event(self.con,'CUSTODY_FAILED',src['source_id'],{'reason':'missing custody bytes'})
                 raise ValueError(f"Custody verification failed: {src['source_id']}")
             if hashlib.sha256(path.read_bytes()).hexdigest() != src['sha256']:
