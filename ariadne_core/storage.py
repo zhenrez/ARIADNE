@@ -16,6 +16,7 @@ DEFAULT_POLICY = {
     "launcher_backup_retention": 2,
     "snapshot_retention": 1,
     "processing_overhead_factor": 5,
+    "processing_reserve_bytes": 64 * 1024 * 1024,
     "auto_evict_g0_originals": True,
     "auto_evict_reacquirable_text_originals": True,
 }
@@ -54,7 +55,7 @@ def validate_policy(data):
     for key in (
         "local_budget_bytes", "free_space_reserve_bytes", "metadata_fetch_limit_bytes",
         "selective_fetch_limit_bytes", "max_source_bytes", "launcher_backup_retention",
-        "snapshot_retention", "processing_overhead_factor",
+        "snapshot_retention", "processing_overhead_factor", "processing_reserve_bytes",
     ):
         if type(out[key]) is not int or out[key] < 0:
             raise ValueError(f"{key} must be a nonnegative integer")
@@ -169,6 +170,15 @@ def acquisition_limit(root, con=None):
     if safe_headroom <= 0:
         return 0, "storage headroom is insufficient for source plus processing/index overhead"
     return min(per_source, policy["max_source_bytes"], safe_headroom), None
+
+
+def processing_allowed(root, con=None):
+    policy=load_policy(root)
+    state=usage(root,con=con,include_venv=False)
+    needed=policy["processing_reserve_bytes"]
+    if state["headroom_bytes"] < needed:
+        return False, state, f"less than {needed} bytes of governed processing headroom remain"
+    return True, state, None
 
 
 def ensure_upload_capacity(root, byte_count, con=None):
