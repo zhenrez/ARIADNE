@@ -1610,3 +1610,77 @@ The mathematical Local Binary Theorem itself remains already proven in Phase 2; 
 Next decisive tests:
 1. recover an independent β/complement distinction between the two nodes without defining it post hoc;
 2. recover evidence for the 35 intact binary fibers of M70 or an equivalent pair-preserving structure.
+
+
+## Phase 7 — Functional beta-resolution of F*
+
+Status: LOCAL FIBER CLOSED / GLOBAL W72 STILL PARTIALLY OPEN
+
+Historical source distinction:
+- b. Sanhedrin 17a preserves three alternative accounts of the pair's prophecy: succession, quail, Gog/Magog.
+- Targum Pseudo-Jonathan synthesizes them by assigning succession to Eldad, quail to Medad, and Gog/Magog to both together.
+Therefore the individual beta split is supplied by Pseudo-Jonathan, not by Sanhedrin alone.
+
+### Beta resolution
+
+Previously verified:
+p_E = p_M = p*
+tau_E = tau_M = tau*
+
+Independent functional metadata now distinguish the two members:
+output_E != output_M.
+
+Under the locked Local Binary fiber:
+F* = {(p*,tau*,0),(p*,tau*,1)}
+
+the two distinct nodes sharing identical parent coordinates necessarily occupy opposite beta states, up to label exchange.
+
+Thus:
+beta_E != beta_M
+and the local historical F* instantiation passes all coordinate requirements.
+
+The semantic labels "vertical/structural" and "horizontal/material" are interpretive classifications of the two outputs, not native mathematical coordinates; they must remain tagged as an overlay.
+
+### Joint-output caution
+
+The source's joint third prophecy is structurally compatible with the pair acting as one higher-order unit.
+
+However, B^2=I means:
+state0 --B--> state1 --B--> state0,
+with zero checksum.
+
+A simultaneous combined output is NOT mathematically identical to B^2 unless a separate readout/synthesis operator Sigma is declared.
+The frozen Phase-1 model contains no Sigma operator.
+
+Therefore:
+- joint prophecy = SUPPORTING higher-order pair behavior;
+- joint prophecy != proof of C(B^2)=0.
+
+The zero checksum remains a theorem of the binary fiber itself, not of the semantic output content.
+
+### Final local verdict
+
+F* parent coordinates: PASS.
+F* beta distinction: PASS.
+F* complete historical local-binary instantiation: PASS within the Pseudo-Jonathan lineage tradition.
+
+Exact coordinate:
+S_E = (2,g0,p*,tau*,0,rho0)
+S_M = (2,g0,p*,tau*,1,rho0)
+up to beta-label exchange.
+
+### Global architecture status
+
+Do NOT declare all W72 historically closed yet.
+
+Still unverified:
+- independent recovery of the remaining 35 complete binary fibers of M70;
+- historical list-to-(tau,beta) pairing for the 70.
+
+Thus:
+LOCAL anomaly F*: CLOSED.
+GLOBAL 72=F* ⊔ M70 architecture: STRONGLY SUPPORTED / NOT FULLY HISTORICALLY CLOSED.
+
+### Dependency note
+
+Modern scholarship notes that Pseudo-Jonathan's three-part synthesis is likely dependent on the collection of three opinions already present in the Talmud. Therefore the three output topics are not independent witnesses to one another. Their value here is coordinate resolution within the Targumic realization, not triple independent corroboration.
