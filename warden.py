@@ -99,6 +99,15 @@ def cycle(paths=None,budget=None,allow_acquisition=True):
     try:
         w = Warden(con,ariadne.ROOT)
         con.commit()
+        from ariadne_core.storage import processing_allowed
+        allowed,storage_state,storage_reason=processing_allowed(ariadne.ROOT,con=con)
+        if not allowed:
+            pending=con.execute("""SELECT COUNT(*) FROM acquisition_jobs
+                WHERE status='QUEUED' OR (status='FETCH_FAILED' AND attempts<3)""").fetchone()[0]
+            result=dict(executed=0,pending=pending,revision='STORAGE_PAUSED',
+                        storage_blocked=True,storage=storage_state,reason=storage_reason)
+            print(json.dumps(result),flush=True)
+            return result
         gate=_prepare_field_census(con,w,allow_acquisition=allow_acquisition)
         if gate['blocked']:
             pending=con.execute("""SELECT COUNT(*) FROM acquisition_jobs
