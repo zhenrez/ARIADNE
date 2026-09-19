@@ -284,3 +284,57 @@ Every Protocol Alignment Audit must include:
 - whether a catch-up checkpoint is required.
 
 If cadence was missed, repair transparently with a recovery checkpoint. Do not fabricate the missing cadence history or pretend the checkpoint occurred on time.
+
+
+---
+
+## GPR-006 — Re-entrant prior-art divergence and prediction-first search
+
+**Status:** ACTIVE / GLOBAL RESEARCH / NON-OPTIONAL  
+**Adopted:** 2026-09-18
+
+The prior-art/field-census gate is **re-entrant**. A materially new finding, operator, relationship, recurrence, vocabulary, mechanism, prediction, or novelty claim must trigger a renewed bounded First-order / First-&-3/4-order prior-art check before substantial original effort continues downstream.
+
+The purpose is not merely to avoid duplicate citations. It is to prevent the research program from independently spending its effort to arrive at an endpoint already reached by prior work without producing a meaningful contribution delta.
+
+Operating rule:
+
+```text
+CHANGE SOMETHING.
+BREAK NOTHING BETTER SUPPORTED.
+DO NOT SPEND ORIGINAL-RESEARCH BUDGET
+MERELY TO REDISCOVER A KNOWN ENDPOINT.
+```
+
+### Prediction-first navigation
+
+Repeated patterns must be used prospectively. When a recurrence suggests a missing or next structural address, record the predicted location, relation/operator, invariant, allowed variation, and falsifier **before** searching that address.
+
+```text
+RECURRENCE
+→ ABSTRACT INVARIANT
+→ PREDICT ADDRESS
+→ RECORD
+→ SEARCH
+→ HIT / MISS / PARTIAL / CONTRADICTION
+→ NEIGHBOR + NON-BREAK TEST
+→ UPDATE
+```
+
+Post-hoc fitting does not count as prediction. Misses and contradictions remain first-class records.
+
+Prediction guides where ARIADNE searches; it does not become evidence for the predicted result. All findings remain subject to the Epistemic Firewall and independence analysis.
+
+### Mandatory triggers
+
+Re-run prior-art divergence checks:
+- before every prescribed hop/forced-focus transition;
+- after high-diagnostic findings;
+- when previously separate torches connect;
+- when a prediction hits unexpectedly;
+- when new terminology or an adjacent field becomes visible;
+- before mechanism promotion;
+- before novelty/uniqueness/significance claims;
+- before committing substantial work to a new branch.
+
+ABRUPT implements the browser-specific enforcement details in `docs/ABRUPT.md`.
