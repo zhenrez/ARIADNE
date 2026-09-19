@@ -232,3 +232,39 @@ Instead, this failure increases the relative diagnostic value of Aquila→Theodo
 ### Next
 - PRED-666-02 remains active: identify a genuinely invariant operation across three stages of Aquila→Theodotion without using generic source→translation→reception categories.
 - Run nearest non-666 translator/reviser controls before promotion.
+
+
+## PRED-666-02 investigation update — Hexaplar transmission and false 616 calendar ping
+
+A high-diagnostic side ping appeared during the Aquila/Theodotion→Hexapla transmission search: modern scholarship commonly dates Paul of Tella's Syro-Hexapla to 616 or 616–617 CE.
+
+### Carrier check
+Do **not** count this as a native 616.
+
+The Syriac/Harklean colophon tradition uses the Era of Alexander/Greeks (e.g. year 927, fourth indiction, corresponding roughly to 615/16 CE; related Syro-Hexaplar subscriptions span the following year(s)). "616 CE" is a modern calendar conversion/summary, not the original numerical carrier in the source.
+
+Classification:
+`MODERN_CALENDAR_SIDE_COINCIDENCE / NOT PERIOD-NATIVE 616`.
+
+This is a successful application of the period-locked decoder and carrier-provenance rule: an attractive numerical match was found and then downgraded before interpretation.
+
+### Candidate invariant found, but uniqueness not established
+
+Across the Aquila/Theodotion→Origen→Syro-Hexapla chain, a specific textual-critical operation recurs:
+
+```text
+COMPARE SOURCE/TRADITIONS
+→ IDENTIFY DIFFERENCE
+→ MARK / PRESERVE ALTERNATIVE
+→ ALIGN OR CORRECT WHILE RETAINING PROVENANCE
+```
+
+Evidence:
+- Aquila and Theodotion belong to Jewish Greek revision traditions that engage prior Greek translations against Hebrew.
+- Origen's Hexapla explicitly juxtaposes Hebrew and Greek versions, uses critical signs, and often supplements LXX gaps from Theodotion or other revisers.
+- The Syro-Hexapla mirror-translates the Hexaplaric text and preserves critical signs/marginal alternative readings, allowing later reconstruction of the comparison.
+
+However, Symmachus participates in the same Hexaplar comparative apparatus, so this operation is **not unique to the Δ666 Aquila↔Theodotion pair**. Nearest non-666 translator controls are therefore mandatory before any promotion.
+
+Current PRED-666-02 status:
+`PARTIAL HIT — invariant textual-critical operator exists; 666-specific uniqueness unproven.`
