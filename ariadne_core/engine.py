@@ -82,8 +82,15 @@ class Warden:
             if known and known[0] == self.implementation_id:
                 continue
             path = self.root/src['custody_path']
-            if not path.exists() or hashlib.sha256(path.read_bytes()).hexdigest() != src['sha256']:
-                event(self.con,'CUSTODY_FAILED',src['source_id'],{'reason':'missing or changed custody bytes'})
+            if not path.exists():
+                storage=self.con.execute("SELECT state FROM source_storage WHERE source_id=?",(src['source_id'],)).fetchone()
+                if storage and storage[0]=='EVICTED' and known:
+                    event(self.con,'RECOMPILE_DEFERRED',src['source_id'],{'reason':'original intentionally evicted','compiled_version':known[0]})
+                    continue
+                event(self.con,'CUSTODY_FAILED',src['source_id'],{'reason':'missing custody bytes'})
+                raise ValueError(f"Custody verification failed: {src['source_id']}")
+            if hashlib.sha256(path.read_bytes()).hexdigest() != src['sha256']:
+                event(self.con,'CUSTODY_FAILED',src['source_id'],{'reason':'changed custody bytes'})
                 raise ValueError(f"Custody verification failed: {src['source_id']}")
             text, error = extract_text(path)
             metadata, records = {}, []
@@ -104,8 +111,10 @@ class Warden:
             from .acquisition import infer_lane
             lane,reason=infer_lane(path,text or '')
             self.con.execute('INSERT OR IGNORE INTO source_lanes VALUES(?,?,?)',(src['source_id'],lane,reason))
+            # The canonical searchable text lives in passages. Do not retain a
+            # second full extracted-text copy in source_profiles.
             self.con.execute('INSERT OR REPLACE INTO source_profiles VALUES(?,?,?,?,?,?,?,?)',
-                (src['source_id'],text or '',metadata.get('family'),metadata.get('tradition'),
+                (src['source_id'],'',metadata.get('family'),metadata.get('tradition'),
                  metadata.get('language'),metadata.get('witness_class'),encoded(metadata),self.implementation_id))
             event(self.con,'ADJUDICATOR',src['source_id'],{'metadata':metadata,'qualification':'DECLARED_METADATA_ONLY','unknown_independence':not metadata.get('family')})
             for i,line in enumerate((text or '').splitlines(),1):
