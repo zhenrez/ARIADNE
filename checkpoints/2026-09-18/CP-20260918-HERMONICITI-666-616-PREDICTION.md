@@ -1549,3 +1549,64 @@ The surrounding discussion offers more than one interpretation of how Eldad/Meda
 
 Contribution of this phase:
 the clean-room theorem converts the vague 70+2 correspondence into a falsifiable same-p/same-τ prediction and exposes that the lottery algorithm itself does not guarantee the required pair integrity.
+
+
+## Phase 6 — Independent coordinate recovery for isolated F* candidate
+
+Status: HIGH_DIAGNOSTIC / CONDITIONAL HISTORICAL INSTANTIATION
+
+Independent metadata:
+- Numbers 34:25 identifies Elizaphan son of Parnach as a leader/chief of Zebulun.
+- Targum Pseudo-Jonathan on Numbers 11:26, as reported in independent scholarship, identifies Eldad and Medad as brothers/offspring of Elizaphan son of Parnach and Jochebed.
+
+### Coordinate resolution
+
+Under the declared historical-to-clean-room adapter:
+p := tribal parent address
+τ := specific lineage/parent subaddress within p
+
+the data give:
+
+p_E = p_M = p_Zeb
+τ_E = τ_M = τ_Elizaphan
+
+This exactly satisfies the Phase-5 shared-parent prediction for F*.
+
+Thus the candidate coordinates are:
+
+S_E = (2,g0,p_Zeb,τ_Elizaphan,0,ρ0)
+S_M = (2,g0,p_Zeb,τ_Elizaphan,1,ρ0)
+
+up to exchange of β labels 0↔1.
+
+### What is confirmed
+
+CONFIRMED under the adapter:
+- same p;
+- same τ-parent;
+- two distinct nodes;
+- compatibility with one complete binary fiber.
+
+This independently rules out, for this branch:
+- different-p placement;
+- same-p/different-τ placement.
+
+### What is not independently confirmed
+
+The metadata do not by themselves establish:
+- that the six candidates within the tribe were historically partitioned into exactly three lineage-pairs;
+- which node is β=0 versus β=1;
+- an independent binary semantic/function distinguishing the two β states;
+- the global 35-pair decomposition of the remaining 70.
+
+Therefore the historical F* instantiation is a STRONG CONDITIONAL PASS at the parent-coordinate level, not yet a fully independent proof of the entire W72 binary architecture.
+
+### Verdict
+
+Parent-coordinate prediction: PASS.
+Full Local-Binary historical instantiation: CONDITIONAL PASS / not yet independently closed.
+The mathematical Local Binary Theorem itself remains already proven in Phase 2; this phase verifies that the exogenous genealogy lands exactly on the theorem's required shared-parent coordinates.
+
+Next decisive tests:
+1. recover an independent β/complement distinction between the two nodes without defining it post hoc;
+2. recover evidence for the 35 intact binary fibers of M70 or an equivalent pair-preserving structure.
