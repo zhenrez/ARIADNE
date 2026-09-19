@@ -223,7 +223,8 @@ def main(argv=None):
             elif args.command=='snapshot':
                 print(snapshot(con,ariadne.ROOT))
             elif args.command=='verify':
-                custody=all((ariadne.ROOT/r['custody_path']).exists() and ariadne.sha256_file(ariadne.ROOT/r['custody_path'])==r['sha256'] for r in con.execute('SELECT * FROM sources'))
+                from ariadne_core.storage import custody_consistent
+                custody=custody_consistent(con,ariadne.ROOT)
                 checks=dict(events=verify_events(con),history=verify_history(con),custody=custody,
                             sqlite=con.execute('PRAGMA integrity_check').fetchone()[0]=='ok',foreign_keys=not con.execute('PRAGMA foreign_key_check').fetchall())
                 print(json.dumps(checks));return 0 if all(checks.values()) else 1
