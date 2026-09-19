@@ -752,3 +752,84 @@ The Adam=C label is provisional. An upstream trace from higher classes may trans
 
 P-GEN-05 — variant referee:
 The second-Cainan dispute is high diagnostic value because insertion/deletion occurs exactly at the first 12-step return. Music may referee it only through held-out structural signatures, never by cardinality alone.
+
+
+## CORRECTION — human-note genealogy must use a Pythagorean spiral, not a closed 12-TET circle
+
+Status: SUPERSEDES the earlier fixed mod-12 generation-note table.
+
+The earlier provisional mapping pc(g)=5g or 7g mod12 silently flattened SUN into a closed 12-TET circle. This violates the frozen SUN audit.
+
+Frozen SUN facts:
+- exact 3:2 and 4:3 transforms are retained;
+- the local recursion itself generates only I/IV/V across registers;
+- a 12-note layer must be added explicitly;
+- twelve exact fifths do NOT close at seven octaves;
+- residual after 12 fifths is the Pythagorean comma 531441/524288 = 23.460010 cents;
+- branch exchange leaves local closure invariant; music alone does not derive which semantic side receives which label.
+
+### Correct 12-address adapter for the current human experiment
+
+Use a separately declared Pythagorean fifth-spiral adapter, because it preserves the exact fifth relation and the nonclosure residual rather than quotienting it away.
+
+Set Eden Adam as relative pitch origin only:
+P_0 = 1.
+
+One orientation:
+P_g = normalize_octave((3/2)^g).
+
+Mirror orientation:
+P'_g = normalize_octave((4/3)^g) or equivalently inverse fifth direction.
+
+Do NOT collapse the comma residual.
+
+Key addresses:
+g=6: nominal tritone neighborhood, +611.730005 cents in ascending-fifth orientation.
+g=12: nominal tonic return BUT +23.460010-cent residual.
+g=18: nominal tritone return BUT +23.460010-cent accumulated cycle shift relative to g=6.
+g=24: nominal tonic return BUT +46.920021-cent residual.
+
+Thus the actual model is a spiral:
+same nominal angular class after 12 steps ≠ same global state.
+
+### High-diagnostic textual coincidence / prior art
+
+The LXX second Cainan occupies g=12 when Adam is g=0: the 13th person/patriarch.
+This is exactly the first Pythagorean nonclosure boundary in the new adapter.
+
+Independent prior art already exists:
+Helen R. Jacobus (2009), "The Curse of Cainan ... Genealogies in Genesis 5 and Genesis 11 and a Mathematical Pattern," explicitly treats Cainan as the missing 13th patriarch and argues that variant genealogical data across MT/SP/LXX/Peshitta participate in an integrated mathematical pattern.
+
+Therefore:
+- the 13th-position anomaly is NOT a novel finding;
+- the potential contribution is specifically the Pythagorean nonclosure/spiral interpretation and its predictive consequences, if it survives controls.
+
+### Revised pre-registered signatures
+
+P-GEN-SPIRAL-01 — first-cycle nonclosure:
+At g=12/13th person, a structurally meaningful occupant/variant should exhibit return-with-residual, boundary, displacement, recovered prior content, or other "same address/new global state" behavior more strongly than ordinary neighbors.
+
+P-GEN-SPIRAL-02 — second-cycle nonclosure:
+At g=24/25th person, the same class of return-with-accumulated-residual behavior should recur, transformed rather than identically repeated.
+
+P-GEN-SPIRAL-03 — half-cycle:
+g=6 and g=18 should preferentially carry polarity/liminality/opposition/transition signatures.
+
+P-GEN-SPIRAL-04 — witness phase shift:
+If insertion/deletion of Cainan is the decisive corruption/projection, all downstream addresses shift by exactly one generation between witness families. The structurally better witness may differ by neighborhood; do not force a single global winner before testing multiple anchor addresses.
+
+P-GEN-SPIRAL-05 — no fake note labels:
+Named note labels are readability only until an absolute tonic and orientation are independently anchored. Preserve exact ratios/cents and generational address.
+
+### First held-out observations after freezing the corrected model
+
+- g=6 Enoch is strongly liminal: "walked with God ... was no more, for God took him."
+- MT g=18 Terah is transition-heavy: initiates movement from Ur toward Canaan and stops at Haran.
+- LXX g=18 Nahor is comparatively ordinary in the immediate Genesis genealogy.
+- LXX g=12 Cainan has an independent Jubilees reception as a forbidden-knowledge / ancient-inscription / expulsion figure; this aligns with boundary/residual behavior but must be dependency-tagged and not treated as Genesis primary evidence.
+- MT g=12 Shelah is primarily genealogical in Genesis.
+- LXX g=24 Perez is explicitly a breach/breakthrough figure whose birth overturns expected firstborn order.
+- MT g=24 Hezron is a clan-founder / enclosure-associated figure; semantic etymology requires separate lexical confidence.
+
+Current result:
+the simple "which genealogy wins?" test does NOT resolve cleanly. Different witnesses align at different special addresses. This is evidence that the one-dimensional generation-count model is insufficient by itself and that local relational operators must be recovered rather than inferred from count alone.
