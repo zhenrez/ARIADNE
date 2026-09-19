@@ -17,6 +17,7 @@ DEFAULT_POLICY = {
     "snapshot_retention": 1,
     "processing_overhead_factor": 3,
     "auto_evict_g0_originals": True,
+    "auto_evict_reacquirable_text_originals": True,
 }
 
 VALID_MODES = {"metadata_first", "selective", "full"}
@@ -59,6 +60,8 @@ def validate_policy(data):
             raise ValueError(f"{key} must be a nonnegative integer")
     if type(out["auto_evict_g0_originals"]) is not bool:
         raise ValueError("auto_evict_g0_originals must be boolean")
+    if type(out["auto_evict_reacquirable_text_originals"]) is not bool:
+        raise ValueError("auto_evict_reacquirable_text_originals must be boolean")
     return out
 
 
@@ -256,8 +259,8 @@ def evict_source(con, root, source_id):
         raise ValueError("unknown source")
     if row["pinned"]:
         raise ValueError("source is pinned; unpin before eviction")
-    if not row["reacquirable"] and row["lane"] != "G0":
-        raise ValueError("source is not safely reacquirable; ARIADNE will not evict it")
+    if not row["reacquirable"]:
+        raise ValueError("source is not safely reacquirable; ARIADNE will not evict its only original")
     if row["lane"] != "G0" and not con.execute(
         "SELECT 1 FROM source_profiles WHERE source_id=? LIMIT 1",(source_id,)
     ).fetchone():
@@ -274,6 +277,25 @@ def evict_source(con, root, source_id):
         (_now(), source_id),
     )
     return {"source_id": source_id, "state": "EVICTED"}
+
+
+def maybe_evict_processed_original(con, root, source_id):
+    """In metadata-first mode, keep searchable text/provenance and release reacquirable originals."""
+    policy=load_policy(root)
+    if policy["mode"]!="metadata_first" or not policy["auto_evict_reacquirable_text_originals"]:
+        return False
+    row=con.execute(
+        """SELECT COALESCE(ss.pinned,0) pinned,COALESCE(ss.reacquirable,0) reacquirable,
+                  COALESCE(ss.state,'MISSING') state,s.text_extracted
+           FROM sources s LEFT JOIN source_storage ss USING(source_id)
+           WHERE s.source_id=?""",(source_id,)
+    ).fetchone()
+    if not row or row["state"]!="PRESENT" or row["pinned"] or not row["reacquirable"] or not row["text_extracted"]:
+        return False
+    if not con.execute("SELECT 1 FROM source_profiles WHERE source_id=? LIMIT 1",(source_id,)).fetchone():
+        return False
+    evict_source(con,root,source_id)
+    return True
 
 
 def maybe_evict_g0(con, root, source_id):
