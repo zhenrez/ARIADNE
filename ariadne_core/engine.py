@@ -140,6 +140,9 @@ class Warden:
             event(self.con,'PROCESSOR',src['source_id'],{'compiled_version':self.implementation_id})
             for stage in (('UNSUPPORTED_FORMAT',) if text is None else ('EXTRACTED','NORMALIZED','INDEXED','LINKED')):
                 self.con.execute('UPDATE acquisition_jobs SET status=? WHERE source_id=?',(stage,src['source_id']))
+            if text is not None:
+                from .storage import maybe_evict_processed_original
+                maybe_evict_processed_original(self.con,self.root,src['source_id'])
             compiled += 1
         self.match_torches()
         revision = identity('CORPUS',[(r[0],r[1]) for r in self.con.execute('SELECT source_id,sha256 FROM sources ORDER BY source_id')],VERSION,self.implementation_id,
