@@ -163,6 +163,8 @@ details{margin-top:12px}summary{cursor:pointer}
     <button id="resumeDownloads">Resume downloads</button>
     <button id="stop" class="danger">Stop ARIADNE</button>
   </div>
+  <p id="activity" class="muted">Current activity: waiting for status.</p>
+  <div class="notice">Pause/Stop take effect after any network request or processing operation already in flight. Network operations are bounded by timeout/deadline; no new operation starts after the control is received.</div>
   <div id="controlMessage" class="notice" hidden></div>
 </section>
 
@@ -378,10 +380,12 @@ async function refresh(){
     $('storageMeter').style.width=pct+'%';
     $('storageText').textContent=bytes(st.research_bytes)+' research data used of '+bytes(st.budget_bytes)+' budget · '+bytes(st.headroom_bytes)+' permitted headroom';
     $('diskText').textContent=bytes(st.disk_free_bytes)+' drive free · ARIADNE preserves at least '+bytes(st.reserve_bytes)+' free';
-    $('storageBreakdown').textContent='DB '+bytes(st.categories.database)+' · custody '+bytes(st.categories.custody)+' · inbox '+bytes(st.categories.inbox)+' · artifacts '+bytes(st.categories.artifacts)+' · venv '+bytes(st.categories.venv);
+    $('storageBreakdown').textContent='DB '+bytes(st.categories.database)+' · custody '+bytes(st.categories.custody)+' · inbox '+bytes(st.categories.inbox)+' · artifacts '+bytes(st.categories.artifacts)+' · virtual environment excluded from live research-data budget';
     const warning=$('storageWarning');warning.hidden=st.downloads_allowed;warning.textContent=st.downloads_allowed?'':'New network acquisition is blocked by the storage budget or free-space reserve.';
     $('mode').value=pol.mode;$('budgetGb').value=(pol.local_budget_bytes/1073741824).toFixed(2).replace(/\.00$/,'');$('reserveGb').value=(pol.free_space_reserve_bytes/1073741824).toFixed(2).replace(/\.00$/,'');$('autoEvict').checked=!!pol.auto_evict_g0_originals;
 
+    const a=d.activity;
+    $('activity').textContent=a?('Latest recorded activity: '+a.stage+' · '+a.subject):('Current activity: '+(w.status||'waiting'));
     renderQueue(d.queue||[]);renderSources(d.sources||[]);
     const problems=$('problems');problems.replaceChildren();
     for(const job of p.jobs||[]){const li=document.createElement('li');li.textContent=job.status+' · '+job.url+(job.reason?' · '+job.reason:'');problems.append(li)}
