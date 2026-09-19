@@ -346,3 +346,100 @@ A clean historical path should connect Jerome's name-etymology practice to Irena
 
 Next prescribed hop:
 PRIOR-ART RECHECK -> DOWN Jerome De Nominibus 666 entries/source lineage -> SIDEWAYS Philo/Origen/Eusebius controls -> ORTHOGONAL Jerome's translation/text-critical behavior -> UP contribution/non-break assessment.
+
+
+## Fundamental pivot — macro isomorphic projection / held-out reconstruction
+
+Status: ACTIVE / METHOD CORRECTION / G0
+
+Localized Jerome/616 and Aquila/Theodotion analysis is HALTED.
+
+The target is now treated as a corrupted/contested holdout region. Do not infer the clean pattern primarily from that region.
+
+### Macro procedure
+
+1. Build the clean blueprint from structurally comparable traditions/number fields with explicit native transforms and low local ambiguity.
+2. Abstract the recurring relational shape without importing names/stories.
+3. Locate the disputed Moses/70-72/translation region inside the full Pleroma→Kenoma class descent.
+4. Express the clean shape in SUN/acoustic cylindrical coordinates:
+   - angular coordinate = local state/pitch-class/address;
+   - vertical coordinate = generation/register/class layer;
+   - recursive motion may return locally while moving globally.
+5. Pre-register concrete structural predictions for the disputed region.
+6. Throw predictions into the holdout region and work backward.
+7. Record hit/miss/partial/contradiction; do not repair predictions post hoc.
+8. Promote only patterns that change explanatory/predictive state and break no better-supported neighbors.
+
+### Current macro coordinate hypothesis
+
+Working class stack:
+
+- Upper Pleroma: relational/generative grammar.
+- Sophia/Yaldabaoth: major type/boundary transition.
+- Early Kenoma K1: 12-address/state class.
+- K2 candidate refinement: 36-sector/pair class where source-native.
+- K3: 72-address/mediation/representation field.
+- CURRENT TARGET: K3 projection/boundary neighborhood, where 72-full-address structures can appear as 70 authorized/visible + 2 residual/outside/functionally-active units.
+- Deeper fields: 144/216 role/carrier multiplication, then 360/364/365 cycle/closure residuals.
+
+36 is not forced as a universal wheel; it is retained where native factorization supplies 12×3=36 and 36×2=72.
+
+### Acoustic/cylindrical invariant
+
+SUN supplies:
+C_n -> {R_n,L_n} -> C_{n+1}
+with R=2/3, L=3/4, O=1/2.
+
+In cylindrical coordinates:
+- pitch-class/local address is angular;
+- octave/register/generation is vertical;
+- complementary displacements close to the same local class one wheel lower.
+
+Fludd–Kepler supplies the boundary invariant:
+LOCAL IDENTITY CAN CLOSE WHILE GLOBAL GENERATIONAL STATE CHANGES.
+
+This suggests that contested translation/number differences at the current Great Divide may encode collapsed coordinates (lateral address vs vertical generation, role vs entity, visible authorization vs retained function) rather than simple mutually exclusive readings.
+
+### Pre-registered predictions
+
+P-MACRO-01 — Full-field projection
+Where a 70/72 dispute belongs to this 72-address class, the cleaner generative state should be 72 and 70 should arise through projection/authorization/visibility rather than generation from a different base.
+Falsifier: a source-native 70-generating operator with no latent/residual pair better explains the same neighborhood.
+
+P-MACRO-02 — Coupled residual pair
+The 72→70 residual should behave as one structurally related pair, not two arbitrary independent losses.
+Falsifier: missing units are unrelated or multiple non-pair changes are required.
+
+P-MACRO-03 — Boundary/succession payload
+The residual pair should disproportionately carry transition, succession, mediation, outside/inside, or next-generation information rather than ordinary interior-member function.
+Falsifier: residual pair behaves exactly like ordinary members and no transition role appears.
+
+P-MACRO-04 — Axis-collapse decoder
+Near this boundary, major translation/reading disputes should tend to exchange abstraction axes while preserving much of the carrier: e.g. temporal/vertical ↔ numerical/lateral, object ↔ state/function, entity ↔ role/address.
+Falsifier: disputed readings are ordinary lexical substitutions with no recurrent coordinate-class change.
+
+P-MACRO-05 — Native factorization
+Clean 72 realizations in the same class should expose a source-native factorization/address grammar such as 12×6, 36×2, 3×24, or 216→72 triplets. Same count without a typed transform is a control, not a match.
+Falsifier: proposed same-class systems share only 72 cardinality.
+
+P-MACRO-06 — 72→216 carrier expansion
+Where 72 addresses are represented by three-component carriers, the deeper class should be 216 occurrences/components rather than 216 unrelated entities.
+Falsifier: no typed 3-per-address expansion.
+
+P-MACRO-07 — Pair projection in emissary systems
+If a 70/72 emissary system uses dyadic dispatch, 70 vs72 should reduce to 35 vs36, i.e. exactly one complete pair.
+This is a direct arithmetic/topological prediction and must not be generalized beyond dyadic-dispatch systems.
+
+P-MACRO-08 — downstream non-break
+Restoring the predicted full field should simplify, not damage, neighboring native transforms (12×6, 36×2, 72×3, 72×5, etc.). If restoration creates more exceptions downstream, reject.
+
+### Immediate clean-blueprint controls
+
+Use as low-ambiguity structural controls, with source/dependency labels:
+- Chinese 12 lü: alternating fixed interval operations generate a complete 12-state pitch space.
+- Zodiac geometric hierarchy: 12 signs → 36 decans → 72 5-degree subdivisions (where historically applicable).
+- Shem extraction: 3×72 letter occurrences → 72 indexed triplets under the attested extraction rule.
+- SUN/TOL: repeated complementary differentiation → closure → next center; terminal boundary changes transition grammar.
+- 360-cycle subdivisions and calendar residual systems for regular-grid + boundary-residual comparison.
+
+Do not use these as proof of historical transmission into Moses. They are shape controls for held-out prediction.
