@@ -1255,3 +1255,53 @@ If the pair's invariant is boundary mediation rather than tribe identity, their 
 
 P-TRIBE-ALL-04:
 No exact Eldad pitch survives all three branches. Any absolute/local note claim must remain branch-tagged until an independent identity witness resolves the branch.
+
+
+## TIQ Phase 2 — Textless topology test
+
+Frozen carrier: docs/CLEAN_ROOM_CARRIER_WAVE.md
+
+### Candidate 1 — Peripheral Triad
+Verdict: NO CALL.
+
+Forward:
+A direct acoustic composite exists that bypasses the middle address:
+R L^-1 gives nominal Δp=+2, Δg=0 (modulo ordinary carry convention), Δρ=+2δ.
+Thus bypass itself is not illegal.
+
+But target endpoint residuals were left unspecified.
+PASS requires ρ_B-ρ_A=+2δ for that orientation (or the exact residual required by another legal composite).
+Without the residual relation, checksum closure cannot be verified.
+
+Backward:
+The inverse composite L R^-1 returns exactly if the forward residual condition is satisfied.
+Because endpoint residual is unknown, backward test is likewise underdetermined.
+
+### Candidate 2 — Local Binary
+Verdict: PASS.
+
+Forward:
+B maps (τ0,β=0) -> (τ0,β=1), equivalently φ -> φ+3 mod6.
+No forbidden axis changes.
+Checksum: Δg=0, Δp=0, Δτ=0, Δβ=1, Δρ=0.
+
+Backward:
+B^-1=B exactly restores the starting state.
+B^2=I gives zero closed-loop checksum.
+π2 erases β, but π2^-1 of the common parent returns exactly the legal two-element fiber {β=0,β=1}. Individual identity is not recoverable from projection alone, but the pair topology is.
+
+### Candidate 3 — Central Axis
+Verdict: FAIL under the frozen Phase-1 carrier.
+
+At c=0 the state space is W12=Z12, so p must be an element of Z12.
+A state with p=∅ is outside the declared carrier.
+R,L,O are defined on (g,p,ρ); no declared operator acts on a null angular coordinate.
+Allowing O on a new center-axis domain would require an undeclared extension/coupling operator, prohibited during Phase 2.
+
+### Phase-2 result
+
+Only Candidate 2 earns PASS.
+Candidate 1 is mathematically admissible in principle but unresolved because its exact endpoint residual/checksum was not supplied.
+Candidate 3 is illegal in the frozen state space.
+
+Do not convert Candidate 1 NO CALL into FAIL without additional coordinate data.
