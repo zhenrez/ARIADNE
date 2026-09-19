@@ -168,7 +168,7 @@ def acquire(con,root,budget=4,fetcher=fetch):
     ).fetchall()
     for job in rows:
         try:
-            limit,reason=acquisition_limit(root)
+            limit,reason=acquisition_limit(root,con)
             if limit<=0:
                 detail={'reason':reason or 'storage acquisition paused','url':job['url']}
                 con.execute("UPDATE acquisition_jobs SET status='STORAGE_DEFERRED',detail=? WHERE job_id=?",(encoded(detail),job['job_id']))
@@ -243,4 +243,3 @@ def acquire(con,root,budget=4,fetcher=fetch):
         con.commit()
         done+=1
     return done
-
