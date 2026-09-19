@@ -1464,3 +1464,88 @@ If no defensible 35-pair structure can be found for the 70 under independent evi
 Thus:
 cardinality match = necessary,
 typed binary-fiber decomposition = decisive.
+
+
+## Phase 4 — Sanhedrin lottery matrix against W72 binary-fiber theorem
+
+Status: HOLDOUT TEST / CONDITIONAL HISTORICAL PROJECTION
+
+Input matrix:
+12 parent addresses × 6 initialized nodes = 72.
+Reduction: 70 active tokens + 2 null tokens assigned by lot.
+
+### Coordinate embedding
+
+For each p∈Z12:
+six local nodes are identified with Z3×Z2:
+(p,τ,β), τ∈Z3, β∈Z2.
+
+Thus each p contains exactly three binary fibers:
+F_{p,0}, F_{p,1}, F_{p,2}.
+
+Across 12 p-addresses:
+12×3 = 36 binary fibers.
+
+### Generation-stage result
+
+PASS:
+12×6=72 is exactly compatible with W72=Z12×Z3×Z2.
+
+But the historical algorithm as stated does not independently label τ or β, so the 36-pair decomposition is supplied by the frozen clean-room model, not by the lottery text itself.
+
+### Reduction-stage theorem
+
+For the 70 selected nodes to equal M70, the two null recipients must be exactly one complete binary fiber:
+
+same p,
+same τ,
+opposite β.
+
+If the null nodes are from:
+- different p: two binary fibers are broken;
+- same p but different τ: two binary fibers are still broken;
+- same p and same τ: exactly one complete fiber is removed and 35 intact fibers remain.
+
+Therefore:
+Eldad/Medad-as-F* requires
+p_E=p_M=p*
+τ_E=τ_M=τ*
+β_E≠β_M.
+
+### Global lottery issue
+
+A blind global choice of 2 nulls among 72 does NOT guarantee fiber preservation.
+
+Under a fixed 36-fiber partition, the number of unordered 2-node outcomes is C(72,2)=2556.
+Exactly 36 outcomes remove one intact fiber.
+
+Probability under an unconstrained uniform 2-recipient selection:
+36/2556 = 1/71 ≈ 1.40845%.
+
+Same-parent-p only:
+12*C(6,2)=180 outcomes,
+180/2556 = 5/71 ≈ 7.04225%.
+
+Conditional on same p, only 3 of the 15 possible local pairs are valid same-τ binary fibers:
+1/5.
+
+These probabilities are diagnostic only; they are not evidence that the historical process was random in the probabilistic modern sense.
+
+### Verdict
+
+Generation matrix: PASS.
+Reduction mechanism as a guaranteed fiber-preserving algorithm: FAIL.
+Realized historical instance: NO CALL pending recovery of Eldad/Medad p* and τ*.
+
+The theorem makes a hard prediction:
+if independent evidence places Eldad and Medad in different tribes/p-addresses, the F* mapping fails.
+If same tribe but different τ-parent, it still fails.
+Only same p and same τ with opposite β satisfies the locked theorem.
+
+### Text-critical caution
+
+Sanhedrin 17a clearly records the 6-per-tribe / 72-slip / 70-marked + 2-blank algorithm.
+The surrounding discussion offers more than one interpretation of how Eldad/Medad relate to the selection/nonattendance event. Do not silently equate every form of the tradition with "Eldad and Medad definitely drew the two blank slips."
+
+Contribution of this phase:
+the clean-room theorem converts the vague 70+2 correspondence into a falsifiable same-p/same-τ prediction and exposes that the lottery algorithm itself does not guarantee the required pair integrity.
