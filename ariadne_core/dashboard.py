@@ -205,7 +205,10 @@ details{margin-top:12px}summary{cursor:pointer}
           <input id="reserveGb" inputmode="decimal" value="5">
         </label>
         <label style="display:flex;align-items:center;gap:8px;margin-top:21px;color:var(--text)">
-          <input id="autoEvict" type="checkbox" style="width:auto;min-height:auto"> Auto-evict parsed G0 originals
+          <input id="autoEvict" type="checkbox" style="width:auto;min-height:auto"> Auto-release parsed G0 originals
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;color:var(--text)">
+          <input id="autoReleaseText" type="checkbox" style="width:auto;min-height:auto"> Auto-release reacquirable originals after text is indexed
         </label>
       </div>
       <div class="actions">
@@ -293,7 +296,8 @@ $('saveStorage').onclick=async()=>{
       mode:$('mode').value,
       local_budget_bytes:gbToBytes($('budgetGb').value),
       free_space_reserve_bytes:gbToBytes($('reserveGb').value),
-      auto_evict_g0_originals:$('autoEvict').checked
+      auto_evict_g0_originals:$('autoEvict').checked,
+      auto_evict_reacquirable_text_originals:$('autoReleaseText').checked
     },'Storage policy saved.');
   }catch(e){}
 };
@@ -360,7 +364,8 @@ function renderSources(rows){
     const o=document.createElement('td');o.textContent=s.url||'local/user file';tr.append(o);
     const a=document.createElement('td');a.className='row-actions';
     const pin=document.createElement('button');pin.textContent=s.pinned?'Unpin':'Pin';pin.onclick=()=>sourceAction(s.source_id,s.pinned?'unpin':'pin');a.append(pin);
-    const ev=document.createElement('button');ev.textContent='Evict original';ev.disabled=s.state!=='PRESENT'||s.pinned||(!s.reacquirable&&s.lane!=='G0');ev.title=ev.disabled?'Pinned or not safely reacquirable':'';ev.onclick=()=>sourceAction(s.source_id,'evict');a.append(ev);
+    const ev=document.createElement('button');ev.textContent='Release original';ev.disabled=s.state!=='PRESENT'||s.pinned||!s.reacquirable;ev.title=ev.disabled?'Pinned, already released, or not safely reacquirable':'';ev.onclick=()=>sourceAction(s.source_id,'evict');a.append(ev);
+    if(s.state==='EVICTED'&&s.reacquirable){const rq=document.createElement('button');rq.textContent='Reacquire';rq.onclick=()=>sourceAction(s.source_id,'reacquire');a.append(rq)}
     tr.append(a);body.append(tr);
   }
 }
@@ -382,7 +387,7 @@ async function refresh(){
     $('diskText').textContent=bytes(st.disk_free_bytes)+' drive free · ARIADNE preserves at least '+bytes(st.reserve_bytes)+' free';
     $('storageBreakdown').textContent='DB '+bytes(st.categories.database)+' · custody '+bytes(st.categories.custody)+' · inbox '+bytes(st.categories.inbox)+' · artifacts '+bytes(st.categories.artifacts)+' · virtual environment excluded from live research-data budget';
     const warning=$('storageWarning');warning.hidden=st.downloads_allowed;warning.textContent=st.downloads_allowed?'':'New network acquisition is blocked by the storage budget or free-space reserve.';
-    $('mode').value=pol.mode;$('budgetGb').value=(pol.local_budget_bytes/1073741824).toFixed(2).replace(/\.00$/,'');$('reserveGb').value=(pol.free_space_reserve_bytes/1073741824).toFixed(2).replace(/\.00$/,'');$('autoEvict').checked=!!pol.auto_evict_g0_originals;
+    $('mode').value=pol.mode;$('budgetGb').value=(pol.local_budget_bytes/1073741824).toFixed(2).replace(/\.00$/,'');$('reserveGb').value=(pol.free_space_reserve_bytes/1073741824).toFixed(2).replace(/\.00$/,'');$('autoEvict').checked=!!pol.auto_evict_g0_originals;$('autoReleaseText').checked=!!pol.auto_evict_reacquirable_text_originals;
 
     const a=d.activity;
     $('activity').textContent=a?('Latest recorded activity: '+a.stage+' · '+a.subject):('Current activity: '+(w.status||'waiting'));
