@@ -20,6 +20,9 @@ USER_AGENT='ARIADNE/1.0 (local research source custody)'
 MAX_BYTES=25*1024*1024
 _LAST_REQUEST={}
 
+class StorageDeferred(Exception):
+    pass
+
 
 def infer_lane(path,text):
     name=path.name.casefold()
@@ -98,6 +101,13 @@ def request_once(url,limit=MAX_BYTES):
         path=urlunsplit(('','',p.path or '/',p.query,''))
         conn.request('GET',path,headers={'User-Agent':USER_AGENT,'Accept-Encoding':'identity'})
         response=conn.getresponse()
+        response_headers=dict(response.getheaders())
+        try:
+            declared=int(response_headers.get('Content-Length','0') or 0)
+        except ValueError:
+            declared=0
+        if declared and declared>limit:
+            raise StorageDeferred(f'Source declares {declared} bytes; current storage policy permits {limit} bytes for this acquisition')
         chunks=[];size=0;deadline=time.monotonic()+30
         while size<=limit:
             if time.monotonic()>deadline:raise ValueError('Response download deadline exceeded')
@@ -106,13 +116,13 @@ def request_once(url,limit=MAX_BYTES):
             chunks.append(chunk);size+=len(chunk)
         data=b''.join(chunks)
         if len(data)>limit:
-            raise ValueError('Source exceeds configured 25 MiB acquisition bound')
-        return response.status,dict(response.getheaders()),data
+            raise StorageDeferred(f'Source exceeds current per-source storage limit of {limit} bytes')
+        return response.status,response_headers,data
     finally:
         conn.close()
 
 
-def fetch(url,robots=True):
+def fetch(url,robots=True,limit=MAX_BYTES):
     visited=[]
     for _ in range(8):
         if url in visited:raise ValueError('Redirect cycle')
@@ -131,7 +141,7 @@ def fetch(url,robots=True):
                 return 'ROBOTS_BLOCKED',None,{'url':url,'robots_status':code}
             elif code!=404:
                 return 'FETCH_FAILED',None,{'url':url,'reason':'robots policy unavailable','robots_status':code}
-        code,headers,body=request_once(url)
+        code,headers,body=request_once(url,limit=limit)
         headers={k.lower():v for k,v in headers.items()}
         if code in (301,302,303,307,308):
             if 'location' not in headers:raise ValueError('Redirect has no location')
@@ -146,47 +156,91 @@ def fetch(url,robots=True):
 
 
 def acquire(con,root,budget=4,fetcher=fetch):
-    """Finite acquisition batch. Backoff and all failures are persisted, never absence."""
+    """Finite, disk-governed acquisition batch. Failures and deferrals are persisted."""
     import ariadne
-    if type(budget) is not int or budget<0:raise ValueError('acquisition budget must be nonnegative')
+    from .storage import acquisition_limit, mark_reacquirable
+    if type(budget) is not int or budget<0:
+        raise ValueError('acquisition budget must be nonnegative')
     done=0
-    rows=con.execute("SELECT * FROM acquisition_jobs WHERE status IN ('QUEUED','FETCH_FAILED') AND attempts<3 AND next_attempt<=? ORDER BY depth,attempts,job_id LIMIT ?",(time.time(),budget)).fetchall()
+    rows=con.execute(
+        "SELECT * FROM acquisition_jobs WHERE status IN ('QUEUED','FETCH_FAILED') AND attempts<3 AND next_attempt<=? ORDER BY depth,attempts,job_id LIMIT ?",
+        (time.time(),budget)
+    ).fetchall()
     for job in rows:
         try:
+            limit,reason=acquisition_limit(root)
+            if limit<=0:
+                detail={'reason':reason or 'storage acquisition paused','url':job['url']}
+                con.execute("UPDATE acquisition_jobs SET status='STORAGE_DEFERRED',detail=? WHERE job_id=?",(encoded(detail),job['job_id']))
+                event(con,'ACQUISITION_STORAGE_DEFERRED',job['job_id'],detail)
+                con.commit();done+=1;continue
+
             p=urlsplit(job['url'])
             parts=p.path.strip('/').split('/')
             if p.hostname=='github.com' and len(parts)==2 and all(re.fullmatch(r'[A-Za-z0-9_.-]+',x) for x in parts):
                 repo='/'.join(parts).removesuffix('.git')
-                queue_manifest(con,f'https://api.github.com/repos/{repo}\nhttps://raw.githubusercontent.com/{repo}/HEAD/README.md\nhttps://api.github.com/repos/{repo}/git/trees/HEAD',job['job_id'],job['depth']+1,'REPO_ADAPTER')
-            # Do not hold SQLite's writer lock across network I/O.
+                queue_manifest(
+                    con,
+                    f'https://api.github.com/repos/{repo}\nhttps://raw.githubusercontent.com/{repo}/HEAD/README.md\nhttps://api.github.com/repos/{repo}/git/trees/HEAD',
+                    job['job_id'],job['depth']+1,'REPO_ADAPTER'
+                )
+
             con.commit()
-            status,body,detail=fetcher(job['url'])
-            con.execute('UPDATE acquisition_jobs SET status=?,attempts=attempts+1,next_attempt=?,detail=? WHERE job_id=?',
-                        (status,time.time()+30*2**job['attempts'],encoded(detail),job['job_id']))
+            status,body,detail=(fetch(job['url'],limit=limit) if fetcher is fetch else fetcher(job['url']))
+            con.execute(
+                'UPDATE acquisition_jobs SET status=?,attempts=attempts+1,next_attempt=?,detail=? WHERE job_id=?',
+                (status,time.time()+30*2**job['attempts'],encoded(detail),job['job_id'])
+            )
+
             if body is not None:
                 headers=detail.get('headers',{})
                 mime=headers.get('content-type','').split(';')[0]
-                ext={ 'application/pdf':'.pdf','text/html':'.html','text/plain':'.txt','application/json':'.json','text/csv':'.csv'}.get(mime,Path(urlsplit(detail.get('url',job['url'])).path).suffix or '.bin')
-                if not re.fullmatch(r'\.[A-Za-z0-9]{1,10}',ext):ext='.bin'
-                directory=Path(root)/'inbox/acquired';directory.mkdir(parents=True,exist_ok=True)
-                digest=hashlib.sha256(body).hexdigest();path=directory/(digest+ext)
+                ext={
+                    'application/pdf':'.pdf','text/html':'.html','text/plain':'.txt',
+                    'application/json':'.json','text/csv':'.csv'
+                }.get(mime,Path(urlsplit(detail.get('url',job['url'])).path).suffix or '.bin')
+                if not re.fullmatch(r'\.[A-Za-z0-9]{1,10}',ext):
+                    ext='.bin'
+
+                directory=Path(root)/'inbox/.staging'
+                directory.mkdir(parents=True,exist_ok=True)
+                digest=hashlib.sha256(body).hexdigest()
+                path=directory/(digest+ext)
                 if not path.exists():
-                    temporary=path.with_suffix('.part');temporary.write_bytes(body);temporary.replace(path)
-                sid,is_new,_=ariadne.register_source(path,connection=con,pointer_depth=job['depth']+1)
+                    temporary=path.with_suffix(path.suffix+'.part')
+                    temporary.write_bytes(body)
+                    temporary.replace(path)
+
+                sid,is_new,_=ariadne.register_source(
+                    path,connection=con,pointer_depth=job['depth']+1,move_into_custody=True
+                )
+                mark_reacquirable(con,sid)
                 con.execute("UPDATE acquisition_jobs SET status='CUSTODIED',source_id=? WHERE job_id=?",(sid,job['job_id']))
-                detail.update(sha256=digest,duplicate=not is_new)
+                detail.update(sha256=digest,duplicate=not is_new,storage_limit=limit)
+
                 if mime in ('text/html','text/plain','application/json'):
                     raw=body.decode('utf-8',errors='replace')
-                    # Explicit DOI/citation/link pointers only; labels do not claim actual citation semantics.
                     leads=pointers(raw)
                     queue_manifest(con,'\n'.join(leads),job['job_id'],job['depth']+1,'DISCOVERED_POINTER')
+
                 event(con,'ACQUISITION_CUSTODY',job['job_id'],dict(detail,source_id=sid))
+
             event(con,'ACQUISITION_RESULT',job['job_id'],dict(detail,status=status))
+
+        except StorageDeferred as exc:
+            detail={'reason':str(exc),'url':job['url']}
+            con.execute("UPDATE acquisition_jobs SET status='STORAGE_DEFERRED',detail=? WHERE job_id=?",(encoded(detail),job['job_id']))
+            event(con,'ACQUISITION_STORAGE_DEFERRED',job['job_id'],detail)
+
         except (ValueError,OSError,http.client.HTTPException) as exc:
             detail={'error':str(exc),'url':job['url']}
-            con.execute("UPDATE acquisition_jobs SET status='FETCH_FAILED',attempts=attempts+1,next_attempt=?,detail=? WHERE job_id=?",
-                        (time.time()+30*2**job['attempts'],encoded(detail),job['job_id']))
+            con.execute(
+                "UPDATE acquisition_jobs SET status='FETCH_FAILED',attempts=attempts+1,next_attempt=?,detail=? WHERE job_id=?",
+                (time.time()+30*2**job['attempts'],encoded(detail),job['job_id'])
+            )
             event(con,'ACQUISITION_FAILED',job['job_id'],detail)
+
         con.commit()
         done+=1
     return done
+
