@@ -212,7 +212,7 @@ def acquire(con,root,budget=4,fetcher=fetch):
                     temporary.replace(path)
 
                 sid,is_new,_=ariadne.register_source(
-                    path,connection=con,pointer_depth=job['depth']+1,move_into_custody=True
+                    path,connection=con,pointer_depth=job['depth']+1,move_into_custody=True,reacquirable=True
                 )
                 mark_reacquirable(con,sid)
                 con.execute("UPDATE acquisition_jobs SET status='CUSTODIED',source_id=? WHERE job_id=?",(sid,job['job_id']))
