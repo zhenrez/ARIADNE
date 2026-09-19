@@ -149,6 +149,137 @@ DETECT
 → SUPERSEDE, NEVER SILENTLY OVERWRITE
 ```
 
+
+## Re-entrant Prior-Art Divergence Firewall
+
+The prior-art gate is not a one-time opening ritual. It is **re-entrant** and must fire again whenever the investigation produces a materially new:
+
+- numerical or symbolic hit;
+- operator or transform;
+- etymological/root compound;
+- historical relationship;
+- cross-domain correspondence;
+- structural recurrence;
+- candidate mechanism;
+- prediction;
+- apparent novelty claim;
+- synthesis that would justify substantial new work.
+
+Before spending substantial original effort downstream of such a finding, ABRUPT must ask:
+
+1. Has this exact result already been published, argued, catalogued, or refuted?
+2. Has the same structure been reached under different terminology?
+3. Has an adjacent discipline already connected the same units by another route?
+4. Does the field already know the endpoint even if it used different premises?
+5. If prior work reaches the same endpoint, what **contribution delta** remains?
+6. Does the new route change provenance, mechanism, explanatory power, prediction, scope, or downstream consequences?
+7. Does it break any established upstream, neighboring, or downstream fact?
+
+A path that merely reproduces an already-known endpoint without changing the explanatory or predictive state is **not a productive original-investigation path**. Bank it as prior-art convergence and redirect effort to the unresolved delta.
+
+Operating constraint:
+
+```text
+DO NOT SPEND ORIGINAL-RESEARCH BUDGET
+TO INDEPENDENTLY REACH A KNOWN ENDPOINT
+UNLESS THE NEW ROUTE CHANGES SOMETHING TESTABLE,
+EXPLANATORY, PREDICTIVE, OR STRUCTURAL
+WITHOUT BREAKING ESTABLISHED NEIGHBORS.
+```
+
+### Mandatory recurrence cadence
+
+Re-run First-order / First-&-3/4-order prior-art checks at minimum:
+
+- before every prescribed hop or forced-focus transition;
+- after every HIGH_DIAGNOSTIC_VALUE finding;
+- before promoting a candidate pattern into a working mechanism;
+- whenever a new vocabulary term or field becomes visible;
+- whenever a prediction is satisfied unexpectedly;
+- whenever two previously separate torches connect;
+- before claiming novelty, uniqueness, or historical significance;
+- before committing substantial time to a new branch.
+
+Negative searches are bounded records, not proof of novelty. Search vocabulary, aliases, historical terminology, structural equivalents, and neighboring disciplines before declaring a gap.
+
+## Prediction-First Navigation
+
+Prediction is a core search operator, not a final validation ornament.
+
+When ARIADNE/ABRUPT identifies a repeated pattern, the next hop should preferentially be chosen by a **pre-registered structural prediction**:
+
+```text
+OBSERVED RECURRENCE
+  → ABSTRACT INVARIANT
+  → PREDICT NEXT / MISSING ADDRESS
+  → RECORD EXPECTATION BEFORE SEARCH
+  → SEARCH THE PREDICTED ADDRESS
+  → COMPARE HIT / MISS / PARTIAL / CONTRADICTION
+  → RUN NEIGHBOR + NON-BREAK TESTS
+  → UPDATE OR KILL THE PATTERN
+```
+
+Predictions must specify, where possible:
+
+- **where** to look;
+- **what relation/operator** is expected;
+- **what should remain invariant**;
+- **what may vary**;
+- **what would falsify or weaken the prediction**;
+- **what neighboring facts must remain intact**.
+
+A post-hoc fit is not a prediction. Do not rewrite the predicted target after seeing the result. Misses, partial hits, and contradictions remain first-class residuals.
+
+### Scale-recursion requirement
+
+Because the active research theory expects patterns to recur across scales, every promoted recurrence should generate candidate searches at multiple structurally corresponding levels when historically meaningful:
+
+- within-unit;
+- between-unit;
+- chain/transmission;
+- field/era;
+- cross-domain analog.
+
+This is guidance, not evidence. A recurrence at one scale does not validate recurrence at another; it predicts where to inspect.
+
+## Change-Something / Break-Nothing Gate
+
+Original work is promoted only when it has a plausible **contribution delta** and survives local preservation tests.
+
+A candidate should answer both:
+
+```text
+WHAT DOES THIS CHANGE?
+WHAT DOES THIS BREAK?
+```
+
+Preferred paths:
+- resolve an open disagreement;
+- expose an unrecognized relationship;
+- distinguish previously conflated operators;
+- recover a missing intermediate;
+- generate a successful novel prediction;
+- explain a residual using fewer unsupported assumptions;
+- connect fields previously left disconnected;
+- alter downstream interpretation while preserving established source facts.
+
+If a path changes nothing beyond terminology, duplicates a known conclusion, or requires breaking better-supported neighboring evidence, bank or reject it.
+
+## Execution Compliance — Protocol Violations
+
+The following are protocol violations, not optional omissions:
+
+- skipping a prescribed DOWN / SIDEWAYS / ORTHOGONAL / UP hop;
+- failing to run the re-entrant prior-art firewall at a trigger point;
+- synthesizing before recording the contribution delta;
+- searching after seeing the answer and presenting the result as prediction;
+- failing to retain misses/residuals;
+- allowing a high-value chat finding to pass the checkpoint boundary without ARIADNE update;
+- failing to run neighbor/non-break tests before promotion;
+- silently substituting a new spelling, root, operator, or normalization to preserve a desired pattern.
+
+At Protocol Alignment Audit, explicitly record each required hop/gate as PASS / FAIL / DEFERRED WITH RETURN TRIGGER.
+
 ## Runtime rule
 
 ABRUPT research is ARIADNE research whether or not the local Warden is running.
