@@ -258,6 +258,10 @@ def evict_source(con, root, source_id):
         raise ValueError("source is pinned; unpin before eviction")
     if not row["reacquirable"] and row["lane"] != "G0":
         raise ValueError("source is not safely reacquirable; ARIADNE will not evict it")
+    if row["lane"] != "G0" and not con.execute(
+        "SELECT 1 FROM source_profiles WHERE source_id=? LIMIT 1",(source_id,)
+    ).fetchone():
+        raise ValueError("source has not been compiled/indexed yet; ARIADNE will not evict its original")
     path = Path(root) / row["custody_path"]
     if path.exists():
         path.unlink()
