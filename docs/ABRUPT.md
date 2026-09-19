@@ -247,6 +247,30 @@ Only then proceed to expensive original synthesis unless a bounded emergency/sou
 
 All three lanes re-open after a materially new finding, vocabulary, mechanism, cross-domain connection, unexpected prediction hit, or new source class.
 
+## Field-Mapping Purpose of First Order and First & 3/4 Order
+
+First Order and First & 3/4 Order are complementary **field-mapping passes**. Their purpose is not merely bibliography collection or fringe-theory cataloguing.
+
+- **First Order** maps the established/scholarly terrain: accepted terminology, major models, primary-source routes, known results, known failures, disputes, and recognized unknowns.
+- **First & 3/4 Order** maps the marginal/heterodox/fringe/abandoned/obscure terrain: alternative explanations, neglected anomalies, discarded variables, suppressed or stigmatized claims, unusual source routes, and structurally different maps of the same subject.
+- **First & 3/4 Order-P**, when relevant, maps the pressures that may have shaped either map: institutional power, access, preservation, censorship, incentives, stigma, funding, classification, canon formation, or other selection effects.
+
+The point is to compare the maps.
+
+ABRUPT must ask:
+1. Where do the maps independently align?
+2. Where do they sharply disagree?
+3. Which regions are murky, distorted, or internally inconsistent?
+4. Which observations survive even when their proposed explanations fail?
+5. Which areas are completely undefined?
+6. Where do existing maps stop even though the evidence/problem-space clearly continues?
+7. Which edge, mismatch, blank, or convergence most strongly indicates where original investigation should go next?
+
+Fringe status is neither proof nor disproof. Marginal material is retained because it may preserve anomalies, source leads, variables, or structural alternatives omitted from the dominant map. All such material remains subject to the Epistemic Firewall before it can support a historical claim.
+
+The output of these passes is a **comparative terrain model** used to choose the next research address, not a winner-take-all verdict between mainstream and fringe accounts.
+
+
 ## Re-entrant Prior-Art Divergence Firewall
 
 The prior-art gate is not a one-time opening ritual. It is **re-entrant** and must fire again whenever the investigation produces a materially new:
