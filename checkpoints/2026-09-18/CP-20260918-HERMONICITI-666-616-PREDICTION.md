@@ -833,3 +833,89 @@ Named note labels are readability only until an absolute tonic and orientation a
 
 Current result:
 the simple "which genealogy wins?" test does NOT resolve cleanly. Different witnesses align at different special addresses. This is evidence that the one-dimensional generation-count model is insufficient by itself and that local relational operators must be recovered rather than inferred from count alone.
+
+
+## CORRECTION — human coordinate ledger: SUN center-line vs 12-position local carrier
+
+Status: SUPERSEDES the assumption that every father→son generation is one fifth-step.
+
+Frozen SUN gives:
+C_n -> {R_n=2/3 C_n, L_n=3/4 C_n} -> C_{n+1}=1/2 C_n.
+
+Therefore:
+- generation/register index is vertical;
+- center-to-center continuation is an octave relation (same pitch class, new register);
+- angular movement around a 12-position carrier requires a typed R/L/other transform or an independently defined 12-unit local class;
+- unresolved mappings remain typed UNKNOWN rather than receiving invented notes.
+
+The prior Pythagorean "one fifth per genealogy generation" remains only an external adapter experiment, not the default SUN interpretation.
+
+### First directly resolvable human 12-unit class
+
+Jacob has twelve sons. For the current test, define a provisional local 12-position adapter using the already-declared music-first fifth traversal T_7 on Z_12.
+
+Birth-order slot j (1..12) maps provisionally to:
+pitch_index = 7*(j-1) mod 12.
+
+This is a test adapter, not a historical claim that birth order was encoded musically.
+
+Under ascending-fifth orientation:
+1 Reuben C-relative (0)
+2 Simeon G-relative (7)
+3 Levi D-relative (2)
+4 Judah A-relative (9)
+5 Dan E-relative (4)
+6 Naphtali B-relative (11)
+7 Gad F#-relative (6)
+8 Asher C#-relative (1)
+9 Issachar G#-relative (8)
+10 Zebulun D#-relative (3)
+11 Joseph A#-relative (10)
+12 Benjamin E#-relative (5)
+
+Mirror orientation remains open. Judah's mirror position is E-flat-relative / 32:27; ascending orientation is A-relative / 27:16.
+
+Thus Judah is now assigned:
+- local class: Jacob-12
+- unit position: 4 of 12
+- fifth-traversal index: 3
+- pitch-class offset: +9 mod12 in ascending orientation
+- exact ratio to Jacob center: 27/16
+- mirror exact ratio: 32/27
+- absolute note: UNKNOWN until upstream orientation/transposition is fixed.
+
+### Judah translator subaddresses
+
+The 6 translators in a tribal sector can be modeled as phase coordinate Z_6 only after declaring an order adapter.
+
+If simple listed order is used provisionally:
+t=0..5 correspond to positions 1..6.
+
+Do NOT call positions 5–6 a musical dyad merely because they are adjacent in the list.
+
+For the native Z_6 phase structure used in the music-first theorem:
+A={0,3}
+B={0,2,4}
+B_shift={1,3,5}
+and the natural antipodal pairs are {0,3}, {1,4}, {2,5}.
+
+Therefore the previously frozen claim that the Judah corruption is "the final dyad positions 5–6" is SUPERSEDED.
+
+What remains valid:
+- four list positions are stable across the compared witnesses;
+- instability is concentrated in list positions 5–6;
+- the musical relation between those two positions is UNRESOLVED until the list→phase adapter is independently justified.
+
+### New predictions
+
+P-HUMAN-12-01:
+If birth-order fifth traversal is a useful adapter, homologous 12-member human classes should show stronger cross-system alignment by unit position than shuffled controls.
+
+P-JUDAH-NOTE-01:
+Judah is relative slot 4. Any downstream Judah-class realization that preserves the same address should align to the same local pitch offset under the chosen orientation, while register/phase/role may change.
+
+P-JUDAH-PHASE-01:
+The six Judah translator positions should be tested under all legitimate Z6 orderings/adapters. A meaningful mapping should predict witness instability or role relationships better than permutation controls; no preferred phase assignment may be chosen after inspecting the names.
+
+P-UPSTREAM-ADAM-01:
+Absolute Judah pitch remains unknown until Adam/Jacob transposition and orientation are fixed by an independent upstream aeon→archon→angel/demon→human chain or another clean anchor.
