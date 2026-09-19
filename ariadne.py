@@ -386,16 +386,25 @@ def generate_queue(con, source_id: str) -> None:
         enqueue(con,source_id,None,"UP",f"Global check for transform {tr['from_value']} {tr['operator']} {tr['to_value']}","Check whether this transform changes any older cosmology, lineage, language, sound/music, TOL, ritual/magic, number, or historical-transmission problem.","LOW","HIGH")
 
 
-def register_source(path: Path, connection=None, pointer_depth=0, move_into_custody=False) -> tuple[str,bool,dict[str,int]]:
+def register_source(path: Path, connection=None, pointer_depth=0, move_into_custody=False, reacquirable=False) -> tuple[str,bool,dict[str,int]]:
     path=path.resolve(); digest=sha256_file(path); source_id=f"SRC-{digest[:16].upper()}"
     original_name=path.name; original_path=str(path); original_size=path.stat().st_size
     stats={"discrepancies":0,"transforms":0,"residuals":0,"assertions":0,"torch_hits":0}
     with (nullcontext(connection) if connection is not None else connect()) as con:
-        existing=con.execute("SELECT source_id FROM sources WHERE sha256=?",(digest,)).fetchone()
+        existing=con.execute("SELECT source_id,custody_path FROM sources WHERE sha256=?",(digest,)).fetchone()
         if existing:
+            existing_dest=ROOT/existing["custody_path"]
             if move_into_custody and path.exists():
-                try: path.unlink()
-                except OSError: pass
+                if not existing_dest.exists():
+                    existing_dest.parent.mkdir(parents=True,exist_ok=True)
+                    shutil.move(str(path),str(existing_dest))
+                    if sha256_file(existing_dest)!=digest:
+                        raise ValueError(f"Restored custody checksum mismatch: {existing_dest}")
+                    from ariadne_core.storage import record_present
+                    record_present(con,existing["source_id"],reacquirable=reacquirable)
+                else:
+                    try:path.unlink()
+                    except OSError:pass
             return existing["source_id"],False,stats
         dest_dir=CUSTODY_DIR/source_id; dest_dir.mkdir(parents=True,exist_ok=True); dest=dest_dir/original_name
         if not dest.exists():
@@ -408,7 +417,7 @@ def register_source(path: Path, connection=None, pointer_depth=0, move_into_cust
         text,error=extract_text(dest)
         con.execute("INSERT INTO sources(source_id,sha256,original_name,original_path,custody_path,extension,byte_size,text_extracted,created_at) VALUES(?,?,?,?,?,?,?,?,?)",(source_id,digest,original_name,original_path,str(dest.relative_to(ROOT)),dest.suffix.lower(),original_size,1 if text is not None else 0,now()))
         from ariadne_core.storage import record_present
-        record_present(con,source_id,reacquirable=move_into_custody)
+        record_present(con,source_id,reacquirable=reacquirable)
         eid=stable_id("EVT",source_id,"INGEST",now())
         con.execute("INSERT INTO ingest_events(event_id,source_id,action,detail,created_at) VALUES(?,?,?,?,?)",(eid,source_id,"INGEST","Source registered in custody",now()))
         if text is None:
@@ -444,7 +453,7 @@ def ingest(paths: list[str]) -> None:
         if not p.exists() or not p.is_file(): print(f"SKIP: {p} (not a file)"); continue
         resolved=p.resolve()
         move_local=resolved.is_relative_to(INBOX_DIR.resolve())
-        source_id,is_new,stats=register_source(p,move_into_custody=move_local)
+        source_id,is_new,stats=register_source(p,move_into_custody=move_local,reacquirable=False)
         if is_new:
             new_count+=1; print(f"INGESTED {p.name} -> {source_id} | discrepancies={stats['discrepancies']} transforms={stats['transforms']} residuals={stats['residuals']} torch_hits={stats['torch_hits']}")
         else: print(f"KNOWN    {p.name} -> {source_id}")
